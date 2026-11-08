@@ -1,0 +1,1529 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Неделя 1 — Старт · Learning OS</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .doc { max-width: 900px; margin: 0 auto; padding: 28px 22px 120px; }
+  .doc-top {
+    position: sticky; top: 0; z-index: 30;
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 12px 22px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(9,12,19,.88); backdrop-filter: blur(10px);
+  }
+  .doc-top a.back { color: var(--muted); font-size: 13px; font-weight: 700; }
+  .doc-top a.back:hover { color: var(--lime); }
+  .week-dots { display: flex; gap: 6px; }
+  .week-dots a {
+    width: 26px; height: 26px; border-radius: 8px;
+    display: grid; place-items: center;
+    font-size: 11.5px; font-weight: 800;
+    border: 1px solid var(--line); background: var(--panel-2); color: var(--dim);
+  }
+  .week-dots a:hover { border-color: var(--lime); color: var(--lime); }
+  .week-dots a.done { background: rgba(182,255,60,.16); border-color: rgba(182,255,60,.45); color: var(--lime); }
+
+  .hero { padding: 26px 0 30px; border-bottom: 1px solid var(--line); margin-bottom: 34px; }
+  .hero h1 { font-size: 38px; margin: 10px 0 12px; }
+  .hero p { color: var(--muted); max-width: 640px; font-size: 16px; }
+  .hero-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+
+  .day { padding: 30px 0 40px; border-bottom: 1px solid var(--line); scroll-margin-top: 70px; }
+  .day:last-of-type { border-bottom: none; }
+  .day-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+  .day-num {
+    width: 44px; height: 44px; flex: 0 0 auto;
+    border-radius: 13px; display: grid; place-items: center;
+    background: linear-gradient(145deg, rgba(182,255,60,.18), rgba(182,255,60,.04));
+    border: 1px solid rgba(182,255,60,.4);
+    color: var(--lime); font-weight: 900; font-size: 17px;
+  }
+  .day-head h2 { font-size: 26px; }
+  .day-sub { color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; font-weight: 800; }
+
+  .block { margin: 22px 0; }
+  .block h3 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: .11em;
+    color: var(--dim); margin-bottom: 10px; font-weight: 800;
+  }
+  .block p { color: var(--muted); margin-bottom: 10px; font-size: 15px; }
+  .block p b, .block li b { color: var(--text); font-weight: 700; }
+  .block ul, .block ol { color: var(--muted); padding-left: 22px; margin: 8px 0; }
+  .block li { margin-bottom: 6px; font-size: 14.5px; }
+  code {
+    font-family: var(--mono); font-size: .9em;
+    background: rgba(108,140,255,.12); color: #b9c8ff;
+    padding: 2px 6px; border-radius: 5px;
+  }
+  pre {
+    background: #0b0f18; border: 1px solid var(--line);
+    border-radius: 12px; padding: 14px 16px; overflow-x: auto;
+    font-family: var(--mono); font-size: 13px; line-height: 1.6;
+    color: #cfe0ff; margin: 12px 0;
+  }
+  pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
+
+  .note {
+    border-left: 3px solid var(--blue);
+    background: rgba(108,140,255,.07);
+    padding: 12px 16px; border-radius: 0 10px 10px 0;
+    color: var(--muted); font-size: 14px; margin: 14px 0;
+  }
+  .note.warn { border-color: var(--orange); background: rgba(255,165,60,.07); }
+  .note.good { border-color: var(--lime); background: rgba(182,255,60,.06); }
+  .note b { color: var(--text); }
+
+  .demo {
+    border: 1px solid var(--line-2); border-radius: 16px;
+    background: var(--panel); padding: 18px; margin: 16px 0;
+  }
+  .demo-title { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--dim); font-weight: 800; margin-bottom: 12px; }
+
+  .tree-view { font-family: var(--mono); font-size: 13.5px; line-height: 1.9; color: var(--muted); }
+  .tree-view .folder { color: var(--blue); }
+  .tree-view .file { color: var(--muted); }
+  .tree-view .hl { color: var(--lime); }
+
+  .term {
+    background: #05070b; border: 1px solid var(--line);
+    border-radius: 12px; overflow: hidden;
+  }
+  .term-bar { display: flex; gap: 6px; padding: 9px 12px; background: #0c1119; border-bottom: 1px solid var(--line); }
+  .term-bar i { width: 10px; height: 10px; border-radius: 50%; background: #2b3548; }
+  .term-bar i:nth-child(1) { background: #ff5f57; }
+  .term-bar i:nth-child(2) { background: #febc2e; }
+  .term-bar i:nth-child(3) { background: #28c840; }
+  .term-body { padding: 14px; font-family: var(--mono); font-size: 13px; line-height: 1.7; height: 260px; overflow-y: auto; color: #c9d6ee; }
+  .term-body div { white-space: pre-wrap; }
+  .term-body .prompt { color: var(--lime); }
+  .term-body .err { color: var(--red); }
+  .term-body .ok { color: var(--cyan); }
+  .term-input-row { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--line); background: #080c13; }
+  .term-input-row span { color: var(--lime); font-family: var(--mono); font-size: 13px; white-space: nowrap; }
+  .term-input-row input {
+    flex: 1; background: none; border: none; outline: none;
+    color: #c9d6ee; font-family: var(--mono); font-size: 13px;
+  }
+
+  .playground { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .playground textarea {
+    width: 100%; min-height: 240px; resize: vertical;
+    background: #05070b; color: #cfe0ff;
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+  }
+  .playground iframe {
+    width: 100%; min-height: 240px; border: 1px solid var(--line);
+    border-radius: 10px; background: #fff;
+  }
+
+  .zones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .zone { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-soft); padding: 12px; min-height: 130px; }
+  .zone h4 { font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--dim); margin-bottom: 8px; }
+  .zone .item { font-family: var(--mono); font-size: 12px; padding: 4px 7px; border-radius: 6px; background: var(--panel-2); margin-bottom: 5px; border: 1px solid var(--line); }
+  .zone .item.new { border-color: rgba(182,255,60,.4); color: var(--lime); }
+  .zone .commit { font-family: var(--mono); font-size: 11.5px; color: var(--cyan); padding: 4px 0; }
+  .zone-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; color: var(--muted); font-size: 14px; }
+  .check-item input { margin-top: 4px; accent-color: #b6ff3c; }
+
+  .quiz details {
+    border: 1px solid var(--line); border-radius: 11px;
+    padding: 12px 14px; margin-bottom: 8px; background: var(--panel-2);
+  }
+  .quiz summary { cursor: pointer; font-weight: 650; font-size: 14px; color: var(--text); }
+  .quiz details p { margin-top: 10px; color: var(--muted); font-size: 13.5px; }
+
+  .day-check {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    margin-top: 22px; padding-top: 18px; border-top: 1px dashed var(--line);
+  }
+  .mark-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 15px; border-radius: 10px;
+    border: 1px solid var(--line-2); background: var(--panel-2);
+    color: var(--muted); font-size: 13px; font-weight: 700; cursor: pointer;
+    transition: all .15s;
+  }
+  .mark-btn:hover { border-color: var(--lime); color: var(--lime); }
+  .mark-btn.on { background: rgba(182,255,60,.14); border-color: rgba(182,255,60,.5); color: var(--lime); }
+
+  .prompt-out {
+    width: 100%; min-height: 150px; resize: vertical;
+    background: #05070b; color: #cfe0ff; border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .form-row .field { margin-bottom: 10px; }
+
+  .final { border: 1px solid rgba(182,255,60,.3); background: linear-gradient(180deg, rgba(182,255,60,.07), transparent); border-radius: 18px; padding: 24px; }
+
+  .tbl-wrap {
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--panel-2); padding: 4px 14px; margin: 14px 0;
+    overflow-x: auto;
+  }
+  .tbl { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13.5px; }
+  .tbl th, .tbl td {
+    text-align: left; vertical-align: top;
+    padding: 9px 10px; border-bottom: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .tbl th {
+    color: var(--dim); font-size: 10.5px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .1em;
+  }
+  .tbl td:first-child {
+    color: var(--text); font-family: var(--mono);
+    font-size: 12.5px; white-space: nowrap;
+  }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl b { color: var(--text); }
+
+  @media (max-width: 760px) {
+    .hero h1 { font-size: 28px; }
+    .day-head h2 { font-size: 21px; }
+    .playground { grid-template-columns: 1fr; }
+    .zones { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .doc { padding: 20px 16px 110px; }
+    .doc-top { padding: 10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="doc-top">
+  <a class="back" href="../index.html">← в дашборд</a>
+  <div class="week-dots" id="week-dots">
+    <a href="#d1" data-day="1">1</a>
+    <a href="#d2" data-day="2">2</a>
+    <a href="#d3" data-day="3">3</a>
+    <a href="#d4" data-day="4">4</a>
+    <a href="#d5" data-day="5">5</a>
+    <a href="#d6" data-day="6">6</a>
+  </div>
+</div>
+
+<div class="doc">
+
+  <div class="hero">
+    <div class="eyebrow"><span class="dot"></span>неделя 1 · блок «Старт»</div>
+    <h1>Старт: от нуля до ссылки в интернете</h1>
+    <p>
+      За шесть дней ты поймёшь, где лежат файлы, из чего состоит сайт, как работает
+      машина времени для кода — и опубликуешь свою первую страницу. Не «посмотришь курс»,
+      а сделаешь руками.
+    </p>
+    <div class="hero-meta">
+      <span class="chip" style="color:var(--lime)">6 дней</span>
+      <span class="chip" style="color:var(--blue)">~20 часов</span>
+      <span class="chip" style="color:var(--orange)">первый коммит на 3-й день</span>
+      <span class="chip" style="color:var(--pink)">ссылка в интернете на 4-й</span>
+    </div>
+  </div>
+
+  <!-- ================= ДЕНЬ 1 ================= -->
+  <section class="day" id="d1">
+    <div class="day-head">
+      <div class="day-num">1</div>
+      <div>
+        <div class="day-sub">теория + практика · 3–3,5 часа</div>
+        <h2>Файлы, папки, пути, терминал</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>
+        Не просто «узнать, что такое файл», а свободно ходить по файловой системе:
+        понимать, где лежит проект, собирать путь руками и не паниковать, когда терминал
+        отвечает ошибкой. Сегодня ты создашь свои первые папки и файлы командой, а не мышкой.
+      </p>
+    </div>
+
+    <div class="block">
+      <h3>Разминка · 15 минут</h3>
+      <p>Сначала — карточки в дашборде (15 минут повторения). Потом ответь себе на пять вопросов. Записывать не обязательно, но честно — полезно.</p>
+      <ol>
+        <li>Где на твоём компьютере лежат документы? Назови путь.</li>
+        <li>Чем файл отличается от папки?</li>
+        <li>Что произойдёт, если дважды кликнуть по <code>.html</code>-файлу?</li>
+        <li>Что значит «скачать файл» и куда он обычно попадает?</li>
+        <li>Что ты уже умеешь делать в Проводнике?</li>
+      </ol>
+      <div class="note">Не страшно, если на какой-то вопрос нет ответа. Вернись к нему в конце дня — разница и будет твоим прогрессом.</div>
+    </div>
+
+    <div class="block">
+      <h3>План дня</h3>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Время</th><th>Блок</th><th>Что делаем</th></tr></thead>
+          <tbody>
+            <tr><td>0:00–0:15</td><td><b>Разминка</b></td><td>карточки и пять вопросов «что я уже знаю»</td></tr>
+            <tr><td>0:15–0:45</td><td><b>Теория 1</b></td><td>файлы, папки, расширения и где живёт проект</td></tr>
+            <tr><td>0:45–1:15</td><td><b>Теория 2</b></td><td>пути: абсолютные, относительные, кавычки, слэши</td></tr>
+            <tr><td>1:15–1:40</td><td><b>Теория 3</b></td><td>как устроена команда и что умеет терминал</td></tr>
+            <tr><td>1:40–2:10</td><td><b>Лаборатория 1</b></td><td>прогулка по настоящему проекту в cmd</td></tr>
+            <tr><td>2:10–2:50</td><td><b>Лаборатория 2</b></td><td>своё дерево папок и файлов в <code>notes\sandbox</code></td></tr>
+            <tr><td>2:50–3:10</td><td><b>Разбор ошибок</b></td><td>шесть сломанных команд — найти причину</td></tr>
+            <tr><td>3:10–3:30</td><td><b>Проверка</b></td><td>вопросы, чек-лист, дневник</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><b>Не гонись за временем.</b> Если блок занял меньше — отлично, есть запас. Если больше — это нормально: практика всегда дольше чтения.</div>
+    </div>
+
+    <div class="block">
+      <h3>Теория 1 · Файлы и папки</h3>
+      <p><b>Файл</b> — набор данных на диске. У него есть <b>имя</b>, <b>расширение</b> и <b>содержимое</b>. Расширение (<code>.html</code>, <code>.css</code>, <code>.png</code>) — подсказка системе и программам, чем открывать файл. Само по себе оно ничего не «делает»: переименуй <code>index.html</code> в <code>index.txt</code> — и браузер перестанет считать его страницей.</p>
+      <p><b>Папка</b> — контейнер для файлов и других папок. Никакой мистической «глубины» нет: это просто вложенность. Путь <code>Документы\vb_ed\materials</code> читается как «в папке Документы лежит vb_ed, в ней — materials».</p>
+      <div class="note warn">
+        <b>Сначала включи расширения.</b> Windows по умолчанию их прячет, и <code>index.html</code> выглядит как файл «index».
+        Проводник → вкладка <b>Вид</b> → <b>Показать</b> → <b>Расширения имён файлов</b>.
+        Без этого невозможно понять, почему один файл открывается браузером, а другой — Блокнотом.
+      </div>
+      <p>Твой проект лежит здесь:</p>
+<pre><code>C:\Users\Vera\OneDrive\Документы\vb_ed</code></pre>
+      <ul>
+        <li><code>C:</code> — диск.</li>
+        <li><code>Users</code> — папка всех пользователей компьютера.</li>
+        <li><code>Vera</code> — твой профиль: рабочий стол, загрузки, документы.</li>
+        <li><code>OneDrive</code> — папка, которая синхронизируется с облаком.</li>
+        <li><code>Документы\vb_ed</code> — собственно проект.</li>
+      </ul>
+      <div class="note">
+        <b>Про OneDrive.</b> Он синхронизирует папку с облаком: это бэкап, но одновременно источник сюрпризов.
+        Если Git и синхронизация пишут в одни файлы, появляются «файл занят» и копии вида
+        <code>index-КОМПЬЮТЕР.html</code>. Правила простые: не открывай проект в двух окнах сразу,
+        дождись статуса «Синхронизировано» перед коммитом и не храни в облачной папке секреты.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Теория 2 · Пути</h3>
+      <p><b>Путь</b> — адрес файла или папки. Он бывает двух видов.</p>
+      <ul>
+        <li><b>Абсолютный</b> — от корня диска: <code>C:\Users\Vera\OneDrive\Документы\vb_ed\index.html</code>. Работает из любого места, но длинный и привязан к компьютеру.</li>
+        <li><b>Относительный</b> — от текущей папки: <code>index.html</code>, <code>materials\week-01.html</code>, <code>..\data.js</code>. Короткий, но зависит от того, где ты сейчас находишься.</li>
+      </ul>
+      <p>Два символа, без которых не обойтись:</p>
+      <ul>
+        <li><code>..</code> — «на уровень выше». <code>cd ..</code> поднимает из <code>materials</code> в <code>vb_ed</code>.</li>
+        <li><code>.</code> — «текущая папка». <code>start .</code> откроет её в Проводнике.</li>
+      </ul>
+      <p>Если путь начинается со слэша — <code>\materials</code>, — отсчёт идёт от корня текущего диска. Обратный слэш <code>\</code> — разделитель в Windows, прямой <code>/</code> — в адресах интернета и на серверах. В cmd понимает оба, но в путях Windows принято писать <code>\</code>.</p>
+      <div class="note warn">
+        <b>Пробел в пути — не пробел в команде.</b> <code>cd C:\Program Files</code> терминал прочитает как «зайди в C:\Program» и «ещё вот это» — и ответит «Слишком много параметров».
+        Правильно: <code>cd "C:\Program Files"</code>. Кавычки говорят: это один аргумент.
+      </div>
+    </div>
+
+    <div class="block quiz">
+      <h3>Мини-задание: абсолютный или относительный?</h3>
+      <p>Сначала ответь себе, потом открой подсказку.</p>
+      <details><summary><code>C:\Users\Vera\index.html</code></summary><p>Абсолютный: начинается с буквы диска и корня.</p></details>
+      <details><summary><code>..\..\data.js</code></summary><p>Относительный: отсчёт от текущей папки, два уровня вверх.</p></details>
+      <details><summary><code>materials\week-01.html</code></summary><p>Относительный: папка <code>materials</code> внутри текущей.</p></details>
+      <details><summary><code>\Windows\System32</code></summary><p>Абсолютный: начинается от корня текущего диска.</p></details>
+      <details><summary><code>.</code></summary><p>Относительный: текущая папка.</p></details>
+      <details><summary><code>..\notes</code></summary><p>Относительный: папка <code>notes</code> на уровень выше.</p></details>
+      <details><summary><code>C:notes</code></summary><p>Хитрый: это не «папка notes на диске C», а «текущая папка на диске C, затем notes». Лучше так не писать — используй <code>C:\notes</code>.</p></details>
+      <details><summary><code>notes\sandbox\2026</code></summary><p>Относительный: три уровня вложенности от текущей папки.</p></details>
+    </div>
+
+    <div class="block">
+      <h3>Теория 3 · Терминал</h3>
+      <p><b>Терминал</b> — текстовый интерфейс к тем же файлам, что и Проводник. Не хакерство и не «для избранных»: просто быстрее, когда знаешь команды, и точнее, когда нужно объяснить компьютеру, что делать.</p>
+      <p>Строка приглашения показывает, где ты:</p>
+<pre><code>C:\Users\Vera&gt;</code></pre>
+      <p>Это значит: диск <code>C:</code>, текущая папка <code>C:\Users\Vera</code>. Всё, что ты напишешь дальше, выполнится именно здесь.</p>
+      <p><b>Команда</b> состоит из трёх частей:</p>
+      <ul>
+        <li><b>имя</b> — что делать: <code>dir</code>, <code>cd</code>, <code>mkdir</code>;</li>
+        <li><b>аргумент</b> — с чем: <code>cd materials</code>;</li>
+        <li><b>флаг</b> — как: <code>tree /f</code> (флаг <code>/f</code> добавляет файлы).</li>
+      </ul>
+      <p>Четыре привычки, которые экономят часы:</p>
+      <ul>
+        <li><b>Tab</b> — автодополнение. Набери <code>cd Doc</code> и нажми Tab: терминал допишет <code>Документы</code>.</li>
+        <li><b>↑ и ↓</b> — история команд. Не нужно печатать заново.</li>
+        <li><b>Ctrl + C</b> — прервать зависшую команду.</li>
+        <li><b>cls</b> — очистить экран. История при этом не стирается.</li>
+      </ul>
+      <div class="note">
+        <b><code>pwd</code> — это PowerShell.</b> В cmd текущую папку показывает <code>cd</code> без аргументов.
+        В песочнице ниже работают оба варианта, но на своём компьютере привыкай к <code>cd</code>.
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+          <tbody>
+            <tr><td>dir</td><td>показать содержимое текущей папки</td></tr>
+            <tr><td>cd &lt;путь&gt;</td><td>перейти в папку: <code>cd materials</code></td></tr>
+            <tr><td>cd ..</td><td>подняться на уровень выше</td></tr>
+            <tr><td>cd \</td><td>перейти в корень диска</td></tr>
+            <tr><td>cd</td><td>показать, где ты сейчас (в cmd)</td></tr>
+            <tr><td>mkdir &lt;путь&gt;</td><td>создать папку, можно сразу несколько уровней</td></tr>
+            <tr><td>echo текст &gt; файл</td><td>создать файл с текстом (или перезаписать)</td></tr>
+            <tr><td>echo текст &gt;&gt; файл</td><td>дописать строку в конец файла</td></tr>
+            <tr><td>type &lt;файл&gt;</td><td>показать содержимое файла</td></tr>
+            <tr><td>copy откуда куда</td><td>скопировать файл</td></tr>
+            <tr><td>move откуда куда</td><td>переместить файл или папку</td></tr>
+            <tr><td>ren было стало</td><td>переименовать</td></tr>
+            <tr><td>del &lt;файл&gt;</td><td>удалить файл (папки так не удаляются)</td></tr>
+            <tr><td>tree</td><td>показать дерево папок</td></tr>
+            <tr><td>start &lt;файл&gt;</td><td>открыть файл программой по умолчанию</td></tr>
+            <tr><td>cls</td><td>очистить экран</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        <b>Главная мысль:</b> терминал ничего не «понимает». Он выполняет ровно то, что ты написала.
+        Поэтому ошибка в пути — это не поломка компьютера, а просто «файл не найден».
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Визуализация: твой проект</h3>
+      <div class="demo">
+        <div class="demo-title">C:\Users\Vera\OneDrive\Документы\vb_ed\</div>
+        <div class="tree-view">
+<span class="folder">vb_ed\</span>
+├── <span class="file">index.html</span>      <span class="hl">← точка входа, её открывает браузер</span>
+├── <span class="file">styles.css</span>      <span class="hl">← внешний вид</span>
+├── <span class="file">app.js</span>          <span class="hl">← логика экранов</span>
+├── <span class="file">data.js</span>         <span class="hl">← программа: 16 недель</span>
+├── <span class="file">store.js</span>        <span class="hl">← прогресс и XP</span>
+├── <span class="file">README.md</span>       <span class="hl">← описание проекта</span>
+├── <span class="folder">materials\</span>
+│   └── <span class="file">week-01.html</span>  <span class="hl">← этот текст</span>
+└── <span class="folder">notes\</span>
+    └── <span class="folder">sandbox\</span>      <span class="hl">← сюда сложим лабораторию 2</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Песочница: потренируйся</h3>
+      <p>Безопасная копия твоего компьютера. Ничего не сломается: это виртуальная файловая система. Пройди по порядку:</p>
+      <ol>
+        <li><code>help</code> — список команд.</li>
+        <li><code>dir</code> — что лежит в <code>C:\Users\Vera</code>.</li>
+        <li><code>cd OneDrive</code> → <code>cd Документы\vb_ed</code> — дойди до проекта.</li>
+        <li><code>dir</code> и <code>tree</code> — сверь с картинкой выше.</li>
+        <li><code>type README.md</code> — прочитай файл.</li>
+        <li><code>cd ..</code> — на уровень выше. Потом <code>cd \</code> — в корень диска.</li>
+        <li><code>mkdir notes\sandbox\week-01\day-01</code> — одна команда создаёт всю цепочку.</li>
+        <li><code>cd notes\sandbox\week-01\day-01</code> — зайди внутрь.</li>
+        <li><code>echo Привет &gt; plan.txt</code> — создай файл.</li>
+        <li><code>echo Вторая строка &gt;&gt; plan.txt</code> — допиши строку. Потом <code>type plan.txt</code>.</li>
+        <li><code>copy plan.txt copy.txt</code> → <code>ren copy.txt renamed.txt</code> → <code>del renamed.txt</code>.</li>
+        <li><code>tree</code> — посмотри, что получилось.</li>
+      </ol>
+      <div class="term">
+        <div class="term-bar"><i></i><i></i><i></i></div>
+        <div class="term-body" id="term-body"></div>
+        <div class="term-input-row">
+          <span id="term-prompt">C:\Users\Vera&gt;</span>
+          <input id="term-input" autocomplete="off" spellcheck="false" placeholder="введи команду и нажми Enter">
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Лаборатория 1 · Прогулка по проекту</h3>
+      <p>Теперь то же самое, но на настоящем компьютере. Ничего не удаляй — только смотри и переходи.</p>
+      <ol>
+        <li><code>Win + R</code> → <code>cmd</code> → Enter.</li>
+        <li><code>cd</code> — покажет <code>C:\Users\Vera</code>.</li>
+        <li><code>cd /d "C:\Users\Vera\OneDrive\Документы\vb_ed"</code> — попадёшь в проект. <code>/d</code> нужен, если проект окажется на другом диске; кавычки — если в пути есть пробелы.</li>
+        <li><code>dir</code> — увидишь те же файлы, что на схеме. Сверь.</li>
+        <li><code>tree</code> — структура папок. <code>tree /f</code> — ещё и файлы.</li>
+        <li><code>start index.html</code> — откроется браузер с твоим дашбордом.</li>
+        <li><code>start .</code> — откроется Проводник с папкой проекта.</li>
+        <li><code>cd materials</code> → <code>dir</code> → <code>cd ..</code> — заглянула внутрь и вернулась.</li>
+        <li>Набери <code>cd Doc</code> и нажми <b>Tab</b> — терминал допишет название папки.</li>
+        <li><code>cls</code> — очисти экран.</li>
+      </ol>
+      <div class="note warn">
+        <b>Что означают ошибки:</b>
+        «не является внутренней или внешней командой» — опечатка в имени команды;
+        «не удаётся найти указанный путь» — опечатка или нет такой папки;
+        «Слишком много параметров» — пробел в пути, нужны кавычки.
+        Ни одна из них не ломает компьютер.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Лаборатория 2 · Своё дерево</h3>
+      <p>Собери в папке <code>notes</code> своё дерево — руками, командами. Это твой первый «проект в проекте».</p>
+      <ol>
+        <li>Ты в папке проекта (если нет — <code>cd /d "C:\Users\Vera\OneDrive\Документы\vb_ed"</code>).</li>
+        <li><code>mkdir notes\sandbox\week-01\day-01</code></li>
+        <li><code>cd notes\sandbox\week-01\day-01</code></li>
+        <li><code>cd</code> — проверь, что ты действительно внутри.</li>
+        <li><code>echo Мой первый файл &gt; plan.txt</code></li>
+        <li><code>type plan.txt</code> — прочитай.</li>
+        <li><code>echo Вторая строка &gt;&gt; plan.txt</code> — допиши. Снова <code>type plan.txt</code>.</li>
+        <li><code>copy plan.txt copy.txt</code> — скопируй.</li>
+        <li><code>ren copy.txt renamed.txt</code> — переименуй.</li>
+        <li><code>dir</code> — проверь, что файлов стало два.</li>
+        <li><code>del renamed.txt</code> — удали копию.</li>
+        <li><code>cd ..</code> пять раз — вернёшься в папку проекта. Затем <code>tree notes</code> — посмотри на дерево сверху.</li>
+      </ol>
+      <div class="note good">
+        <b>Проверка:</b> в папке <code>notes\sandbox\week-01\day-01</code> лежит <code>plan.txt</code> с двумя строками.
+        Это уже результат, который можно показать. Коммита сегодня нет — Git появится на третий день.
+      </div>
+    </div>
+
+    <div class="block quiz">
+      <h3>Разбор ошибок</h3>
+      <p>Прочитай команду, предположи ответ терминала, потом открой подсказку. Понимать сообщения важнее, чем выучить команды: тогда ошибка перестаёт быть страшной.</p>
+      <details><summary><code>cd C:\Users\Vera\OneDrive\Документ</code></summary><p>«Не удаётся найти указанный путь». Папка называется <b>Документы</b>, а не <b>Документ</b>. Терминал не угадывает — он выполняет ровно написанное.</p></details>
+      <details><summary><code>cd C:\Program Files</code></summary><p>«Слишком много параметров». Пробел разделил путь на два аргумента. Нужно <code>cd "C:\Program Files"</code>.</p></details>
+      <details><summary><code>mkdri notes</code></summary><p>«не является внутренней или внешней командой». Опечатка в имени команды: <code>mkdir</code>. Сообщение всегда про первую часть строки, не про папку.</p></details>
+      <details><summary><code>type plan.txt</code> (из папки проекта)</summary><p>«Не удаётся найти указанный файл». Файл лежит в <code>notes\sandbox\week-01\day-01</code>, а команда ищет в текущей папке. Нужно сначала <code>cd</code> туда или указать путь целиком.</p></details>
+      <details><summary><code>del notes</code></summary><p><code>notes</code> — папка, а <code>del</code> удаляет только файлы. Для папок есть <code>rmdir</code>, но сегодня мы её не трогаем — удалять папки лучше осознанно.</p></details>
+      <details><summary><code>cd ..\..\..\..\..\..\..</code></summary><p>Выше <code>C:\</code> подняться нельзя. cmd молча остановится в корне диска. Проверить, где ты, — <code>cd</code> без аргументов.</p></details>
+    </div>
+
+    <div class="block quiz">
+      <h3>Проверь себя</h3>
+      <details><summary>Чем файл отличается от папки?</summary><p>Файл хранит данные и имеет расширение. Папка хранит файлы и другие папки. Сама по себе папка данных не содержит.</p></details>
+      <details><summary>Зачем нужно расширение?</summary><p>По нему система и программы понимают тип содержимого и выбирают, чем открывать файл.</p></details>
+      <details><summary>Чем абсолютный путь отличается от относительного?</summary><p>Абсолютный начинается от корня диска и работает из любого места. Относительный считается от текущей папки и зависит от того, где ты находишься.</p></details>
+      <details><summary>Что означает <code>..</code> в пути?</summary><p>Родительскую папку, то есть «на уровень выше».</p></details>
+      <details><summary>Что означает <code>\</code> в начале пути?</summary><p>Отсчёт от корня текущего диска: <code>\Windows</code> — это <code>C:\Windows</code>, если ты на диске C.</p></details>
+      <details><summary>Почему путь с пробелом нужно брать в кавычки?</summary><p>Потому что пробел разделяет аргументы команды. Кавычки собирают путь в один аргумент.</p></details>
+      <details><summary>Как в cmd узнать, в какой папке ты находишься?</summary><p><code>cd</code> без аргументов. В PowerShell для этого есть <code>pwd</code>.</p></details>
+      <details><summary>Что делать, если cmd пишет «не является внутренней или внешней командой»?</summary><p>Проверить имя команды: почти всегда это опечатка. Смотреть на первое слово строки, а не на путь.</p></details>
+    </div>
+
+    <div class="block">
+      <h3>Чек-лист дня</h3>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox"> Включила показ расширений в Проводнике</label>
+        <label class="check-item"><input type="checkbox"> Нашла папку проекта по полному пути</label>
+        <label class="check-item"><input type="checkbox"> Прошла все 12 заданий в песочнице</label>
+        <label class="check-item"><input type="checkbox"> Лаборатория 1: прошлась по проекту в cmd</label>
+        <label class="check-item"><input type="checkbox"> Лаборатория 2: собрала <code>notes\sandbox\week-01\day-01</code></label>
+        <label class="check-item"><input type="checkbox"> В <code>plan.txt</code> две строки, копия удалена</label>
+        <label class="check-item"><input type="checkbox"> Разобрала 6 ошибок и 8 вопросов</label>
+        <label class="check-item"><input type="checkbox"> Записала дневник: что поняла, где застряла, что завтра</label>
+      </div>
+      <div class="note"><b>Дневник — это часть дня.</b> Без записи день не считается закрытым. Три честных предложения лучше идеального отчёта.</div>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="1">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="1">✓ Практика сделана</button>
+    </div>
+  </section>
+
+  <!-- ================= ДЕНЬ 2 ================= -->
+  <section class="day" id="d2">
+    <div class="day-head">
+      <div class="day-num">2</div>
+      <div>
+        <div class="day-sub">теория · 3–3,5 часа</div>
+        <h2>HTML и DevTools</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>Понять, из чего состоит любая страница в интернете, и научиться заглядывать ей под капот.</p>
+    </div>
+
+    <div class="block">
+      <h3>Теория</h3>
+      <p><b>HTML</b> — язык разметки, а не программирования. Он не считает и не принимает решений. Он только описывает <b>структуру и смысл</b>: вот заголовок, вот список, вот ссылка, вот кнопка.</p>
+      <p>Страница — это дерево тегов. <b>Тег</b> — элемент разметки: <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;button&gt;</code>. У тега может быть <b>атрибут</b> — настройка внутри: <code>&lt;a href="..."&gt;</code>.</p>
+      <p>Минимальный документ выглядит так:</p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Моя страница&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Привет, Вера&lt;/h1&gt;
+    &lt;p&gt;Это мой первый абзац.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <ul>
+        <li><code>&lt;head&gt;</code> — служебная информация: кодировка, заголовок вкладки, стили.</li>
+        <li><code>&lt;body&gt;</code> — всё, что видно на экране.</li>
+        <li><code>&lt;h1&gt;</code> — главный заголовок. Он должен быть один на странице.</li>
+      </ul>
+      <p><b>DevTools</b> — встроенные инструменты браузера. Открываются клавишей <code>F12</code> или <code>Ctrl + Shift + I</code>. Две вкладки, которые нужны сейчас:</p>
+      <ul>
+        <li><b>Elements</b> — показывает реальное дерево страницы. Можно менять текст и стили и сразу видеть результат.</li>
+        <li><b>Console</b> — сюда браузер пишет ошибки. Красная строка здесь — твой главный источник правды.</li>
+      </ul>
+      <div class="note warn">
+        <b>Важно:</b> изменения в DevTools живут только в памяти браузера. Перезагрузил страницу — всё вернулось.
+        Это тренажёр, а не редактор.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Визуализация: живой редактор</h3>
+      <p>Меняй HTML слева — результат справа обновляется сразу. Попробуй поменять текст, добавить второй абзац, поменять <code>&lt;h1&gt;</code> на <code>&lt;h2&gt;</code>.</p>
+      <div class="demo">
+        <div class="demo-title">html → браузер</div>
+        <div class="playground">
+          <textarea id="play-src" spellcheck="false">&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;style&gt;
+    body { font-family: sans-serif; padding: 20px; }
+    h1 { color: #2b6cb0; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Привет, Вера!&lt;/h1&gt;
+  &lt;p&gt;Это моя первая страница.&lt;/p&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Я умею писать HTML&lt;/li&gt;
+    &lt;li&gt;Я не боюсь DevTools&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+          <iframe id="play-out" title="Результат"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Сделай на своём компьютере</h3>
+      <ol>
+        <li>Открой <code>index.html</code> в браузере (двойной клик).</li>
+        <li>Нажми <code>F12</code>, выбери вкладку <b>Elements</b>.</li>
+        <li>Найди заголовок «Сегодня» и поменяй текст прямо в DevTools.</li>
+        <li>Перезагрузи страницу (<code>F5</code>) и убедись, что текст вернулся.</li>
+        <li>Открой вкладку <b>Console</b>. Если там пусто — отлично, ошибок нет.</li>
+      </ol>
+    </div>
+
+    <div class="block quiz">
+      <h3>Проверь себя</h3>
+      <details><summary>HTML — это язык программирования?</summary><p>Нет. Это язык разметки: он описывает структуру и смысл содержимого, но не содержит логики и вычислений.</p></details>
+      <details><summary>Чем тег отличается от атрибута?</summary><p>Тег — сам элемент (<code>&lt;a&gt;</code>). Атрибут — его настройка внутри открывающего тега (<code>href="..."</code>).</p></details>
+      <details><summary>Почему изменения в DevTools исчезают после перезагрузки?</summary><p>Потому что DevTools меняет только то, что уже загружено в память браузера. Исходный файл на диске не меняется.</p></details>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="2">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="2">✓ Практика сделана</button>
+    </div>
+  </section>
+
+  <!-- ================= ДЕНЬ 3 ================= -->
+  <section class="day" id="d3">
+    <div class="day-head">
+      <div class="day-num">3</div>
+      <div>
+        <div class="day-sub">теория · 3–3,5 часа</div>
+        <h2>Node, Git, первый коммит</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>Поставить инструменты и сделать первый снимок проекта, к которому всегда можно вернуться.</p>
+    </div>
+
+    <div class="block">
+      <h3>Теория: Node.js</h3>
+      <p>JavaScript родился в браузере. <b>Node.js</b> — среда, которая умеет выполнять тот же JavaScript вне браузера: на сервере, в терминале, в инструментах сборки.</p>
+      <p>Зачем она тебе сейчас: почти весь современный инструментарий (npm, сборщики, тесты, локальные серверы) работает на Node. Проверка:</p>
+<pre><code>node -v
+npm -v</code></pre>
+      <p>Если видишь номер версии — всё хорошо. Если «команда не найдена» — Node не установлен.</p>
+
+      <h3 style="margin-top:22px">Теория: Git</h3>
+      <p><b>Git</b> — машина времени для проекта. Он запоминает снимки состояния файлов. Снимок называется <b>коммитом</b>.</p>
+      <p>Файлы проходят три зоны:</p>
+      <ol>
+        <li><b>Рабочая папка</b> — то, что ты реально редактируешь.</li>
+        <li><b>Staging</b> — «подготовлено к снимку». Ты сама выбираешь, что попадёт в коммит.</li>
+        <li><b>Репозиторий</b> — история снимков. Отсюда можно вернуться к любой версии.</li>
+      </ol>
+      <p>Базовые команды:</p>
+<pre><code>git init                     # сделать папку репозиторием (один раз)
+git status                   # что изменилось
+git add .                    # подготовить все изменения
+git commit -m "Первый коммит"  # сделать снимок
+git log --oneline            # посмотреть историю</code></pre>
+      <div class="note good">
+        <b>Почему это важно:</b> без Git любой эксперимент страшный. С Git ты можешь сломать всё
+        и вернуться назад одной командой. Это меняет отношение к ошибкам.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Визуализация: три зоны Git</h3>
+      <p>Нажимай кнопки и смотри, как файлы двигаются по конвейеру.</p>
+      <div class="demo">
+        <div class="demo-title">рабочая папка → staging → история</div>
+        <div class="zones">
+          <div class="zone"><h4>рабочая папка</h4><div id="z-work"></div></div>
+          <div class="zone"><h4>staging</h4><div id="z-stage"></div></div>
+          <div class="zone"><h4>история</h4><div id="z-commits"></div></div>
+        </div>
+        <div class="zone-actions">
+          <button class="btn btn-sm" id="git-add">git add .</button>
+          <button class="btn btn-sm btn-primary" id="git-commit">git commit</button>
+          <button class="btn btn-sm btn-ghost" id="git-reset">сброс</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Сделай на своём компьютере</h3>
+      <ol>
+        <li>Установи Node.js LTS с <code>nodejs.org</code> (галочку «Add to PATH» оставь включённой).</li>
+        <li>Установи Git с <code>git-scm.com</code> (настройки по умолчанию подходят).</li>
+        <li>Закрой и заново открой терминал. Проверь <code>node -v</code> и <code>git -v</code>.</li>
+        <li>В папке проекта: <code>git init</code>.</li>
+        <li><code>git status</code> — увидишь красным список файлов. Они ещё не отслеживаются.</li>
+        <li><code>git add .</code> → <code>git status</code> — файлы стали зелёными.</li>
+        <li><code>git commit -m "Первый коммит: Learning OS"</code>.</li>
+        <li><code>git log --oneline</code> — увидишь свой первый снимок.</li>
+      </ol>
+      <div class="note">
+        <b>Если Git ругается на имя и почту</b> — один раз выполни:
+        <code>git config --global user.name "Вера"</code> и
+        <code>git config --global user.email "твой@email"</code>.
+      </div>
+    </div>
+
+    <div class="block quiz">
+      <h3>Проверь себя</h3>
+      <details><summary>Зачем нужен staging, если можно сразу коммитить?</summary><p>Чтобы собрать в один осмысленный снимок именно то, что относится к одной задаче, а не всё подряд. История становится читаемой.</p></details>
+      <details><summary>Что делает git init?</summary><p>Превращает обычную папку в репозиторий: создаёт скрытую папку .git, где хранится вся история.</p></details>
+      <details><summary>Что такое коммит?</summary><p>Снимок состояния файлов с сообщением. Точка, к которой можно вернуться.</p></details>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="3">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="3">✓ Практика сделана</button>
+    </div>
+  </section>
+
+  <!-- ================= ДЕНЬ 4 ================= -->
+  <section class="day" id="d4">
+    <div class="day-head">
+      <div class="day-num">4</div>
+      <div>
+        <div class="day-sub">практика · 3–3,5 часа</div>
+        <h2>GitHub и первая ссылка</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>Сегодня у тебя появится ссылка, которую можно отправить кому угодно. Это первая настоящая победа.</p>
+    </div>
+
+    <div class="block">
+      <h3>Теория</h3>
+      <p><b>GitHub</b> — облако для Git-репозиториев. Git хранит историю локально, GitHub позволяет хранить её в интернете и работать с нескольких устройств.</p>
+      <p><b>remote</b> — это ссылка на удалённую копию. <b>push</b> — отправка своих коммитов туда.</p>
+<pre><code>git remote add origin https://github.com/ТВОЙ_ЛОГИН/vb_ed.git
+git branch -M main
+git push -u origin main</code></pre>
+      <p><b>README.md</b> — главный файл репозитория. Именно его читают первым. Три строки о том, что это и зачем — уже лучше, чем пустота.</p>
+      <p><b>GitHub Pages</b> — бесплатный хостинг статических сайтов прямо из репозитория. Включил — получил ссылку.</p>
+      <div class="note warn">
+        <b>Никогда не клади в публичный репозиторий:</b> пароли, токены, ключи API, персональные данные.
+        Всё, что попало в Git, остаётся в истории навсегда.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Чек-лист публикации</h3>
+      <div class="demo">
+        <div class="checklist">
+          <label class="check-item"><input type="checkbox"> Создала аккаунт на github.com</label>
+          <label class="check-item"><input type="checkbox"> Создала пустой репозиторий <code>vb_ed</code> (без README, без .gitignore)</label>
+          <label class="check-item"><input type="checkbox"> Скопировала ссылку вида <code>https://github.com/.../vb_ed.git</code></label>
+          <label class="check-item"><input type="checkbox"> Выполнила <code>git remote add origin ...</code></label>
+          <label class="check-item"><input type="checkbox"> Выполнила <code>git push -u origin main</code></label>
+          <label class="check-item"><input type="checkbox"> Обновила страницу репозитория — файлы на месте</label>
+          <label class="check-item"><input type="checkbox"> Settings → Pages → Branch: main, папка /root → Save</label>
+          <label class="check-item"><input type="checkbox"> Подождала 1–2 минуты и открыла ссылку <code>https://ЛОГИН.github.io/vb_ed/</code></label>
+          <label class="check-item"><input type="checkbox"> Отправила ссылку себе в мессенджер и открыла с телефона</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Сделай</h3>
+      <ol>
+        <li>Создай <code>README.md</code> в папке проекта.</li>
+        <li>Напиши три строки: что это, зачем, как открыть.</li>
+        <li>Закоммить и запушь: <code>git add .</code> → <code>git commit -m "README"</code> → <code>git push</code>.</li>
+        <li>Включи GitHub Pages и дождись ссылки.</li>
+        <li>Открой ссылку с телефона. Это твой сайт. Он в интернете.</li>
+      </ol>
+      <div class="note good">
+        <b>С этого момента ты не «изучаешь программирование». Ты публикуешь сайты.</b>
+        Разница в формулировке кажется мелочью, но именно она меняет самоощущение.
+      </div>
+    </div>
+
+    <div class="block quiz">
+      <h3>Проверь себя</h3>
+      <details><summary>Чем Git отличается от GitHub?</summary><p>Git — программа контроля версий на твоём компьютере. GitHub — сервис, который хранит копии репозиториев в интернете.</p></details>
+      <details><summary>Что делает git push?</summary><p>Отправляет локальные коммиты в удалённый репозиторий.</p></details>
+      <details><summary>Почему секреты нельзя коммитить?</summary><p>История Git публична и постоянна. Удалить файл следующим коммитом недостаточно — он останется в предыдущих.</p></details>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="4">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="4">✓ Практика сделана</button>
+    </div>
+  </section>
+
+  <!-- ================= ДЕНЬ 5 ================= -->
+  <section class="day" id="d5">
+    <div class="day-head">
+      <div class="day-num">5</div>
+      <div>
+        <div class="day-sub">теория · 3–3,5 часа</div>
+        <h2>Работа с ИИ-агентом</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>Понять, как ставить задачу агенту так, чтобы он не выдумывал и не ломал проект.</p>
+    </div>
+
+    <div class="block">
+      <h3>Теория</h3>
+      <p><b>ИИ-агент</b> — это программа, которая читает файлы, понимает задачу, предлагает изменения и может запускать команды. Это не автопилот и не «кнопка сделать сайт».</p>
+      <p>Агент видит только то, что ему дали: <b>контекст</b>. Чем точнее контекст, тем меньше фантазий. Поэтому хороший запрос состоит из четырёх частей:</p>
+      <ol>
+        <li><b>Контекст</b> — где мы, что уже есть, какие правила.</li>
+        <li><b>Задача</b> — что конкретно нужно получить.</li>
+        <li><b>Ограничения</b> — что нельзя трогать, какой стиль, какие технологии.</li>
+        <li><b>Проверка</b> — как мы поймём, что получилось.</li>
+      </ol>
+      <p>Четыре правила, которые спасают проект:</p>
+      <ul>
+        <li><b>Маленькие шаги.</b> Одна задача — один запрос. «Сделай весь сайт» не работает.</li>
+        <li><b>Проси объяснять.</b> «Объясни, что ты изменил и почему» — обязательно.</li>
+        <li><b>Проверяй сам.</b> Запусти, посмотри, сравни с ожиданием.</li>
+        <li><b>Не коммить непонятное.</b> Строка, которую не можешь объяснить, — это долг.</li>
+      </ul>
+      <div class="note warn">
+        <b>Главная ловушка новичка:</b> принять большой красивый ответ целиком.
+        Если агент переписал пять файлов, а ты не понимаешь зачем — откатись и попроси сделать меньше.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Визуализация: собери запрос</h3>
+      <p>Заполни поля — получишь готовую формулировку. Её можно копировать в агента.</p>
+      <div class="demo">
+        <div class="demo-title">конструктор запроса</div>
+        <div class="form-row">
+          <div class="field"><label>Контекст</label><input id="p-ctx" placeholder="Проект Learning OS, статичный сайт на HTML/CSS/JS"></div>
+          <div class="field"><label>Задача</label><input id="p-task" placeholder="Добавь на экран «Сегодня» блок с таймером"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Ограничения</label><input id="p-lim" placeholder="Без библиотек, не трогай store.js"></div>
+          <div class="field"><label>Проверка</label><input id="p-check" placeholder="Таймер запускается и останавливается, данные сохраняются"></div>
+        </div>
+        <textarea class="prompt-out" id="p-out" readonly></textarea>
+        <div class="zone-actions">
+          <button class="btn btn-sm btn-primary" id="p-build">Собрать</button>
+          <button class="btn btn-sm btn-ghost" id="p-copy">Копировать</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Сделай</h3>
+      <ol>
+        <li>Открой терминал в папке проекта и запусти агента (например, <code>opencode</code>).</li>
+        <li>Попроси: «Прочитай файлы проекта и объясни, что здесь устроено. Ничего не меняй».</li>
+        <li>Прочитай ответ. Если что-то непонятно — спроси ещё раз, другими словами.</li>
+        <li>Попроси маленькое изменение: поменять текст заголовка на экране «Сегодня».</li>
+        <li>Посмотри, какие файлы он изменил. Проверь результат в браузере.</li>
+        <li>Сделай коммит сам, своими руками.</li>
+      </ol>
+    </div>
+
+    <div class="block quiz">
+      <h3>Проверь себя</h3>
+      <details><summary>Почему «сделай мне сайт» — плохой запрос?</summary><p>Слишком много решений сразу: структура, стиль, данные, поведение. Агент начнёт угадывать, и результат будет не тем, что ты представляла.</p></details>
+      <details><summary>Что делать, если агент изменил слишком много файлов?</summary><p>Откатить изменения (<code>git checkout .</code> или отмена в редакторе) и переформулировать задачу уже, с явными ограничениями.</p></details>
+      <details><summary>Зачем просить объяснение изменений?</summary><p>Чтобы понимать свой код. Иначе через неделю ты не сможешь его починить, а агент — не сможет помочь без твоего понимания.</p></details>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="5">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="5">✓ Практика сделана</button>
+    </div>
+  </section>
+
+  <!-- ================= ДЕНЬ 6 ================= -->
+  <section class="day" id="d6">
+    <div class="day-head">
+      <div class="day-num">6</div>
+      <div>
+        <div class="day-sub">проект · 3–3,5 часа</div>
+        <h2>Проект: страница «Мой план»</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>Собрать свою страницу с планом на 16 недель, задеплоить её и закрыть первую неделю.</p>
+    </div>
+
+    <div class="block">
+      <h3>Задание</h3>
+      <p>Сделай отдельную страницу <code>plan.html</code> в папке проекта. На ней должно быть:</p>
+      <ul>
+        <li>Заголовок «Мой план на 16 недель».</li>
+        <li>Список из 16 пунктов — по одному на неделю (названия можно взять из дашборда).</li>
+        <li>Хотя бы один стиль: цвет, отступ, шрифт.</li>
+        <li>Ссылка обратно на <code>index.html</code>.</li>
+      </ul>
+      <p>Начни с этого каркаса — и меняй под себя:</p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Мой план&lt;/title&gt;
+  &lt;style&gt;
+    body {
+      font-family: sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #0f1420;
+      color: #e9eefb;
+    }
+    h1 { color: #b6ff3c; }
+    li { margin: 8px 0; }
+    a { color: #6c8cff; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Мой план на 16 недель&lt;/h1&gt;
+  &lt;ol&gt;
+    &lt;li&gt;Старт: терминал, Git, первая ссылка&lt;/li&gt;
+    &lt;li&gt;HTML и CSS&lt;/li&gt;
+    &lt;li&gt;Сетки и адаптив&lt;/li&gt;
+    &lt;!-- допиши остальные 13 --&gt;
+  &lt;/ol&gt;
+  &lt;p&gt;&lt;a href="index.html"&gt;← назад в дашборд&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <div class="note">
+        <b>Не копируй слепо.</b> Набери руками. Пальцы запоминают синтаксис лучше, чем глаза.
+        И обязательно поменяй хотя бы один цвет на свой.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Публикация</h3>
+      <ol>
+        <li>Сохрани файл.</li>
+        <li><code>git add .</code></li>
+        <li><code>git commit -m "План на 16 недель"</code></li>
+        <li><code>git push</code></li>
+        <li>Открой <code>https://ЛОГИН.github.io/vb_ed/plan.html</code></li>
+      </ol>
+    </div>
+
+    <div class="final">
+      <h3 style="font-size:18px;margin-bottom:12px">Ретро недели</h3>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">Ответь себе честно. Это важнее, чем ещё один урок.</p>
+      <ol style="color:var(--muted);font-size:14px;padding-left:20px">
+        <li>Что оказалось проще, чем ты думала?</li>
+        <li>Что оказалось сложнее?</li>
+        <li>Где ты застряла больше чем на 20 минут — и что помогло?</li>
+        <li>Что бы ты сделала иначе в понедельник?</li>
+        <li>Какая маленькая победа была самой приятной?</li>
+      </ol>
+      <p style="color:var(--dim);font-size:13px;margin-top:14px">Запиши ответы в дневник в дашборде — там для этого есть место.</p>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="6">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="6">✓ Проект задеплоен</button>
+    </div>
+  </section>
+
+</div>
+
+<script src="../data.js"></script>
+<script src="../store.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- отметки прогресса ---------- */
+
+  Store.load();
+
+  function refreshDots() {
+    document.querySelectorAll("#week-dots a").forEach(function (a) {
+      var i = Number(a.dataset.day) - 1;
+      var d = Store.peekDay(i);
+      a.classList.toggle("done", !!(d && d.closed));
+    });
+    document.querySelectorAll(".mark-btn").forEach(function (b) {
+      var i = Number(b.dataset.day) - 1;
+      var d = Store.peekDay(i);
+      var on = !!(d && d.tasks && d.tasks[b.dataset.mark]);
+      if (!b.dataset.base) b.dataset.base = b.textContent.replace(/^✓\s*/, "").trim();
+      b.textContent = (on ? "✓ " : "") + b.dataset.base;
+      b.classList.toggle("on", on);
+    });
+  }
+
+  document.querySelectorAll(".mark-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var i = Number(btn.dataset.day) - 1;
+      var task = btn.dataset.mark;
+      var d = Store.peekDay(i);
+      if (d && d.closed) return;
+      var current = !!(d && d.tasks && d.tasks[task]);
+      Store.setTask(i, task, !current);
+      refreshDots();
+    });
+  });
+
+  refreshDots();
+
+  /* ---------- терминал ---------- */
+
+  var fs = {
+    dirs: {
+      "Users": {
+        dirs: {
+          "Vera": {
+            dirs: {
+              "OneDrive": {
+                dirs: {
+                  "Документы": {
+                    dirs: {
+                      "vb_ed": {
+                        dirs: {
+                          "materials": {
+                            dirs: {},
+                            files: { "week-01.html": "<!doctype html>\n<html lang=\"ru\">\n  <!-- материалы первой недели -->\n</html>" }
+                          },
+                          "notes": { dirs: {}, files: {} }
+                        },
+                        files: {
+                          "index.html": "<!doctype html>\n<html lang=\"ru\">\n  <head><title>Learning OS</title></head>\n  <body>...</body>\n</html>",
+                          "styles.css": "/* внешний вид Learning OS */",
+                          "app.js": "/* логика экранов и действий */",
+                          "data.js": "/* программа: 16 недель, 96 дней */",
+                          "store.js": "/* прогресс, XP, уровни, streak */",
+                          "README.md": "# Learning OS\n\nМой личный пульт обучения.\n\nОткрой index.html в браузере."
+                        }
+                      }
+                    },
+                    files: {}
+                  }
+                },
+                files: {}
+              }
+            },
+            files: {}
+          }
+        },
+        files: {}
+      }
+    },
+    files: {}
+  };
+
+  var cwd = ["Users", "Vera"];
+  var body = document.getElementById("term-body");
+  var input = document.getElementById("term-input");
+  var promptEl = document.getElementById("term-prompt");
+
+  function keyOf(obj, name) {
+    if (!obj) return null;
+    var low = String(name).toLowerCase();
+    for (var k in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, k) && k.toLowerCase() === low) return k;
+    }
+    return null;
+  }
+
+  function pathOf(segs) {
+    return "C:\\" + segs.join("\\");
+  }
+
+  function promptText() {
+    return pathOf(cwd) + ">";
+  }
+
+  function nodeAt(segs) {
+    var node = fs;
+    for (var i = 0; i < segs.length; i++) {
+      var k = keyOf(node.dirs, segs[i]);
+      if (!k) return null;
+      node = node.dirs[k];
+    }
+    return node;
+  }
+
+  function print(text, cls) {
+    var line = document.createElement("div");
+    if (cls) line.className = cls;
+    line.textContent = text;
+    body.appendChild(line);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function tokenize(s) {
+    var out = [];
+    var cur = "";
+    var quote = false;
+    for (var i = 0; i < s.length; i++) {
+      var ch = s.charAt(i);
+      if (ch === '"') { quote = !quote; continue; }
+      if (!quote && /\s/.test(ch)) {
+        if (cur) { out.push(cur); cur = ""; }
+        continue;
+      }
+      cur += ch;
+    }
+    if (cur) out.push(cur);
+    return out;
+  }
+
+  function stripFlags(args) {
+    return args.filter(function (a) { return a.charAt(0) !== "/"; });
+  }
+
+  function expandPath(raw) {
+    var p = String(raw).replace(/^["']|["']$/g, "").replace(/\//g, "\\");
+    var base;
+    var m = p.match(/^([a-zA-Z]):(\\|$)/);
+    if (m) {
+      if (m[1].toUpperCase() !== "C") return null;
+      base = [];
+      p = p.slice(2);
+      if (p.charAt(0) === "\\") p = p.slice(1);
+    } else if (p.charAt(0) === "\\") {
+      base = [];
+      p = p.slice(1);
+    } else {
+      base = cwd.slice();
+    }
+    var parts = p.split("\\");
+    for (var i = 0; i < parts.length; i++) {
+      var s = parts[i];
+      if (!s || s === ".") continue;
+      if (s === "..") { if (base.length) base.pop(); continue; }
+      base.push(s);
+    }
+    return base;
+  }
+
+  function actual(parts) {
+    var segs = [];
+    for (var i = 0; i < parts.length; i++) {
+      var node = nodeAt(segs);
+      var k = node && keyOf(node.dirs, parts[i]);
+      if (!k) return null;
+      segs.push(k);
+    }
+    return segs;
+  }
+
+  function locate(parts) {
+    if (!parts.length) return null;
+    var parent = nodeAt(parts.slice(0, -1));
+    if (!parent) return null;
+    return { parent: parent, name: parts[parts.length - 1] };
+  }
+
+  function fileAt(loc) {
+    if (!loc) return null;
+    var k = keyOf(loc.parent.files, loc.name);
+    return k ? { key: k, text: loc.parent.files[k] } : null;
+  }
+
+  function dirAt(loc) {
+    if (!loc) return null;
+    var k = keyOf(loc.parent.dirs, loc.name);
+    return k ? { key: k, node: loc.parent.dirs[k] } : null;
+  }
+
+  function treeLines(node, prefix, out) {
+    var dirs = Object.keys(node.dirs).sort();
+    var files = Object.keys(node.files).sort();
+    var total = dirs.length + files.length;
+    var n = 0;
+    dirs.forEach(function (d) {
+      n += 1;
+      out.push(prefix + (n === total ? "└── " : "├── ") + d + "\\");
+      treeLines(node.dirs[d], prefix + (n === total ? "    " : "│   "), out);
+    });
+    files.forEach(function (f) {
+      n += 1;
+      out.push(prefix + (n === total ? "└── " : "├── ") + f);
+    });
+  }
+
+  function run(raw) {
+    var cmd = raw.trim();
+    if (!cmd) return;
+    print(promptText() + " " + cmd, "prompt");
+
+    if (/^(help|\?)$/i.test(cmd)) {
+      print("dir                     — что лежит в папке");
+      print("cd <путь>               — перейти в папку");
+      print("cd ..                   — на уровень выше");
+      print("cd \\                    — в корень диска");
+      print("mkdir <путь>            — создать папку");
+      print("echo текст > файл       — создать файл");
+      print("echo текст >> файл      — дописать строку");
+      print("type <файл>             — показать содержимое");
+      print("copy <откуда> <куда>    — скопировать файл");
+      print("move <откуда> <куда>    — переместить");
+      print("ren <было> <стало>      — переименовать");
+      print("del <файл>              — удалить файл");
+      print("tree [путь]             — дерево папок");
+      print("start <файл>            — открыть файл");
+      print("pwd                     — где я (в cmd это cd)");
+      print("cls                     — очистить экран");
+      return;
+    }
+
+    if (/^(cls|clear)$/i.test(cmd)) { body.innerHTML = ""; return; }
+
+    /* echo — отдельно: важен текст после команды */
+    var echo = cmd.match(/^echo\b\s*(.*)$/i);
+    if (echo) {
+      var rest = echo[1];
+      var redir = rest.match(/^(.*?)\s*(>>|>)\s*([^\s>]+)\s*$/);
+      if (!redir) { print(rest); return; }
+
+      var text = redir[1].replace(/^"|"$/g, "");
+      var append = redir[2] === ">>";
+      var target = expandPath(redir[3]);
+      var tLoc = target && locate(target);
+      if (!tLoc) { print("Не удается найти указанный путь: " + redir[3], "err"); return; }
+      if (dirAt(tLoc)) { print("Это папка, а не файл: " + tLoc.name, "err"); return; }
+
+      var existingFile = fileAt(tLoc);
+      var fKey = existingFile ? existingFile.key : tLoc.name;
+      var prev = append && existingFile ? existingFile.text : "";
+      tLoc.parent.files[fKey] = prev ? prev + "\n" + text : text;
+      print("Записано в " + fKey, "ok");
+      return;
+    }
+
+    var toks = tokenize(cmd);
+    var name = toks[0].toLowerCase();
+    var args = toks.slice(1);
+
+    if (name === "dir" || name === "ls") {
+      var dArgs = stripFlags(args);
+      var dParts = dArgs.length ? expandPath(dArgs[0]) : cwd.slice();
+      var dSegs = dParts && actual(dParts);
+      var d = dSegs && nodeAt(dSegs);
+      if (!d) { print("Не удается найти путь: " + (dArgs[0] || ""), "err"); return; }
+
+      print(" Папка: " + pathOf(dSegs));
+      print("");
+      var dNames = Object.keys(d.dirs).sort();
+      var fNames = Object.keys(d.files).sort();
+      dNames.forEach(function (x) { print("<DIR>          " + x, "ok"); });
+      fNames.forEach(function (x) { print("               " + x); });
+      print("");
+      print("               " + (dNames.length + fNames.length) + " элем.");
+      return;
+    }
+
+    if (name === "pwd") {
+      print(pathOf(cwd));
+      return;
+    }
+
+    if (name === "cd" || name === "chdir") {
+      var cArgs = args.slice();
+      if (cArgs[0] && /^\/d$/i.test(cArgs[0])) cArgs.shift();
+      if (!cArgs.length) { print(pathOf(cwd)); return; }
+
+      var cParts = expandPath(cArgs[0]);
+      var cSegs = cParts && actual(cParts);
+      if (!cSegs) { print("Не удается найти указанный путь: " + cArgs[0], "err"); return; }
+      cwd = cSegs;
+      return;
+    }
+
+    if (name === "mkdir" || name === "md") {
+      if (!args.length) { print("Укажи имя папки: mkdir notes", "err"); return; }
+
+      var mParts = expandPath(args[0]);
+      if (!mParts) { print("Неверный путь: " + args[0], "err"); return; }
+      var mNode = fs;
+      var mCreated = false;
+      for (var i = 0; i < mParts.length; i++) {
+        var existingDir = keyOf(mNode.dirs, mParts[i]);
+        if (existingDir) { mNode = mNode.dirs[existingDir]; continue; }
+        if (keyOf(mNode.files, mParts[i])) { print("Файл с именем " + mParts[i] + " уже есть", "err"); return; }
+        mNode.dirs[mParts[i]] = { dirs: {}, files: {} };
+        mNode = mNode.dirs[mParts[i]];
+        mCreated = true;
+      }
+      if (mCreated) print("Создана папка: " + pathOf(mParts), "ok");
+      else print("Уже существует: " + pathOf(mParts), "err");
+      return;
+    }
+
+    if (name === "type" || name === "cat") {
+      if (!args.length) { print("Укажи файл: type README.md", "err"); return; }
+      var tParts = expandPath(args[0]);
+      var tFile = tParts && fileAt(locate(tParts));
+      if (!tFile) { print("Не удается найти указанный файл: " + args[0], "err"); return; }
+      tFile.text.split("\n").forEach(function (line) { print(line); });
+      return;
+    }
+
+    if (name === "copy") {
+      if (args.length < 2) { print("Формат: copy откуда куда", "err"); return; }
+      var csParts = expandPath(args[0]);
+      var csFile = csParts && fileAt(locate(csParts));
+      if (!csFile) { print("Не удается найти файл: " + args[0], "err"); return; }
+      var cdParts = expandPath(args[1]);
+      var cdLoc = cdParts && locate(cdParts);
+      if (!cdLoc) { print("Не удается найти путь: " + args[1], "err"); return; }
+      if (dirAt(cdLoc)) { print("Это папка: " + cdLoc.name, "err"); return; }
+      var cdFile = fileAt(cdLoc);
+      var cdKey = cdFile ? cdFile.key : cdLoc.name;
+      cdLoc.parent.files[cdKey] = csFile.text;
+      print("Скопировано: " + cdKey, "ok");
+      return;
+    }
+
+    if (name === "ren" || name === "rename") {
+      if (args.length < 2) { print("Формат: ren было стало", "err"); return; }
+      if (args[1].indexOf("\\") !== -1) { print("Новое имя — без пути: ren copy.txt renamed.txt", "err"); return; }
+      var rParts = expandPath(args[0]);
+      var rLoc = rParts && locate(rParts);
+      var rFile = rLoc && fileAt(rLoc);
+      var rDir = rLoc && dirAt(rLoc);
+      if (!rFile && !rDir) { print("Не удается найти: " + args[0], "err"); return; }
+      var newName = args[1];
+      if (keyOf(rLoc.parent.files, newName) || keyOf(rLoc.parent.dirs, newName)) {
+        print("Уже существует: " + newName, "err");
+        return;
+      }
+      if (rFile) {
+        rLoc.parent.files[newName] = rLoc.parent.files[rFile.key];
+        delete rLoc.parent.files[rFile.key];
+      } else {
+        rLoc.parent.dirs[newName] = rLoc.parent.dirs[rDir.key];
+        delete rLoc.parent.dirs[rDir.key];
+      }
+      print("Переименовано в " + newName, "ok");
+      return;
+    }
+
+    if (name === "del" || name === "erase") {
+      if (!args.length) { print("Укажи файл: del plan.txt", "err"); return; }
+      var delParts = expandPath(args[0]);
+      var delLoc = delParts && locate(delParts);
+      if (!delLoc) { print("Не удается найти: " + args[0], "err"); return; }
+      if (dirAt(delLoc)) { print(delLoc.name + " — это папка. del удаляет только файлы.", "err"); return; }
+      var delFile = fileAt(delLoc);
+      if (!delFile) { print("Не удается найти файл: " + args[0], "err"); return; }
+      delete delLoc.parent.files[delFile.key];
+      print("Удалено: " + delFile.key, "ok");
+      return;
+    }
+
+    if (name === "move" || name === "mv") {
+      if (args.length < 2) { print("Формат: move откуда куда", "err"); return; }
+      var mvSrc = expandPath(args[0]);
+      var mvDst = expandPath(args[1]);
+      var mvSLoc = mvSrc && locate(mvSrc);
+      var mvDLoc = mvDst && locate(mvDst);
+      if (!mvSLoc) { print("Не удается найти: " + args[0], "err"); return; }
+      if (!mvDLoc) { print("Не удается найти путь: " + args[1], "err"); return; }
+      var mvFile = fileAt(mvSLoc);
+      var mvDir = dirAt(mvSLoc);
+      if (!mvFile && !mvDir) { print("Не удается найти: " + args[0], "err"); return; }
+      if (mvFile) {
+        if (dirAt(mvDLoc)) { print("Это папка: " + mvDLoc.name, "err"); return; }
+        var mvKey = fileAt(mvDLoc) ? fileAt(mvDLoc).key : mvDLoc.name;
+        mvDLoc.parent.files[mvKey] = mvSLoc.parent.files[mvFile.key];
+        delete mvSLoc.parent.files[mvFile.key];
+      } else {
+        if (dirAt(mvDLoc)) { print("Уже существует папка: " + mvDLoc.name, "err"); return; }
+        if (pathOf(mvDst).toLowerCase().indexOf(pathOf(mvSrc).toLowerCase() + "\\") === 0) {
+          print("Нельзя переместить папку внутрь себя.", "err");
+          return;
+        }
+        mvDLoc.parent.dirs[mvDLoc.name] = mvSLoc.parent.dirs[mvDir.key];
+        delete mvSLoc.parent.dirs[mvDir.key];
+      }
+      print("Перемещено: " + args[1], "ok");
+      return;
+    }
+
+    if (name === "tree") {
+      var trArgs = stripFlags(args);
+      var trParts = trArgs.length ? expandPath(trArgs[0]) : cwd.slice();
+      var trSegs = trParts && actual(trParts);
+      var trNode = trSegs && nodeAt(trSegs);
+      if (!trNode) { print("Не удается найти путь: " + (trArgs[0] || ""), "err"); return; }
+      print(pathOf(trSegs));
+      var trOut = [];
+      treeLines(trNode, "", trOut);
+      trOut.forEach(function (line) { print(line); });
+      if (!trOut.length) print("папка пуста");
+      return;
+    }
+
+    if (name === "start") {
+      if (!args.length) { print("start <файл> — открыть файл", "err"); return; }
+      if (args[0] === ".") {
+        print("На своём компьютере это открыло бы папку в Проводнике.", "ok");
+        return;
+      }
+      var stParts = expandPath(args[0]);
+      var stFile = stParts && fileAt(locate(stParts));
+      if (!stFile) { print("Не удается найти файл: " + args[0], "err"); return; }
+      print("На своём компьютере это открыло бы " + stFile.key + " в браузере. В песочнице браузер не запускается.", "ok");
+      return;
+    }
+
+    print("'" + toks[0] + "' не является внутренней или внешней командой. Напиши help.", "err");
+  }
+
+  input.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") return;
+    var value = input.value;
+    input.value = "";
+    run(value);
+    promptEl.textContent = promptText();
+  });
+
+  print("Песочница терминала. Ты в C:\\Users\\Vera — как в настоящем cmd после Win+R.", "ok");
+  print("Напиши help и нажми Enter.", "ok");
+
+  /* ---------- живой редактор ---------- */
+
+  var src = document.getElementById("play-src");
+  var out = document.getElementById("play-out");
+  var t = null;
+
+  function renderPlay() {
+    out.srcdoc = src.value;
+  }
+
+  src.addEventListener("input", function () {
+    clearTimeout(t);
+    t = setTimeout(renderPlay, 250);
+  });
+
+  renderPlay();
+
+  /* ---------- git-конвейер ---------- */
+
+  var work = ["index.html", "styles.css"];
+  var stage = [];
+  var commits = [];
+
+  function drawGit() {
+    document.getElementById("z-work").innerHTML = work.map(function (f) {
+      return '<div class="item">' + f + "</div>";
+    }).join("") || '<div style="color:var(--dim);font-size:12px">пусто</div>';
+
+    document.getElementById("z-stage").innerHTML = stage.map(function (f) {
+      return '<div class="item new">' + f + "</div>";
+    }).join("") || '<div style="color:var(--dim);font-size:12px">пусто</div>';
+
+    document.getElementById("z-commits").innerHTML = commits.map(function (c, i) {
+      return '<div class="commit">● ' + c + "</div>";
+    }).join("") || '<div style="color:var(--dim);font-size:12px">история пуста</div>';
+  }
+
+  document.getElementById("git-add").addEventListener("click", function () {
+    if (!work.length) return;
+    stage = stage.concat(work);
+    work = [];
+    drawGit();
+  });
+
+  document.getElementById("git-commit").addEventListener("click", function () {
+    if (!stage.length) return;
+    commits.unshift('коммит ' + (commits.length + 1) + ": " + stage.length + " файл(а)");
+    stage = [];
+    drawGit();
+  });
+
+  document.getElementById("git-reset").addEventListener("click", function () {
+    work = ["index.html", "styles.css"];
+    stage = [];
+    commits = [];
+    drawGit();
+  });
+
+  drawGit();
+
+  /* ---------- конструктор запроса ---------- */
+
+  function buildPrompt() {
+    var ctx = document.getElementById("p-ctx").value.trim() || "…";
+    var task = document.getElementById("p-task").value.trim() || "…";
+    var lim = document.getElementById("p-lim").value.trim() || "…";
+    var check = document.getElementById("p-check").value.trim() || "…";
+    document.getElementById("p-out").value =
+      "КОНТЕКСТ:\n" + ctx +
+      "\n\nЗАДАЧА:\n" + task +
+      "\n\nОГРАНИЧЕНИЯ:\n" + lim +
+      "\n\nПРОВЕРКА:\n" + check +
+      "\n\nСначала объясни план в двух предложениях. Потом внеси минимальные изменения. " +
+      "В конце перечисли, что именно изменил и почему.";
+  }
+
+  document.getElementById("p-build").addEventListener("click", buildPrompt);
+
+  document.getElementById("p-copy").addEventListener("click", function () {
+    var ta = document.getElementById("p-out");
+    ta.select();
+    try {
+      if (navigator.clipboard) navigator.clipboard.writeText(ta.value);
+      else document.execCommand("copy");
+    } catch (e) {
+      document.execCommand("copy");
+    }
+    var btn = document.getElementById("p-copy");
+    btn.textContent = "Скопировано";
+    setTimeout(function () { btn.textContent = "Копировать"; }, 1500);
+  });
+
+  buildPrompt();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,3154 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Неделя 2 — HTML и CSS · Learning OS</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .doc { max-width: 900px; margin: 0 auto; padding: 28px 22px 120px; }
+  .doc-top {
+    position: sticky; top: 0; z-index: 30;
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 12px 22px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(9,12,19,.88); backdrop-filter: blur(10px);
+  }
+  .doc-top a.back { color: var(--muted); font-size: 13px; font-weight: 700; }
+  .doc-top a.back:hover { color: var(--lime); }
+  .week-dots { display: flex; gap: 6px; }
+  .week-dots a {
+    width: 26px; height: 26px; border-radius: 8px;
+    display: grid; place-items: center;
+    font-size: 11.5px; font-weight: 800;
+    border: 1px solid var(--line); background: var(--panel-2); color: var(--dim);
+  }
+  .week-dots a:hover { border-color: var(--lime); color: var(--lime); }
+  .week-dots a.done { background: rgba(182,255,60,.16); border-color: rgba(182,255,60,.45); color: var(--lime); }
+
+  .hero { padding: 26px 0 30px; border-bottom: 1px solid var(--line); margin-bottom: 34px; }
+  .hero h1 { font-size: 38px; margin: 10px 0 12px; }
+  .hero p { color: var(--muted); max-width: 680px; font-size: 16px; }
+  .hero-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+
+  .day { padding: 30px 0 40px; border-bottom: 1px solid var(--line); scroll-margin-top: 70px; }
+  .day:last-of-type { border-bottom: none; }
+  .day-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+  .day-num {
+    width: 44px; height: 44px; flex: 0 0 auto;
+    border-radius: 13px; display: grid; place-items: center;
+    background: linear-gradient(145deg, rgba(182,255,60,.18), rgba(182,255,60,.04));
+    border: 1px solid rgba(182,255,60,.4);
+    color: var(--lime); font-weight: 900; font-size: 17px;
+  }
+  .day-head h2 { font-size: 26px; }
+  .day-sub { color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; font-weight: 800; }
+
+  .block { margin: 22px 0; }
+  .block h3 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: .11em;
+    color: var(--dim); margin-bottom: 10px; font-weight: 800;
+  }
+  .block p { color: var(--muted); margin-bottom: 10px; font-size: 15px; }
+  .block p b, .block li b { color: var(--text); font-weight: 700; }
+  .block ul, .block ol { color: var(--muted); padding-left: 22px; margin: 8px 0; }
+  .block li { margin-bottom: 6px; font-size: 14.5px; }
+  code {
+    font-family: var(--mono); font-size: .9em;
+    background: rgba(108,140,255,.12); color: #b9c8ff;
+    padding: 2px 6px; border-radius: 5px;
+  }
+  pre {
+    background: #0b0f18; border: 1px solid var(--line);
+    border-radius: 12px; padding: 14px 16px; overflow-x: auto;
+    font-family: var(--mono); font-size: 13px; line-height: 1.6;
+    color: #cfe0ff; margin: 12px 0;
+  }
+  pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
+
+  .note {
+    border-left: 3px solid var(--blue);
+    background: rgba(108,140,255,.07);
+    padding: 12px 16px; border-radius: 0 10px 10px 0;
+    color: var(--muted); font-size: 14px; margin: 14px 0;
+  }
+  .note.warn { border-color: var(--orange); background: rgba(255,165,60,.07); }
+  .note.good { border-color: var(--lime); background: rgba(182,255,60,.06); }
+  .note b { color: var(--text); }
+
+  .demo {
+    border: 1px solid var(--line-2); border-radius: 16px;
+    background: var(--panel); padding: 18px; margin: 16px 0;
+  }
+  .demo-title { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--dim); font-weight: 800; margin-bottom: 12px; }
+
+  .tree-view { font-family: var(--mono); font-size: 13px; line-height: 1.9; color: var(--muted); }
+  .tree-view .folder { color: var(--blue); }
+  .tree-view .file { color: var(--muted); }
+  .tree-view .hl { color: var(--lime); }
+
+  .playground { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .playground textarea {
+    width: 100%; min-height: 260px; resize: vertical;
+    background: #05070b; color: #cfe0ff;
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+  }
+  .playground iframe {
+    width: 100%; min-height: 260px; border: 1px solid var(--line);
+    border-radius: 10px; background: #fff;
+  }
+
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; color: var(--muted); font-size: 14px; }
+  .check-item input { margin-top: 4px; accent-color: #b6ff3c; }
+
+  .quiz details {
+    border: 1px solid var(--line); border-radius: 11px;
+    padding: 12px 14px; margin-bottom: 8px; background: var(--panel-2);
+  }
+  .quiz summary { cursor: pointer; font-weight: 650; font-size: 14px; color: var(--text); }
+  .quiz details p { margin-top: 10px; color: var(--muted); font-size: 13.5px; }
+  .quiz details p + p { margin-top: 6px; }
+
+  .day-check {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    margin-top: 22px; padding-top: 18px; border-top: 1px dashed var(--line);
+  }
+  .mark-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 15px; border-radius: 10px;
+    border: 1px solid var(--line-2); background: var(--panel-2);
+    color: var(--muted); font-size: 13px; font-weight: 700; cursor: pointer;
+    transition: all .15s;
+  }
+  .mark-btn:hover { border-color: var(--lime); color: var(--lime); }
+  .mark-btn.on { background: rgba(182,255,60,.14); border-color: rgba(182,255,60,.5); color: var(--lime); }
+
+  .final { border: 1px solid rgba(182,255,60,.3); background: linear-gradient(180deg, rgba(182,255,60,.07), transparent); border-radius: 18px; padding: 24px; }
+
+  .tbl-wrap {
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--panel-2); padding: 4px 14px; margin: 14px 0;
+    overflow-x: auto;
+  }
+  .tbl { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13.5px; }
+  .tbl th, .tbl td {
+    text-align: left; vertical-align: top;
+    padding: 9px 10px; border-bottom: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .tbl th {
+    color: var(--dim); font-size: 10.5px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .1em;
+  }
+  .tbl td:first-child {
+    color: var(--text); font-family: var(--mono);
+    font-size: 12.5px; white-space: nowrap;
+  }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl b { color: var(--text); }
+
+  /* ---------- подсказки ---------- */
+  .hints { display: grid; gap: 8px; margin: 12px 0; }
+  .hint {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 10px 10px 0;
+    background: rgba(108,140,255,.05);
+    overflow: hidden;
+  }
+  .hint > summary {
+    cursor: pointer; list-style: none;
+    padding: 11px 14px;
+    font-size: 13.5px; font-weight: 700; color: var(--text);
+    display: flex; gap: 9px; align-items: flex-start;
+  }
+  .hint > summary::-webkit-details-marker { display: none; }
+  .hint > summary::before { content: "＋"; color: var(--dim); font-weight: 800; flex: 0 0 auto; }
+  .hint[open] > summary::before { content: "－"; }
+  .hint-body { padding: 0 14px 12px 34px; color: var(--muted); font-size: 13.5px; }
+  .hint-body p { margin: 6px 0; font-size: 13.5px; }
+  .hint-body code { font-size: .92em; }
+  .hint-label {
+    display: block; font-size: 9.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--dim); margin-bottom: 3px;
+  }
+  .hint.prev { border-left-color: var(--lime); background: rgba(182,255,60,.05); }
+  .hint.world { border-left-color: var(--pink); background: rgba(255,107,157,.05); }
+  .hint.pro { border-left-color: var(--cyan); background: rgba(60,224,255,.05); }
+  .hint.trap { border-left-color: var(--orange); background: rgba(255,165,60,.06); }
+
+  /* ---------- карточки-конспекты ---------- */
+  .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 12px 0; }
+  .mini-card {
+    border: 1px solid var(--line); background: var(--panel-2);
+    border-radius: 12px; padding: 14px;
+  }
+  .mini-card h4 {
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--dim); margin-bottom: 8px;
+  }
+  .mini-card p { font-size: 13.5px; margin: 0; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .kw {
+    font-family: var(--mono); font-size: 11.5px;
+    padding: 3px 8px; border-radius: 6px;
+    border: 1px solid var(--line); background: var(--panel-2);
+    color: var(--muted);
+  }
+
+  /* ---------- box model ---------- */
+  .bm-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .bm-stage {
+    border: 1px dashed var(--line-2); border-radius: 12px;
+    background: #05070b; padding: 8px; display: grid; place-items: center;
+  }
+  .bm-margin { background: rgba(255,165,60,.16); padding: 22px; border-radius: 10px; }
+  .bm-border { background: rgba(182,255,60,.22); padding: 6px; border-radius: 8px; }
+  .bm-padding { background: rgba(108,140,255,.22); padding: 18px; border-radius: 6px; }
+  .bm-content {
+    width: 220px; background: #0b0f18; border: 1px solid var(--line);
+    border-radius: 4px; padding: 16px; text-align: center;
+    font-family: var(--mono); font-size: 12px; color: var(--text);
+  }
+  .bm-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; font-size: 11.5px; color: var(--dim); }
+  .bm-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; }
+  .controls { display: grid; gap: 10px; }
+  .ctrl { display: grid; grid-template-columns: 78px 1fr 56px; gap: 8px; align-items: center; font-size: 12.5px; color: var(--muted); }
+  .ctrl input[type=range] { width: 100%; accent-color: #b6ff3c; }
+  .ctrl output { font-family: var(--mono); color: var(--text); text-align: right; }
+  .ctrl select {
+    background: #05070b; color: var(--text);
+    border: 1px solid var(--line); border-radius: 8px;
+    padding: 6px 8px; font-family: var(--mono); font-size: 12px;
+  }
+  .ctrl select:focus { outline: 1px solid rgba(182,255,60,.5); }
+  .bm-result {
+    margin-top: 12px; font-family: var(--mono); font-size: 12.5px;
+    color: var(--cyan); background: #05070b; border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 12px; white-space: pre-wrap;
+  }
+
+  /* ---------- flexbox ---------- */
+  .flex-stage {
+    display: flex; min-height: 230px; gap: 8px;
+    border: 1px dashed var(--line-2); border-radius: 12px;
+    background: #05070b; padding: 10px;
+  }
+  .flex-item {
+    background: linear-gradient(145deg, rgba(108,140,255,.38), rgba(108,140,255,.12));
+    border: 1px solid rgba(108,140,255,.5); border-radius: 8px;
+    padding: 16px 10px; font-family: var(--mono); font-size: 12px;
+    color: #dbe4ff; text-align: center; min-width: 54px;
+  }
+  .flex-item:nth-child(2) { background: linear-gradient(145deg, rgba(255,107,157,.35), rgba(255,107,157,.1)); border-color: rgba(255,107,157,.5); }
+  .flex-item:nth-child(3) { background: linear-gradient(145deg, rgba(182,255,60,.3), rgba(182,255,60,.08)); border-color: rgba(182,255,60,.5); }
+  .flex-item:nth-child(4) { background: linear-gradient(145deg, rgba(60,224,255,.3), rgba(60,224,255,.08)); border-color: rgba(60,224,255,.5); }
+  .flex-code {
+    margin-top: 12px; font-family: var(--mono); font-size: 12.5px;
+    color: var(--cyan); background: #05070b; border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 12px; white-space: pre-wrap;
+  }
+
+  /* ---------- специфичность ---------- */
+  .spec-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .spec-input {
+    flex: 1; min-width: 240px;
+    background: #05070b; color: #cfe0ff;
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px 12px; font-family: var(--mono); font-size: 13px;
+    outline: none;
+  }
+  .spec-input:focus { border-color: rgba(182,255,60,.55); }
+  .spec-score { display: flex; gap: 6px; margin-top: 12px; }
+  .spec-digit {
+    width: 48px; height: 56px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--panel-2);
+    display: grid; place-content: center; text-align: center;
+    font-family: var(--mono); font-size: 20px; color: var(--lime);
+  }
+  .spec-digit small { display: block; font-size: 9px; color: var(--dim); letter-spacing: .06em; margin-top: 2px; }
+  .spec-note { margin-top: 10px; color: var(--dim); font-size: 12px; }
+
+  .battle-options { display: flex; gap: 8px; flex-wrap: wrap; }
+  .battle-opt {
+    padding: 9px 14px; border-radius: 9px;
+    border: 1px solid var(--line-2); background: var(--panel-2);
+    color: var(--muted); font-family: var(--mono); font-size: 12.5px;
+    cursor: pointer;
+  }
+  .battle-opt:hover { border-color: var(--lime); color: var(--lime); }
+  .battle-opt.right { border-color: rgba(182,255,60,.6); background: rgba(182,255,60,.14); color: var(--lime); }
+  .battle-opt.wrong { border-color: rgba(255,120,120,.6); background: rgba(255,120,120,.12); color: #ff9b9b; }
+  .battle-result { margin-top: 12px; font-size: 13.5px; color: var(--muted); min-height: 22px; }
+  .battle-result b { color: var(--text); }
+
+  /* ---------- форма ---------- */
+  .form-demo { display: grid; gap: 13px; }
+  .form-demo .field { display: grid; gap: 6px; }
+  .form-demo label { font-size: 12px; color: var(--dim); font-weight: 700; letter-spacing: .03em; }
+  .form-demo input[type=text],
+  .form-demo input[type=date],
+  .form-demo input[type=number],
+  .form-demo textarea,
+  .form-demo select {
+    background: #05070b; color: var(--text);
+    border: 1px solid var(--line); border-radius: 9px;
+    padding: 10px 12px; font-family: inherit; font-size: 14px;
+  }
+  .form-demo textarea { min-height: 90px; resize: vertical; }
+  .form-demo input:focus, .form-demo textarea:focus, .form-demo select:focus {
+    outline: 2px solid rgba(182,255,60,.45); outline-offset: 1px;
+    border-color: rgba(182,255,60,.55);
+  }
+  .form-demo input:user-invalid, .form-demo textarea:user-invalid { border-color: rgba(255,120,120,.7); }
+  .form-demo input[type=range] { accent-color: #b6ff3c; }
+  .radio-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .radio-row label { display: flex; gap: 6px; align-items: center; font-weight: 400; color: var(--muted); font-size: 13.5px; }
+  .radio-row input { accent-color: #b6ff3c; }
+  .form-out {
+    margin-top: 12px; font-family: var(--mono); font-size: 12.5px;
+    color: var(--cyan); background: #05070b; border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; min-height: 46px;
+  }
+
+  @media (max-width: 760px) {
+    .hero h1 { font-size: 28px; }
+    .day-head h2 { font-size: 21px; }
+    .playground { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: 1fr; }
+    .bm-wrap { grid-template-columns: 1fr; }
+    .ctrl { grid-template-columns: 70px 1fr 44px; }
+    .spec-digit { width: 42px; height: 50px; font-size: 18px; }
+    .doc { padding: 20px 16px 110px; }
+    .doc-top { padding: 10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="doc-top">
+  <a class="back" href="../index.html">← в дашборд</a>
+  <div class="week-dots" id="week-dots">
+    <a href="#d1" data-day="7">1</a>
+    <a href="#d2" data-day="8">2</a>
+    <a href="#d3" data-day="9">3</a>
+    <a href="#d4" data-day="10">4</a>
+    <a href="#d5" data-day="11">5</a>
+    <a href="#d6" data-day="12">6</a>
+  </div>
+</div>
+
+<div class="doc">
+
+  <div class="hero">
+    <div class="eyebrow"><span class="dot"></span>неделя 2 · блок «Как устроен веб»</div>
+    <h1>HTML и CSS: собрать экран руками</h1>
+    <p>
+      На первой неделе ты получила ссылку в интернете. Теперь сайт перестаёт быть
+      «чёрным ящиком»: ты научишься размечать смысл, строить формы, управлять цветом,
+      размерами и раскладкой — и соберёшь настоящий экран «Сегодня» для своего Learning OS.
+    </p>
+    <div class="hero-meta">
+      <span class="chip" style="color:var(--lime)">6 дней</span>
+      <span class="chip" style="color:var(--blue)">~30 часов</span>
+      <span class="chip" style="color:var(--orange)">5 часов в день</span>
+      <span class="chip" style="color:var(--pink)">проект в субботу</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Как устроена эта неделя</h3>
+    <p>
+      Пять часов — это не «пять часов чтения». Это четыре глубоких блока и час на закрепление.
+      Час закрепления — самый важный: именно там знания превращаются в навык.
+    </p>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Время</th><th>Блок</th><th>Что происходит</th></tr></thead>
+        <tbody>
+          <tr><td>0:00–0:20</td><td><b>Разминка</b></td><td>карточки и вопросы «что я уже помню»</td></tr>
+          <tr><td>0:20–1:25</td><td><b>Теория 1</b></td><td>основа дня: понятия, синтаксис, правила</td></tr>
+          <tr><td>1:25–1:35</td><td><b>Перерыв</b></td><td>встать, попить воды, не смотреть в экран</td></tr>
+          <tr><td>1:35–2:25</td><td><b>Теория 2</b></td><td>вторая часть темы и визуализация</td></tr>
+          <tr><td>2:25–2:35</td><td><b>Перерыв</b></td><td>размяться, посмотреть в окно</td></tr>
+          <tr><td>2:35–4:05</td><td><b>Лаборатория</b></td><td>код руками: два задания подряд</td></tr>
+          <tr><td>4:05–4:15</td><td><b>Перерыв</b></td><td>без телефона: он съедает больше 10 минут</td></tr>
+          <tr><td>4:15–4:45</td><td><b>Закрепление</b></td><td>задачи, разбор ошибок, вопросы</td></tr>
+          <tr><td>4:45–5:00</td><td><b>Итог</b></td><td>чек-лист, дневник, коммит</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <b>Правило пятого часа:</b> здесь не изучается ничего нового. Если чувствуешь, что
+      голова не варит — делай механическую часть: чек-лист, коммит, дневник. Это тоже работа.
+    </div>
+    <p>В каждом дне будут четыре вида подсказок. Они сворачиваются: сначала подумай сама.</p>
+    <div class="hints">
+      <details class="hint prev">
+        <summary><span><span class="hint-label">из прошлой недели</span>То, что ты уже умеешь</span></summary>
+        <div class="hint-body"><p>Терминал, пути, Git, DevTools, GitHub Pages и общение с ИИ-агентом. Новые темы будут опираться на это.</p></div>
+      </details>
+      <details class="hint world">
+        <summary><span><span class="hint-label">из другой области</span>Аналогия, которая объясняет</span></summary>
+        <div class="hint-body"><p>Сложное становится простым, когда похоже на что-то знакомое: посылка, книга, полка, законы.</p></div>
+      </details>
+      <details class="hint pro">
+        <summary><span><span class="hint-label">приём профи</span>Маленькая хитрость</span></summary>
+        <div class="hint-body"><p>Трюки, которые экономят минуты каждый день: горячие клавиши, отладочные рамки, быстрые команды.</p></div>
+      </details>
+      <details class="hint trap">
+        <summary><span><span class="hint-label">ловушка</span>Так делают почти все новички</span></summary>
+        <div class="hint-body"><p>Ошибка, которая выглядит безобидно, но потом стоит часов. Лучше узнать о ней сейчас.</p></div>
+      </details>
+    </div>
+    <p style="font-size:13px;color:var(--dim);margin-top:14px">
+      Работаешь не в терминале, а в приложении OpenCode для Windows?
+      <a href="#app-vs-terminal">Разбор разницы — в конце страницы</a>.
+    </p>
+  </div>
+
+  <!-- ================= ДЕНЬ 1 ================= -->
+  <section class="day" id="d1">
+    <div class="day-head">
+      <div class="day-num">1</div>
+      <div>
+        <div class="day-sub">теория + практика · 5 часов</div>
+        <h2>Семантика HTML</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>
+        Понять, что HTML — это не оформление, а <b>смысл</b>. Собрать семантический скелет
+        экрана «Сегодня», который поймут скринридер, поисковик и ты сама через месяц.
+        К вечеру у тебя будет файл <code>skeleton.html</code> — страница без единой CSS-строки,
+        но с правильной структурой.
+      </p>
+    </div>
+
+    <div class="block">
+      <h3>Разминка · 20 минут</h3>
+      <p>Сначала карточки в дашборде. Потом ответь себе на вопросы — вслух или письменно.</p>
+      <ol>
+        <li>Чем тег отличается от атрибута? Приведи пример.</li>
+        <li>Что браузер делает с HTML-файлом, прежде чем нарисовать страницу?</li>
+        <li>Где в DevTools видно структуру страницы?</li>
+        <li>Что такое абсолютный путь и как он выглядит на твоём компьютере?</li>
+        <li>Зачем нужен <code>git commit</code>, если файл и так сохранён?</li>
+        <li>Что произойдёт, если открыть <code>index.html</code> двойным кликом?</li>
+      </ol>
+      <div class="note">
+        Не страшно, если половина ответов «не помню». Это не экзамен, а проверка фундамента.
+        В конце дня вернись к вопросам и сравни.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>План дня</h3>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Время</th><th>Блок</th><th>Что делаем</th></tr></thead>
+          <tbody>
+            <tr><td>0:00–0:20</td><td><b>Разминка</b></td><td>карточки и шесть вопросов</td></tr>
+            <tr><td>0:20–1:20</td><td><b>Теория 1</b></td><td>документ как дерево, вложенность, блоки и строки</td></tr>
+            <tr><td>1:20–1:30</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>1:30–2:25</td><td><b>Теория 2</b></td><td>семантические теги и правила разметки</td></tr>
+            <tr><td>2:25–2:35</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>2:35–3:45</td><td><b>Практика 1</b></td><td>скелет экрана «Сегодня» в <code>skeleton.html</code></td></tr>
+            <tr><td>3:45–4:25</td><td><b>Практика 2</b></td><td>DevTools → Accessibility: проверить структуру</td></tr>
+            <tr><td>4:25–4:50</td><td><b>Закрепление</b></td><td>разбор ошибок и вопросы</td></tr>
+            <tr><td>4:50–5:00</td><td><b>Итог</b></td><td>чек-лист, дневник, коммит</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Теория 1 · Документ как дерево</h3>
+      <p>
+        <b>HTML</b> (HyperText Markup Language) — язык разметки. Он не считает, не принимает
+        решений и не хранит данные. Он описывает <b>структуру и смысл</b>: это заголовок,
+        это список, это ссылка, это форма. Внешний вид — задача CSS. Поведение — задача JavaScript.
+      </p>
+      <p>
+        Браузер читает файл сверху вниз и строит из тегов <b>дерево</b>. У каждого элемента есть
+        родитель, дети и соседи. Именно поэтому говорят «DOM-дерево»: <i>Document Object Model</i>.
+      </p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Экран «Сегодня»&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;header&gt;
+      &lt;h1&gt;Сегодня&lt;/h1&gt;
+    &lt;/header&gt;
+    &lt;main&gt;
+      &lt;p&gt;День 7 из 96.&lt;/p&gt;
+    &lt;/main&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <p>Схема этого документа:</p>
+      <div class="demo">
+        <div class="demo-title">дерево документа</div>
+        <div class="tree-view">
+<span class="folder">html</span>
+├── <span class="folder">head</span>
+│   ├── <span class="file">meta charset</span>
+│   └── <span class="file">title</span>
+└── <span class="folder">body</span>
+    ├── <span class="folder">header</span>
+    │   └── <span class="file">h1</span> <span class="hl">← «Сегодня»</span>
+    └── <span class="folder">main</span>
+        └── <span class="file">p</span> <span class="hl">← «День 7 из 96»</span>
+        </div>
+      </div>
+      <ul>
+        <li><b>Вложенность</b> — тег внутри тега. Открывающий и закрывающий теги должны совпадать: <code>&lt;p&gt;...&lt;/p&gt;</code>.</li>
+        <li><b>Одиночные теги</b> — без закрывающей пары: <code>&lt;meta&gt;</code>, <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;input&gt;</code>.</li>
+        <li><b>Атрибуты</b> — настройки в открывающем теге: <code>&lt;html lang="ru"&gt;</code>, <code>&lt;img src="..." alt="..."&gt;</code>.</li>
+        <li><b>Комментарии</b> — <code>&lt;!-- текст --&gt;</code>. Браузер их не показывает, люди читают.</li>
+      </ul>
+      <div class="note warn">
+        <b>Браузер очень терпелив.</b> Если забыть закрыть тег, он часто «догадается» и починит
+        дерево сам. Но догадается по-своему. Поэтому вложенность лучше проверять сразу,
+        а не надеяться на снисходительность браузера.
+      </div>
+      <p><b>Блочные и строчные элементы.</b> Это пока не про CSS, а про поведение по умолчанию:</p>
+      <ul>
+        <li><b>Блочные</b> (<code>div</code>, <code>p</code>, <code>h1</code>, <code>section</code>, <code>ul</code>) занимают всю ширину и начинаются с новой строки.</li>
+        <li><b>Строчные</b> (<code>span</code>, <code>a</code>, <code>strong</code>, <code>em</code>, <code>code</code>) идут внутри текста, в потоке строки.</li>
+      </ul>
+      <p>
+        Строчный тег внутри блочного — нормально. Блочный внутри строчного — почти всегда ошибка:
+        <code>&lt;a&gt;&lt;div&gt;...&lt;/div&gt;&lt;/a&gt;</code> браузер развалит.
+      </p>
+    </div>
+
+    <div class="block">
+      <h3>Теория 2 · Семантические теги</h3>
+      <p>
+        <b>Семантика</b> — это смысл. Семантический тег сообщает, <i>что это за часть страницы</i>,
+        а не как она выглядит. <code>&lt;div&gt;</code> не говорит ничего. <code>&lt;nav&gt;</code>
+        говорит: «здесь навигация».
+      </p>
+      <p>Крупные зоны страницы:</p>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Тег</th><th>Что означает</th><th>Пример</th></tr></thead>
+          <tbody>
+            <tr><td>header</td><td>шапка страницы или раздела</td><td>логотип, заголовок, дата</td></tr>
+            <tr><td>nav</td><td>навигация</td><td>меню разделов, оглавление</td></tr>
+            <tr><td>main</td><td>главное содержимое, одно на странице</td><td>задания дня, форма</td></tr>
+            <tr><td>section</td><td>смысловой раздел с заголовком</td><td>«Задания», «Дневник»</td></tr>
+            <tr><td>article</td><td>самостоятельная единица</td><td>пост, карточка, новость</td></tr>
+            <tr><td>aside</td><td>второстепенное содержимое</td><td>цитата, подсказка сбоку</td></tr>
+            <tr><td>footer</td><td>подвал</td><td>копирайт, ссылки</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Текст и данные:</p>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Тег</th><th>Когда использовать</th></tr></thead>
+          <tbody>
+            <tr><td>h1–h6</td><td>заголовки по уровням. Один h1 на странице, уровни не перескакивают</td></tr>
+            <tr><td>p</td><td>абзац текста</td></tr>
+            <tr><td>ul / ol / li</td><td>список без порядка / нумерованный / элемент списка</td></tr>
+            <tr><td>dl / dt / dd</td><td>словарь: термин и его определение</td></tr>
+            <tr><td>strong / em</td><td>важность / смысловое ударение. Не «жирный» и «курсив» — это делает CSS</td></tr>
+            <tr><td>blockquote / cite</td><td>цитата и источник</td></tr>
+            <tr><td>pre / code</td><td>код с сохранением пробелов / фрагмент кода в строке</td></tr>
+            <tr><td>time</td><td>дата или время с машинночитаемым значением</td></tr>
+            <tr><td>details / summary</td><td>сворачиваемый блок и его заголовок</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Ссылки и изображения:</p>
+      <ul>
+        <li><code>&lt;a href="plan.html"&gt;Мой план&lt;/a&gt;</code> — ссылка. Без <code>href</code> это не ссылка, а просто текст.</li>
+        <li><code>&lt;img src="avatar.png" alt="Аватар Веры" width="48" height="48"&gt;</code> — картинка. <code>alt</code> обязателен: он читается скринридером и показывается, если картинка не загрузилась.</li>
+        <li><code>&lt;figure&gt;</code> + <code>&lt;figcaption&gt;</code> — картинка или схема с подписью.</li>
+      </ul>
+      <p><b>Пять правил, которые решают 90% задач:</b></p>
+      <ol>
+        <li>Сначала спроси: «что это по смыслу?» Потом ищи тег.</li>
+        <li>Один <code>h1</code> на странице. Уровни заголовков — как оглавление, а не как размер шрифта.</li>
+        <li><code>div</code> и <code>span</code> — только когда никакой другой тег не подходит.</li>
+        <li>Каждый <code>section</code> начинается с заголовка. Иначе это просто <code>div</code>.</li>
+        <li>Кнопка — это <code>button</code>, а не <code>div</code> с кликом. Ссылка — <code>a</code>. Скринридер и клавиатура это чувствуют.</li>
+      </ol>
+      <div class="hint world">
+        <summary><span><span class="hint-label">из другой области</span>Книга и её рубрики</span></summary>
+        <div class="hint-body">
+          <p>Семантическая страница — как хорошо сделанная книга: обложка, оглавление, главы, подзаголовки, сноски, указатель. Можно набрать тот же текст сплошным полотном — читать будет почти невозможно.</p>
+          <p><code>div</code> — это «просто страница без рубрик». Работает, но попробуй найди нужное.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block quiz">
+      <h3>Мини-задание · выбери тег</h3>
+      <p>Прочитай ситуацию, назови тег, потом открой ответ.</p>
+      <details><summary>Меню из четырёх разделов вверху страницы</summary><p><code>&lt;nav&gt;</code> со списком ссылок. Если это не главная навигация, можно оставить просто список.</p></details>
+      <details><summary>Главный заголовок страницы «Сегодня»</summary><p><code>&lt;h1&gt;</code>. Один на странице.</p></details>
+      <details><summary>Блок с заданиями дня: заголовок и четыре пункта</summary><p><code>&lt;section&gt;</code> с <code>&lt;h2&gt;</code> и <code>&lt;ol&gt;</code> или <code>&lt;ul&gt;</code>.</p></details>
+      <details><summary>Цитата о discipline, стоящая сбоку</summary><p><code>&lt;aside&gt;</code> + <code>&lt;blockquote&gt;</code> и <code>&lt;cite&gt;</code>.</p></details>
+      <details><summary>Дата «8 ноября 2026» в шапке</summary><p><code>&lt;time datetime="2026-11-08"&gt;8 ноября 2026&lt;/time&gt;</code>.</p></details>
+      <details><summary>Картинка с подписью «Мой прогресс»</summary><p><code>&lt;figure&gt;</code> + <code>&lt;img alt="..."&gt;</code> + <code>&lt;figcaption&gt;</code>.</p></details>
+      <details><summary>Сворачиваемая подсказка «Показать ответ»</summary><p><code>&lt;details&gt;</code> + <code>&lt;summary&gt;</code>. Работает без JavaScript.</p></details>
+      <details><summary>Просто контейнер для стилизации, без смысла</summary><p><code>&lt;div&gt;</code>. Это единственный случай, когда он уместен.</p></details>
+    </div>
+
+    <div class="block">
+      <h3>Визуализация · div-суп против семантики</h3>
+      <div class="card-grid">
+        <div class="mini-card">
+          <h4>так делает новичок</h4>
+<pre><code>&lt;div class="top"&gt;
+  &lt;div class="title"&gt;Сегодня&lt;/div&gt;
+  &lt;div class="menu"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="content"&gt;
+  &lt;div class="block"&gt;
+    &lt;div class="h"&gt;Задания&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          <p>Выглядит нормально. Но скринридер не найдёт ни заголовка, ни навигации, ни главной зоны.</p>
+        </div>
+        <div class="mini-card">
+          <h4>так делаем мы</h4>
+<pre><code>&lt;header&gt;
+  &lt;h1&gt;Сегодня&lt;/h1&gt;
+  &lt;nav&gt;...&lt;/nav&gt;
+&lt;/header&gt;
+&lt;main&gt;
+  &lt;section&gt;
+    &lt;h2&gt;Задания&lt;/h2&gt;
+  &lt;/section&gt;
+&lt;/main&gt;</code></pre>
+          <p>Та же картинка на экране, но у страницы появился скелет, который понимают все.</p>
+        </div>
+      </div>
+      <div class="hint world">
+        <summary><span><span class="hint-label">из другой области</span>Пандус у входа</span></summary>
+        <div class="hint-body">
+          <p>Доступность (a11y) — это не «для инвалидов». Пандус удобен маме с коляской, курьеру с тележкой и тебе с чемоданом. Семантический HTML так же помогает всем: клавиатуре, поиску, голосовым помощникам, будущей тебе.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Практика 1 · Скелет экрана «Сегодня»</h3>
+      <p>
+        Создай папку и файл. Только разметка, <b>никакого CSS</b> — сегодня мы проверяем смысл,
+        а не красоту.
+      </p>
+<pre><code>cd /d "C:\Users\Vera\OneDrive\Документы\vb_ed"
+mkdir notes\sandbox\week-02\day-01
+cd notes\sandbox\week-02\day-01
+type nul &gt; skeleton.html</code></pre>
+      <div class="note">
+        <b>Если у тебя PowerShell:</b> <code>cd /d</code> не нужен — работает
+        <code>cd "C:\Users\Vera\OneDrive\Документы\vb_ed"</code>, а пустой файл создаётся
+        командой <code>New-Item skeleton.html</code>. Подробнее — в конце страницы.
+      </div>
+      <p>Открой папку в VS Code и заполни <code>skeleton.html</code>. Требования:</p>
+      <ol>
+        <li><code>&lt;!doctype html&gt;</code>, <code>lang="ru"</code>, <code>charset="utf-8"</code>, осмысленный <code>&lt;title&gt;</code>.</li>
+        <li><code>&lt;header&gt;</code> с <code>h1</code> «Сегодня» и <code>&lt;time datetime="..."&gt;</code>.</li>
+        <li><code>&lt;nav&gt;</code> с четырьмя ссылками: Сегодня, Программа, Карточки, Дневник.</li>
+        <li><code>&lt;main&gt;</code> — ровно один на странице.</li>
+        <li><code>&lt;section&gt;</code> «Задания дня» с <code>h2</code> и списком из четырёх заданий.</li>
+        <li><code>&lt;section&gt;</code> «Дневник» с <code>h2</code> и формой: дата, текстовая область, кнопка. Поля пока простые, глубже разберём завтра.</li>
+        <li><code>&lt;aside&gt;</code> с цитатой и источником.</li>
+        <li><code>&lt;footer&gt;</code> с текстом «Learning OS · неделя 2».</li>
+        <li>Ни одного <code>div</code> без причины. Если поставила <code>div</code> — ответь себе, почему не подошёл другой тег.</li>
+      </ol>
+      <p>Стартовый каркас — набери руками и допиши:</p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Сегодня — Learning OS&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;h1&gt;Сегодня&lt;/h1&gt;
+    &lt;p&gt;&lt;time datetime="2026-11-08"&gt;8 ноября 2026&lt;/time&gt;&lt;/p&gt;
+  &lt;/header&gt;
+
+  &lt;nav&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="index.html"&gt;Сегодня&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="program.html"&gt;Программа&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="cards.html"&gt;Карточки&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="journal.html"&gt;Дневник&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+
+  &lt;main&gt;
+    &lt;section&gt;
+      &lt;h2&gt;Задания дня&lt;/h2&gt;
+      &lt;!-- список из четырёх заданий --&gt;
+    &lt;/section&gt;
+
+    &lt;section&gt;
+      &lt;h2&gt;Дневник&lt;/h2&gt;
+      &lt;!-- форма --&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;aside&gt;
+    &lt;!-- цитата --&gt;
+  &lt;/aside&gt;
+
+  &lt;footer&gt;
+    &lt;p&gt;Learning OS · неделя 2&lt;/p&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <div class="hint prev">
+        <summary><span><span class="hint-label">из прошлой недели</span>Папка, файл, редактор</span></summary>
+        <div class="hint-body">
+          <p>Пути и <code>mkdir</code> уже знакомы. Если забыла, где проект: <code>cd /d "C:\Users\Vera\OneDrive\Документы\vb_ed"</code>, потом <code>dir</code>. В VS Code: File → Open Folder → <code>vb_ed</code>.</p>
+          <p>Файл <code>skeleton.html</code> открывай в браузере двойным кликом или <code>start skeleton.html</code>.</p>
+        </div>
+      </div>
+      <div class="note good">
+        <b>Критерий готовности:</b> страница открывается, в ней есть шапка, навигация, главная зона,
+        два раздела, боковая цитата и подвал. Текст можно любой — структура важнее содержания.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Практика 2 · DevTools → Accessibility</h3>
+      <p>Теперь посмотри на свою страницу глазами машины.</p>
+      <ol>
+        <li>Открой <code>skeleton.html</code> в браузере.</li>
+        <li><code>F12</code> → вкладка <b>Elements</b>. Найди <code>header</code>, <code>nav</code>, <code>main</code>, <code>section</code>, <code>aside</code>, <code>footer</code>.</li>
+        <li>Выдели <code>main</code> и открой справа вкладку <b>Accessibility</b> (если не видно — три точки → More tools → Accessibility).</li>
+        <li>Проверь: у <code>main</code> роль <code>main</code>, у <code>nav</code> — <code>navigation</code>, у <code>h1</code> — <code>heading level 1</code>.</li>
+        <li>Нажми <code>Ctrl + Shift + C</code> и наведи на элементы: DevTools подсветит их в дереве.</li>
+        <li>Открой вкладку <b>Console</b>. Ошибок быть не должно. Предупреждения про отсутствующие файлы (<code>404</code>) — нормально, ссылки пока ведут в никуда.</li>
+        <li>Проверь порядок заголовков: <code>h1</code> → <code>h2</code>, без пропусков. Если пропуск есть — исправь.</li>
+      </ol>
+      <div class="hint pro">
+        <summary><span><span class="hint-label">приём профи</span>Быстрая проверка структуры</span></summary>
+        <div class="hint-body">
+          <p>В DevTools выполни в консоли:</p>
+          <pre><code>document.querySelectorAll("h1,h2,h3").forEach(h =&gt; console.log(h.tagName, h.textContent))</code></pre>
+          <p>Увидишь все заголовки по порядку. Это быстрее, чем кликать по дереву. JavaScript мы ещё не проходили — просто скопируй команду и посмотри результат.</p>
+        </div>
+      </div>
+      <div class="hint trap">
+        <summary><span><span class="hint-label">ловушка</span>«Поставлю h3, потому что так красивее»</span></summary>
+        <div class="hint-body">
+          <p>Уровень заголовка — это иерархия, а не размер. Если <code>h2</code> кажется слишком большим, это лечится CSS, а не переходом на <code>h4</code>. Скринридер объявит «heading level 4» и собьёт пользователя с толку.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block quiz">
+      <h3>Разбор ошибок</h3>
+      <p>Прочитай фрагмент, найди проблему, потом открой ответ.</p>
+      <details><summary><code>&lt;p&gt;Первый абзац&lt;p&gt;Второй абзац&lt;/p&gt;</code></summary><p>Первый <code>p</code> не закрыт. Браузер закроет его сам, но дерево может получиться не таким, как ты думала. Всегда закрывай парные теги.</p></details>
+      <details><summary><code>&lt;h1&gt;Сегодня&lt;/h1&gt; ... &lt;h1&gt;Задания&lt;/h1&gt;</code></summary><p>Два <code>h1</code> на странице. Второй должен быть <code>h2</code>: это раздел внутри главной темы.</p></details>
+      <details><summary><code>&lt;div class="button"&gt;Закрыть день&lt;/div&gt;</code></summary><p>Это кнопка по смыслу. Нужен <code>&lt;button&gt;</code>: он работает с клавиатуры и озвучивается как кнопка.</p></details>
+      <details><summary><code>&lt;img src="avatar.png"&gt;</code></summary><p>Нет <code>alt</code>. Скринридер прочитает имя файла или промолчит. Добавь <code>alt="Аватар Веры"</code>. Если картинка чисто декоративная — <code>alt=""</code>.</p></details>
+      <details><summary><code>&lt;ul&gt;&lt;div&gt;Задание 1&lt;/div&gt;&lt;/ul&gt;</code></summary><p>Внутри <code>ul</code> могут быть только <code>li</code>. Иначе список перестаёт быть списком для машины.</p></details>
+      <details><summary><code>&lt;a&gt;Мой план&lt;/a&gt;</code></summary><p>Нет <code>href</code>. Это не ссылка: она не кликается, не фокусируется клавиатурой и не озвучивается как ссылка.</p></details>
+      <details><summary><code>&lt;section&gt;&lt;p&gt;Просто текст&lt;/p&gt;&lt;/section&gt;</code></summary><p>У <code>section</code> нет заголовка. Без заголовка это бессмысленный контейнер — используй <code>div</code> или добавь <code>h2</code>.</p></details>
+      <details><summary><code>&lt;body&gt;&lt;header&gt;...&lt;/header&gt;&lt;/body&gt;&lt;footer&gt;...&lt;/footer&gt;</code></summary><p><code>footer</code> оказался вне <code>body</code> — это ошибка вложенности. Всё видимое содержимое живёт внутри <code>body</code>.</p></details>
+    </div>
+
+    <div class="block quiz">
+      <h3>Проверь себя</h3>
+      <details><summary>HTML — язык программирования?</summary><p>Нет. Это язык разметки: он описывает структуру и смысл, но не содержит вычислений и логики.</p></details>
+      <details><summary>Зачем нужна семантика, если CSS всё равно делает красоту?</summary><p>Семантика нужна машинам и людям: скринридерам, поисковикам, клавиатуре, будущей тебе. CSS меняет вид, но не смысл.</p></details>
+      <details><summary>Чем &lt;section&gt; отличается от &lt;div&gt;?</summary><p><code>section</code> — смысловой раздел с заголовком. <code>div</code> — нейтральный контейнер без смысла.</p></details>
+      <details><summary>Почему &lt;h1&gt; должен быть один?</summary><p>Это главная тема страницы. Несколько <code>h1</code> ломают оглавление для скринридера и поисковика.</p></details>
+      <details><summary>Что делает атрибут alt?</summary><p>Описывает картинку текстом: для скринридера, для случая, когда картинка не загрузилась, и для поиска. Декоративная картинка получает пустой <code>alt=""</code>.</p></details>
+      <details><summary>Чем блочный элемент отличается от строчного?</summary><p>Блочный занимает всю ширину и начинается с новой строки. Строчный идёт внутри текста. Это поведение по умолчанию, CSS может его изменить.</p></details>
+      <details><summary>Можно ли вкладывать div в a?</summary><p>Технически браузер починит, но по стандарту HTML5 ссылка может содержать блочные элементы. Надёжнее — ссылка внутри блока или <code>display:block</code> у ссылки. Главное — не строчный тег вокруг блочного.</p></details>
+      <details><summary>Что такое DOM?</summary><p>Дерево элементов, которое браузер построил из HTML. Через DOM JavaScript меняет страницу.</p></details>
+      <details><summary>Почему кнопку нельзя делать из div?</summary><p><code>div</code> не имеет роли кнопки: не фокусируется клавиатурой, не реагирует на Enter и пробел, не озвучивается как кнопка. <code>button</code> даёт всё это бесплатно.</p></details>
+      <details><summary>Что важнее: правильные теги или красивый вид?</summary><p>Сначала правильные теги, потом вид. Красоту можно переделать за час, кривую структуру — за дни.</p></details>
+    </div>
+
+    <div class="block">
+      <h3>Подсказки на закрепление</h3>
+      <div class="hints">
+        <details class="hint prev">
+          <summary><span><span class="hint-label">из прошлой недели</span>DevTools — твой второй учитель</span></summary>
+          <div class="hint-body">
+            <p>На первой неделе ты меняла текст через Elements. Сегодня добавь к этому вкладку Accessibility. Схема та же: <code>F12</code> → выбрать элемент → посмотреть, что о нём думает браузер.</p>
+          </div>
+        </details>
+        <details class="hint world">
+          <summary><span><span class="hint-label">из другой области</span>Скелет и одежда</span></summary>
+          <div class="hint-body">
+            <p>HTML — скелет, CSS — одежда, JavaScript — мышцы и нервная система. Можно надеть красивое пальто на кривой скелет, но ходить будет больно. Сегодня мы строим скелет.</p>
+          </div>
+        </details>
+        <details class="hint pro">
+          <summary><span><span class="hint-label">приём профи</span>Отладочная рамка</span></summary>
+          <div class="hint-body">
+            <p>Добавь в начало страницы временный стиль — он покажет все границы:</p>
+            <pre><code>&lt;style&gt;
+  * { outline: 1px solid rgba(255,0,0,.25); }
+&lt;/style&gt;</code></pre>
+            <p>Сразу видно, где заканчивается каждый блок. Потом удали. Это грубо, но быстро.</p>
+          </div>
+        </details>
+        <details class="hint trap">
+          <summary><span><span class="hint-label">ловушка</span>alt="картинка"</span></summary>
+          <div class="hint-body">
+            <p>Бесполезный <code>alt</code> хуже отсутствующего: он создаёт шум. Описывай смысл: не «фото», а «график прогресса за неделю: пять дней из шести закрыты».</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Чек-лист дня</h3>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox"> Прошла карточки и ответила на шесть вопросов</label>
+        <label class="check-item"><input type="checkbox"> Создала <code>notes\sandbox\week-02\day-01\skeleton.html</code></label>
+        <label class="check-item"><input type="checkbox"> В файле есть header, nav, main, два section, aside, footer</label>
+        <label class="check-item"><input type="checkbox"> Ровно один <code>h1</code>, заголовки не перескакивают уровни</label>
+        <label class="check-item"><input type="checkbox"> Ни одного <code>div</code> без объяснения</label>
+        <label class="check-item"><input type="checkbox"> Проверила роли в DevTools → Accessibility</label>
+        <label class="check-item"><input type="checkbox"> Разобрала 8 ошибок и 10 вопросов</label>
+        <label class="check-item"><input type="checkbox"> Записала дневник и сделала коммит</label>
+      </div>
+      <div class="note">
+        <b>Коммит сегодня:</b> <code>git add .</code> → <code>git commit -m "Неделя 2: семантический скелет экрана Сегодня"</code>.
+        Push можно сделать в конце недели, но лучше не копить.
+      </div>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="7">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="7">✓ Практика сделана</button>
+    </div>
+  </section>
+
+  <!-- ================= ДЕНЬ 2 ================= -->
+  <section class="day" id="d2">
+    <div class="day-head">
+      <div class="day-num">2</div>
+      <div>
+        <div class="day-sub">теория + практика · 5 часов</div>
+        <h2>Формы и инпуты</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>
+        Научиться разговаривать с пользователем: собирать данные так, чтобы форма работала
+        с клавиатуры, проверялась браузером и не превращалась в ребус. К вечеру у тебя будет
+        форма дневника — настоящая, с валидацией и подписями, — встроенная в скелет.
+      </p>
+    </div>
+
+    <div class="block">
+      <h3>Разминка · 20 минут</h3>
+      <p>Карточки, потом вопросы по вчерашнему дню.</p>
+      <ol>
+        <li>Чем <code>section</code> отличается от <code>div</code>?</li>
+        <li>Почему <code>h1</code> только один?</li>
+        <li>Что произойдёт со ссылкой без <code>href</code>?</li>
+        <li>Где в DevTools видно роль элемента?</li>
+        <li>Что делает <code>alt</code> и когда он пустой?</li>
+        <li>Какой тег отвечает за кнопку и почему не <code>div</code>?</li>
+      </ol>
+      <div class="note">
+        Формы — это первый раз, когда страница начинает <b>принимать</b> данные, а не только показывать.
+        Ошибки здесь дороже: пользователь вводит текст, и потерять его легко.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>План дня</h3>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Время</th><th>Блок</th><th>Что делаем</th></tr></thead>
+          <tbody>
+            <tr><td>0:00–0:20</td><td><b>Разминка</b></td><td>карточки и шесть вопросов</td></tr>
+            <tr><td>0:20–1:30</td><td><b>Теория 1</b></td><td>анатомия формы, input, name, label</td></tr>
+            <tr><td>1:30–1:40</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>1:40–2:25</td><td><b>Теория 2</b></td><td>выбор, валидация, доступность, кнопки</td></tr>
+            <tr><td>2:25–2:35</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>2:35–3:50</td><td><b>Практика 1</b></td><td>форма дневника в <code>form.html</code></td></tr>
+            <tr><td>3:50–4:25</td><td><b>Практика 2</b></td><td>встроить форму в скелет, пройти клавиатурой</td></tr>
+            <tr><td>4:25–4:50</td><td><b>Закрепление</b></td><td>разбор ошибок и вопросы</td></tr>
+            <tr><td>4:50–5:00</td><td><b>Итог</b></td><td>чек-лист, дневник, коммит</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Теория 1 · Анатомия формы</h3>
+      <p>
+        <b>Форма</b> — контейнер для полей ввода и кнопок. Она умеет собирать значения и отправлять
+        их на сервер. Даже если сервера пока нет, форма полезна: браузер проверяет данные,
+        клавиатура работает, а значения можно прочитать.
+      </p>
+<pre><code>&lt;form action="/save" method="post"&gt;
+  &lt;label for="date"&gt;Дата&lt;/label&gt;
+  &lt;input id="date" name="date" type="date" required&gt;
+
+  &lt;button type="submit"&gt;Сохранить&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+      <p>Разберём каждую часть:</p>
+      <ul>
+        <li><b><code>action</code></b> — адрес, куда уйдут данные. Пока можно поставить <code>#</code> или оставить пустым.</li>
+        <li><b><code>method</code></b> — как отправлять: <code>get</code> (данные в адресной строке) или <code>post</code> (в теле запроса). Пароли и личные данные — только <code>post</code>.</li>
+        <li><b><code>name</code></b> — имя поля для сервера. Без <code>name</code> значение не отправится вообще.</li>
+        <li><b><code>id</code></b> — имя поля для страницы. По нему <code>label</code> связывается с полем.</li>
+        <li><b><code>label</code></b> — подпись. Клик по ней ставит курсор в поле. Скринридер читает её как название поля.</li>
+        <li><b><code>required</code></b> — поле обязательно. Браузер не даст отправить пустым.</li>
+        <li><b><code>placeholder</code></b> — серая подсказка внутри поля. Исчезает при вводе. <b>Не заменяет label.</b></li>
+      </ul>
+      <div class="note warn">
+        <b>Главная пара дня:</b> <code>label for="date"</code> + <code>input id="date"</code>.
+        Если <code>for</code> и <code>id</code> не совпадают, подпись не связана с полем. Клик не работает,
+        скринридер молчит. Это ошибка №1 в формах.
+      </div>
+      <p><b>Типы input</b> — выбирай по смыслу, а не «как выглядит»:</p>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>type</th><th>Для чего</th><th>Что даёт бесплатно</th></tr></thead>
+          <tbody>
+            <tr><td>text</td><td>короткий текст</td><td>обычная строка ввода</td></tr>
+            <tr><td>email</td><td>почта</td><td>клавиатура с @ на телефоне, проверка формата</td></tr>
+            <tr><td>password</td><td>пароль</td><td>символы скрыты, менеджер паролей подсказывает</td></tr>
+            <tr><td>number</td><td>число</td><td>стрелки, <code>min</code>/<code>max</code>/<code>step</code></td></tr>
+            <tr><td>date</td><td>дата</td><td>календарь, формат даты</td></tr>
+            <tr><td>range</td><td>число из диапазона</td><td>ползунок</td></tr>
+            <tr><td>checkbox</td><td>независимая галочка</td><td>можно выбрать несколько</td></tr>
+            <tr><td>radio</td><td>один вариант из группы</td><td>выбор ровно одного</td></tr>
+            <tr><td>file</td><td>файл</td><td>кнопка выбора файла</td></tr>
+            <tr><td>search</td><td>поиск</td><td>крестик очистки в некоторых браузерах</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Дополнительные атрибуты: <code>minlength</code>, <code>maxlength</code>, <code>min</code>,
+        <code>max</code>, <code>step</code>, <code>pattern</code> (регулярное выражение),
+        <code>autocomplete</code> (подсказки браузера), <code>disabled</code> (поле недоступно и не отправляется),
+        <code>readonly</code> (можно читать, нельзя менять, но отправляется).
+      </p>
+      <div class="hint world">
+        <summary><span><span class="hint-label">из другой области</span>Анкета в поликлинике</span></summary>
+        <div class="hint-body">
+          <p><code>label</code> — это вопрос в анкете, <code>input</code> — строка для ответа, <code>name</code> — код поля в карточке, по которому врач понимает, что это «дата рождения», а не «жалобы».</p>
+          <p>Если вопрос оторван от строки, человек не знает, что писать. Если <code>for</code> не совпал с <code>id</code>, с формой происходит то же самое.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Теория 2 · Выбор, валидация и доступность</h3>
+      <p><b>Radio или checkbox?</b> Правило простое:</p>
+      <ul>
+        <li><b>radio</b> — «выбери одно из»: настроение, тариф, пол. У всех radio одной группы одинаковый <code>name</code>.</li>
+        <li><b>checkbox</b> — «отметь всё, что подходит»: теги, согласия, выполненные задания. У каждого свой <code>name</code> (или общий массив на сервере).</li>
+      </ul>
+<pre><code>&lt;fieldset&gt;
+  &lt;legend&gt;Настроение&lt;/legend&gt;
+
+  &lt;label&gt;&lt;input type="radio" name="mood" value="ok"&gt; норм&lt;/label&gt;
+  &lt;label&gt;&lt;input type="radio" name="mood" value="tired"&gt; устала&lt;/label&gt;
+  &lt;label&gt;&lt;input type="radio" name="mood" value="great"&gt; отлично&lt;/label&gt;
+&lt;/fieldset&gt;</code></pre>
+      <p>
+        <b><code>fieldset</code> + <code>legend</code></b> — рамка и название группы. Это не украшение:
+        скринридер прочитает «Настроение, группа» и пользователь поймёт контекст.
+      </p>
+      <p><b>Выпадающий список и большой текст:</b></p>
+<pre><code>&lt;label for="week"&gt;Неделя&lt;/label&gt;
+&lt;select id="week" name="week"&gt;
+  &lt;option value="1"&gt;Неделя 1&lt;/option&gt;
+  &lt;option value="2" selected&gt;Неделя 2&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;label for="note"&gt;Что поняла&lt;/label&gt;
+&lt;textarea id="note" name="note" rows="4"&gt;&lt;/textarea&gt;</code></pre>
+      <p><b>Кнопки:</b> <code>button</code> по умолчанию имеет <code>type="submit"</code> — отправляет форму. Если кнопка внутри формы не должна отправлять, пиши <code>type="button"</code>. <code>type="reset"</code> очищает поля, но этим почти никто не пользуется: случайное нажатие стирает введённое.</p>
+      <p><b>Валидация браузером</b> — бесплатная проверка до отправки:</p>
+      <ul>
+        <li><code>required</code> — не пусто;</li>
+        <li><code>type="email"</code> — похоже на почту;</li>
+        <li><code>minlength="10"</code> — не короче 10 символов;</li>
+        <li><code>min="0" max="5"</code> — число в диапазоне;</li>
+        <li><code>pattern="[0-9]{4}"</code> — ровно четыре цифры.</li>
+      </ul>
+      <p>CSS-состояния помогают показать проблему: <code>:valid</code>, <code>:invalid</code>, <code>:focus</code>, <code>:required</code>. Но цвет — не единственный сигнал: добавь текст.</p>
+      <div class="note">
+        <b>Доступность формы — это не про «слабых».</b> Кто-то открывает сайт с телефона одной рукой,
+        кто-то с клавиатуры, кто-то с экранным диктором. Связанный <code>label</code>, понятные
+        сообщения и порядок Tab делают форму удобной для всех.
+      </div>
+      <div class="hint trap">
+        <summary><span><span class="hint-label">ловушка</span>placeholder вместо label</span></summary>
+        <div class="hint-body">
+          <p>Подсказка исчезает, как только человек начал печатать. Он забывает, что это было за поле. Скринридер может не прочитать placeholder. Всегда делай видимый <code>label</code>, а placeholder — только примером формата.</p>
+        </div>
+      </div>
+      <div class="hint pro">
+        <summary><span><span class="hint-label">приём профи</span>Проверка формы одной клавишей</span></summary>
+        <div class="hint-body">
+          <p>Нажми <code>Tab</code> и иди по форме. Видно ли, где ты находишься? Если фокус не виден — добавь <code>:focus-visible</code> стиль. Если Tab перескакивает через поле — там <code>div</code> вместо <code>input</code> или отрицательный <code>tabindex</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Визуализация · живая форма дневника</h3>
+      <p>
+        Заполни форму и нажми кнопку. Браузер сам проверит обязательные поля. Обрати внимание:
+        подписи кликабельны, у каждого поля есть <code>label</code>, а ползунок показывает значение.
+      </p>
+      <div class="demo">
+        <div class="demo-title">form → данные</div>
+        <form class="form-demo" id="demo-form">
+          <div class="field">
+            <label for="demo-date">Дата</label>
+            <input id="demo-date" name="date" type="date" required>
+          </div>
+          <div class="field">
+            <span style="font-size:12px;color:var(--dim);font-weight:700;letter-spacing:.03em">Настроение</span>
+            <div class="radio-row">
+              <label><input type="radio" name="mood" value="норм" required> норм</label>
+              <label><input type="radio" name="mood" value="устала"> устала</label>
+              <label><input type="radio" name="mood" value="отлично"> отлично</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="demo-hours">Часов практики: <output id="demo-hours-out">2</output></label>
+            <input id="demo-hours" name="hours" type="range" min="0" max="5" step="0.5" value="2">
+          </div>
+          <div class="field">
+            <label for="demo-text">Что поняла сегодня</label>
+            <textarea id="demo-text" name="learned" minlength="10" required placeholder="Минимум 10 символов"></textarea>
+          </div>
+          <label style="display:flex;gap:8px;align-items:center;color:var(--muted);font-size:13.5px;font-weight:400">
+            <input type="checkbox" name="agree" required> день действительно закрыт
+          </label>
+          <div>
+            <button class="btn btn-primary" type="submit">Закрыть день</button>
+          </div>
+        </form>
+        <div class="form-out" id="demo-out">Заполни форму и нажми «Закрыть день» — здесь появятся данные.</div>
+      </div>
+      <div class="note good">
+        <b>Обрати внимание:</b> код ни строчки. Всё, что ты видишь, — это HTML-атрибуты и поведение браузера.
+        JavaScript понадобится позже, чтобы сохранять данные, но базовая проверка уже работает.
+      </div>
+    </div>
+
+    <div class="block quiz">
+      <h3>Мини-задание · что не так с формой</h3>
+      <details><summary><code>&lt;input type="text" placeholder="Имя"&gt;</code></summary><p>Нет <code>label</code> и нет <code>name</code>. Placeholder исчезнет, а на сервер ничего не уйдёт.</p></details>
+      <details><summary><code>&lt;label for="email"&gt;Почта&lt;/label&gt;&lt;input id="mail" type="email"&gt;</code></summary><p><code>for="email"</code> не совпадает с <code>id="mail"</code>. Подпись не связана с полем.</p></details>
+      <details><summary>Три radio с разными <code>name</code></summary><p>Они не образуют группу: можно выбрать все три одновременно. У radio одной группы должен быть одинаковый <code>name</code>.</p></details>
+      <details><summary><code>&lt;input type="number" min="0" max="5"&gt;</code> без <code>label</code></summary><p>Непонятно, что вводить: часы? оценки? Нужен видимый <code>label</code>.</p></details>
+      <details><summary><code>&lt;button&gt;Отмена&lt;/button&gt;</code> внутри формы</summary><p>По умолчанию это <code>submit</code>: кнопка отправит форму. Для отмены нужен <code>type="button"</code>.</p></details>
+      <details><summary><code>&lt;textarea&gt;Текст&lt;/textarea&gt;</code> с текстом внутри</summary><p>Текст между тегами станет значением поля. Обычно так делать не надо: используй <code>placeholder</code> или пустое поле с <code>label</code>.</p></details>
+      <details><summary><code>&lt;input type="checkbox" name="mood"&gt; норм</code> и ещё два таких же</summary><p>Для выбора одного варианта нужны radio, а не checkbox. Checkbox — независимые галочки.</p></details>
+      <details><summary><code>&lt;form method="get"&gt;</code> с полем пароля</summary><p>Пароль попадёт в адресную строку и историю. Для паролей — только <code>method="post"</code> и HTTPS.</p></details>
+    </div>
+
+    <div class="block">
+      <h3>Практика 1 · Форма дневника</h3>
+      <p>Создай <code>notes\sandbox\week-02\day-02\form.html</code> и собери форму по требованиям.</p>
+<pre><code>cd /d "C:\Users\Vera\OneDrive\Документы\vb_ed"
+mkdir notes\sandbox\week-02\day-02
+cd notes\sandbox\week-02\day-02
+type nul &gt; form.html</code></pre>
+      <ol>
+        <li><code>&lt;form&gt;</code> с <code>method="post"</code> и <code>action="#"</code>.</li>
+        <li><code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code> «Дневник дня».</li>
+        <li>Дата: <code>input type="date"</code>, обязательная, с <code>label</code>.</li>
+        <li>Настроение: три radio в группе, обязательное, с <code>fieldset</code>/<code>legend</code>.</li>
+        <li>Часов практики: <code>type="range"</code> от 0 до 5 с шагом 0,5 и <code>output</code> (можно без JS — просто покажи значение рядом текстом).</li>
+        <li>Что поняла: <code>textarea</code>, минимум 10 символов, обязательное.</li>
+        <li>Согласие: checkbox, обязательный.</li>
+        <li>Кнопка «Сохранить» с <code>type="submit"</code>.</li>
+        <li>Все поля имеют <code>name</code>. Все подписи связаны через <code>for</code>/<code>id</code> или обёртку.</li>
+      </ol>
+      <p>Каркас для начала:</p>
+<pre><code>&lt;form action="#" method="post"&gt;
+  &lt;fieldset&gt;
+    &lt;legend&gt;Дневник дня&lt;/legend&gt;
+
+    &lt;p&gt;
+      &lt;label for="date"&gt;Дата&lt;/label&gt;
+      &lt;input id="date" name="date" type="date" required&gt;
+    &lt;/p&gt;
+
+    &lt;fieldset&gt;
+      &lt;legend&gt;Настроение&lt;/legend&gt;
+      &lt;label&gt;&lt;input type="radio" name="mood" value="ok" required&gt; норм&lt;/label&gt;
+      &lt;label&gt;&lt;input type="radio" name="mood" value="tired"&gt; устала&lt;/label&gt;
+      &lt;label&gt;&lt;input type="radio" name="mood" value="great"&gt; отлично&lt;/label&gt;
+    &lt;/fieldset&gt;
+
+    &lt;p&gt;
+      &lt;label for="note"&gt;Что поняла&lt;/label&gt;
+      &lt;textarea id="note" name="note" rows="5" minlength="10" required&gt;&lt;/textarea&gt;
+    &lt;/p&gt;
+
+    &lt;p&gt;
+      &lt;label&gt;&lt;input type="checkbox" name="agree" required&gt; день закрыт&lt;/label&gt;
+    &lt;/p&gt;
+
+    &lt;button type="submit"&gt;Сохранить&lt;/button&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;</code></pre>
+      <div class="hint prev">
+        <summary><span><span class="hint-label">из прошлой недели</span>Коммит после практики</span></summary>
+        <div class="hint-body">
+          <p>Не жди конца недели. Сделала форму — <code>git status</code>, <code>git add .</code>, <code>git commit -m "Форма дневника"</code>. Маленькие коммиты легче откатывать.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Практика 2 · Встроить форму в скелет</h3>
+      <p>Вернись в <code>notes\sandbox\week-02\day-01\skeleton.html</code> и замени простую форму из раздела «Дневник» на настоящую.</p>
+      <ol>
+        <li>Скопируй разметку формы из <code>form.html</code> (или набери заново — полезнее).</li>
+        <li>Убедись, что <code>id</code> не повторяются на странице. Два одинаковых <code>id</code> — ошибка.</li>
+        <li>Пройди форму только клавиатурой: <code>Tab</code> вперёд, <code>Shift + Tab</code> назад, <code>Space</code> — галочка, стрелки — radio.</li>
+        <li>Проверь: видно ли, где находится фокус. Если нет — это заготовка на день 3.</li>
+        <li>Попробуй отправить пустую форму. Браузер должен показать сообщение и подсветить первое проблемное поле.</li>
+        <li>Открой DevTools → Elements → выдели поле → проверь, что <code>label</code> связан (в Accessibility у поля есть имя).</li>
+      </ol>
+      <div class="note good">
+        <b>Критерий готовности:</b> форма отправляется только заполненной, каждое поле имеет подпись,
+        Tab проходит по всем элементам, сообщение браузера понятно.
+      </div>
+    </div>
+
+    <div class="block quiz">
+      <h3>Разбор ошибок</h3>
+      <details><summary>Клик по подписи не ставит курсор в поле</summary><p>Не совпали <code>for</code> и <code>id</code> или поле не обёрнуто в <code>label</code>. Проверь точное совпадение, включая регистр.</p></details>
+      <details><summary>Форма отправляется, но данные пустые</summary><p>У полей нет <code>name</code>. Без него браузер не включает значение в отправку.</p></details>
+      <details><summary>Можно выбрать все три radio сразу</summary><p>У radio разные <code>name</code>. Одинаковое имя объединяет их в группу.</p></details>
+      <details><summary>Кнопка «Очистить» отправляет форму</summary><p>У кнопки нет <code>type="button"</code>, поэтому срабатывает стандартный <code>submit</code>. Явно указывай тип у всех кнопок.</p></details>
+      <details><summary>Браузер не проверяет поле</summary><p>Нет <code>required</code> или тип поля не поддерживает проверку (например, <code>type="text"</code> для даты). Проверь атрибуты.</p></details>
+      <details><summary>На телефоне неудобно вводить почту</summary><p>Использован <code>type="text"</code>. <code>type="email"</code> покажет клавиатуру с @ и точкой.</p></details>
+      <details><summary>Текст подсказки исчез, и непонятно, что за поле</summary><p>Использован только <code>placeholder</code>. Нужен постоянный <code>label</code>.</p></details>
+      <details><summary>Два поля с одинаковым id</summary><p><code>id</code> должен быть уникален на странице. <code>label for</code> попадёт в первое совпадение, второе поле останется без подписи.</p></details>
+    </div>
+
+    <div class="block quiz">
+      <h3>Проверь себя</h3>
+      <details><summary>Зачем полю name?</summary><p>Это имя, под которым значение уйдёт на сервер. Без <code>name</code> поле не отправляется.</p></details>
+      <details><summary>Зачем полю id и как он связан с label?</summary><p><code>id</code> — уникальное имя элемента на странице. <code>label for="..."</code> ссылается на этот <code>id</code>, и клик по подписи активирует поле.</p></details>
+      <details><summary>Чем placeholder отличается от label?</summary><p><code>label</code> — постоянная подпись, видна всегда. <code>placeholder</code> — временная подсказка внутри поля, исчезает при вводе.</p></details>
+      <details><summary>Radio и checkbox — в чём разница?</summary><p>Radio — выбор одного варианта из группы (одинаковый <code>name</code>). Checkbox — независимые галочки, можно выбрать несколько.</p></details>
+      <details><summary>Что делает required?</summary><p>Запрещает отправку формы, пока поле пустое. Браузер показывает сообщение и подсвечивает поле.</p></details>
+      <details><summary>Что делает fieldset?</summary><p>Группирует связанные поля и даёт группе название через <code>legend</code>. Помогает скринридерам и логике.</p></details>
+      <details><summary>Почему у кнопки важен type?</summary><p>По умолчанию кнопка внутри формы — <code>submit</code>. Если нужна другая роль, укажи <code>type="button"</code>, иначе она отправит форму.</p></details>
+      <details><summary>Что такое валидация браузером?</summary><p>Встроенная проверка полей по атрибутам: <code>required</code>, <code>type</code>, <code>minlength</code>, <code>pattern</code>. Работает без JavaScript.</p></details>
+      <details><summary>Почему пароль нельзя отправлять методом GET?</summary><p>Данные GET попадают в адресную строку, историю и логи. Пароль должен идти в теле POST-запроса по HTTPS.</p></details>
+      <details><summary>Как проверить форму без мыши?</summary><p>Пройди <code>Tab</code>, <code>Shift+Tab</code>, <code>Space</code>, стрелками. Все поля должны быть достижимы, фокус — виден, подписи — читаемы.</p></details>
+    </div>
+
+    <div class="block">
+      <h3>Подсказки на закрепление</h3>
+      <div class="hints">
+        <details class="hint prev">
+          <summary><span><span class="hint-label">из прошлой недели</span>Семантика вчера работает и здесь</span></summary>
+          <div class="hint-body">
+            <p><code>fieldset</code>, <code>legend</code>, <code>label</code> — это та же логика, что <code>section</code> и <code>h2</code>: смысл важнее вида. Форма — не набор <code>div</code>, а структура с названиями.</p>
+          </div>
+        </details>
+        <details class="hint world">
+          <summary><span><span class="hint-label">из другой области</span>Анкета и бланк</span></summary>
+          <div class="hint-body">
+            <p>Хорошая анкета не спрашивает «введите сюда» без пояснения. У каждой строки есть вопрос, формат ответа и пометка «обязательно». Форма на сайте — тот же бланк, только электронный.</p>
+          </div>
+        </details>
+        <details class="hint pro">
+          <summary><span><span class="hint-label">приём профи</span>autocomplete</span></summary>
+          <div class="hint-body">
+            <p>Добавь <code>autocomplete="email"</code>, <code>autocomplete="name"</code>, <code>autocomplete="current-password"</code> — браузер подставит данные и сэкономит пользователю секунды. Это бесплатное удобство.</p>
+          </div>
+        </details>
+        <details class="hint trap">
+          <summary><span><span class="hint-label">ловушка</span>Проверять только на компьютере с мышью</span></summary>
+          <div class="hint-body">
+            <p>Половина пользователей придёт с телефона, часть — с клавиатуры. Проверяй форму тремя способами: мышью, Tab и на узком окне (или в DevTools → Toggle device toolbar).</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Чек-лист дня</h3>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox"> Прошла карточки и ответила на вопросы</label>
+        <label class="check-item"><input type="checkbox"> Создала <code>notes\sandbox\week-02\day-02\form.html</code></label>
+        <label class="check-item"><input type="checkbox"> Все поля имеют <code>label</code> и <code>name</code></label>
+        <label class="check-item"><input type="checkbox"> Radio объединены одинаковым <code>name</code></label>
+        <label class="check-item"><input type="checkbox"> Валидация работает: пустая форма не отправляется</label>
+        <label class="check-item"><input type="checkbox"> Прошла форму клавиатурой, фокус виден</label>
+        <label class="check-item"><input type="checkbox"> Форма встроена в <code>skeleton.html</code></label>
+        <label class="check-item"><input type="checkbox"> Разобрала 8 ошибок и 10 вопросов</label>
+        <label class="check-item"><input type="checkbox"> Дневник и коммит</label>
+      </div>
+      <div class="note">
+        <b>Коммит:</b> <code>git add .</code> → <code>git commit -m "Неделя 2: форма дневника"</code>.
+      </div>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="8">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="8">✓ Практика сделана</button>
+    </div>
+  </section>
+
+  <!-- ================= ДЕНЬ 3 ================= -->
+  <section class="day" id="d3">
+    <div class="day-head">
+      <div class="day-num">3</div>
+      <div>
+        <div class="day-sub">теория + практика · 5 часов</div>
+        <h2>CSS: селекторы и каскад</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>
+        Понять, почему «цвет не применяется» и кто из правил побеждает. К вечеру скелет
+        превратится в аккуратную страницу с цветами, шрифтами и состояниями — но пока без
+        раскладки. Раскладка будет в дни 4 и 5.
+      </p>
+    </div>
+
+    <div class="block">
+      <h3>Разминка · 20 минут</h3>
+      <ol>
+        <li>Чем <code>id</code> отличается от <code>class</code>?</li>
+        <li>Что делает <code>label for</code>?</li>
+        <li>Почему <code>name</code> важнее для отправки, чем <code>id</code>?</li>
+        <li>Как браузер проверяет <code>required</code>?</li>
+        <li>Что случится, если два элемента имеют одинаковый <code>id</code>?</li>
+        <li>Какой вчерашний тег группирует поля?</li>
+      </ol>
+      <div class="note">
+        CSS — это не «раскраска». Это система правил: селектор выбирает элементы, свойство меняет
+        характеристику, каскад решает конфликт. Сегодня — про то, как эта система думает.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>План дня</h3>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Время</th><th>Блок</th><th>Что делаем</th></tr></thead>
+          <tbody>
+            <tr><td>0:00–0:20</td><td><b>Разминка</b></td><td>карточки и шесть вопросов</td></tr>
+            <tr><td>0:20–1:30</td><td><b>Теория 1</b></td><td>подключение, синтаксис, селекторы</td></tr>
+            <tr><td>1:30–1:40</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>1:40–2:25</td><td><b>Теория 2</b></td><td>каскад, наследование, специфичность</td></tr>
+            <tr><td>2:25–2:35</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>2:35–3:45</td><td><b>Практика 1</b></td><td>стилизация скелета: <code>style.css</code></td></tr>
+            <tr><td>3:45–4:25</td><td><b>Практика 2</b></td><td>DevTools → Styles и Computed</td></tr>
+            <tr><td>4:25–4:50</td><td><b>Закрепление</b></td><td>битва селекторов, ошибки, вопросы</td></tr>
+            <tr><td>4:50–5:00</td><td><b>Итог</b></td><td>чек-лист, дневник, коммит</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Теория 1 · Подключение и селекторы</h3>
+      <p>Три способа подключить CSS. В проекте используем первый:</p>
+      <ol>
+        <li><b>Внешний файл</b> — <code>&lt;link rel="stylesheet" href="style.css"&gt;</code> в <code>head</code>. Главный способ: стили переиспользуются, кэшируются, не мешают разметке.</li>
+        <li><b>Внутри документа</b> — <code>&lt;style&gt;...&lt;/style&gt;</code>. Годится для быстрых экспериментов и одной страницы.</li>
+        <li><b>Внутри тега</b> — <code>style="color: red"</code>. Самый сильный и самый вредный: не переиспользуется, засоряет HTML, побеждает почти всё.</li>
+      </ol>
+      <p>Правило CSS состоит из селектора и блока объявлений:</p>
+<pre><code>/* селектор */  /* свойство: значение; */
+h1            { color: #b6ff3c; font-size: 32px; }
+
+.note         { color: #9aa7c7; }
+
+#intro        { border-left: 3px solid #6c8cff; }</code></pre>
+      <p><b>Селекторы</b> — это язык, на котором ты говоришь «к кому применить»:</p>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Селектор</th><th>Что выбирает</th><th>Пример</th></tr></thead>
+          <tbody>
+            <tr><td>p</td><td>все элементы этого тега</td><td><code>p { ... }</code></td></tr>
+            <tr><td>.note</td><td>все с классом note</td><td><code>class="note"</code></td></tr>
+            <tr><td>#intro</td><td>элемент с id intro</td><td><code>id="intro"</code></td></tr>
+            <tr><td>[type="email"]</td><td>по атрибуту</td><td><code>&lt;input type="email"&gt;</code></td></tr>
+            <tr><td>nav a</td><td>все ссылки внутри nav (потомки)</td><td>любая глубина</td></tr>
+            <tr><td>nav &gt; a</td><td>только прямые дети nav</td><td>первый уровень</td></tr>
+            <tr><td>h2 + p</td><td>p сразу после h2</td><td>соседний элемент</td></tr>
+            <tr><td>h2 ~ p</td><td>все p после h2 на одном уровне</td><td>общий сосед</td></tr>
+            <tr><td>.a, .b</td><td>элементы с классом a или b</td><td>группировка</td></tr>
+            <tr><td>*</td><td>все элементы</td><td>осторожно, влияет на всё</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><b>Псевдоклассы</b> — состояние или положение элемента:</p>
+      <ul>
+        <li><code>:hover</code> — курсор над элементом;</li>
+        <li><code>:focus</code> / <code>:focus-visible</code> — элемент в фокусе (важно для клавиатуры);</li>
+        <li><code>:active</code> — момент нажатия;</li>
+        <li><code>:first-child</code>, <code>:last-child</code>, <code>:nth-child(2n)</code> — положение среди соседей;</li>
+        <li><code>:not(.done)</code> — все, кроме указанных;</li>
+        <li><code>:checked</code>, <code>:disabled</code>, <code>:required</code>, <code>:valid</code>, <code>:invalid</code> — состояние формы.</li>
+      </ul>
+      <p><b>Псевдоэлементы</b> — «виртуальные» части элемента: <code>::before</code>, <code>::after</code>, <code>::first-line</code>, <code>::selection</code>. Например, маркер перед ссылкой:</p>
+<pre><code>a::before { content: "→ "; color: #6c8cff; }</code></pre>
+      <div class="hint world">
+        <summary><span><span class="hint-label">из другой области</span>Селектор — это адрес</span></summary>
+        <div class="hint-body">
+          <p><code>nav a</code> читается как «ссылка, которая живёт внутри nav, на любой глубине». <code>nav &gt; a</code> — «ссылка, которая является прямым ребёнком nav». Как адрес доставки: «в городе N, любой район» против «в городе N, только центральный район».</p>
+        </div>
+      </div>
+      <div class="hint trap">
+        <summary><span><span class="hint-label">ловушка</span>id для стилей</span></summary>
+        <div class="hint-body">
+          <p><code>#intro</code> тяжёлый по специфичности и не переиспользуется. Для стилей почти всегда нужен класс. <code>id</code> оставь для якорей (<code>href="#d1"</code>), <code>label for</code> и JavaScript-хуков.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Теория 2 · Каскад и специфичность</h3>
+      <p>
+        <b>Каскад</b> — набор правил, по которым браузер решает, какое объявление применить,
+        если их несколько. Порядок такой:
+      </p>
+      <ol>
+        <li><b>Важность и происхождение:</b> стили браузера → стили пользователя → твои стили. <code>!important</code> переворачивает порядок и побеждает автора.</li>
+        <li><b>Специфичность:</b> чем «точнее» селектор, тем он сильнее.</li>
+        <li><b>Порядок:</b> при равной специфичности побеждает то, что написано ниже.</li>
+        <li><b>Наследование:</b> если свойства нет ни в одном правиле, элемент может взять его у родителя.</li>
+      </ol>
+      <p><b>Специфичность</b> записывают четырьмя числами: <code>(inline, id, class, tag)</code>.</p>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Что</th><th>Вес</th><th>Пример</th></tr></thead>
+          <tbody>
+            <tr><td>inline style</td><td>1,0,0,0</td><td><code>style="color:red"</code></td></tr>
+            <tr><td>id</td><td>0,1,0,0</td><td><code>#intro</code></td></tr>
+            <tr><td>class, атрибут, псевдокласс</td><td>0,0,1,0</td><td><code>.note</code>, <code>[type]</code>, <code>:hover</code></td></tr>
+            <tr><td>тег, псевдоэлемент</td><td>0,0,0,1</td><td><code>p</code>, <code>::before</code></td></tr>
+            <tr><td>универсальный</td><td>0,0,0,0</td><td><code>*</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Примеры:</p>
+      <ul>
+        <li><code>p</code> → <code>0,0,0,1</code></li>
+        <li><code>.note</code> → <code>0,0,1,0</code></li>
+        <li><code>nav a:hover</code> → <code>0,0,1,2</code> (класс <code>:hover</code> + два тега)</li>
+        <li><code>#intro .note a</code> → <code>0,1,1,1</code></li>
+        <li><code>a[href^="https"]</code> → <code>0,0,1,1</code></li>
+        <li><code>ul li::before</code> → <code>0,0,0,3</code></li>
+      </ul>
+      <p>
+        Сравнение идёт слева направо: один <code>id</code> сильнее ста классов. Поэтому «добавлю ещё
+        один класс» не всегда помогает — иногда нужно убрать <code>id</code> или <code>!important</code>
+        из чужого правила.
+      </p>
+      <p><b>Наследование.</b> Наследуются в основном текстовые свойства: <code>color</code>, <code>font-family</code>, <code>font-size</code>, <code>line-height</code>, <code>text-align</code>. Не наследуются: <code>margin</code>, <code>padding</code>, <code>border</code>, <code>display</code>, <code>width</code>, <code>background</code>. Поэтому <code>body { color: ... }</code> работает, а <code>body { margin: ... }</code> не размножается на детей.</p>
+      <div class="note warn">
+        <b><code>!important</code> — красная кнопка.</b> Она есть, но пользоваться ей стоит,
+        когда ты чинишь чужой код и не можешь его менять. В своём проекте <code>!important</code>
+        почти всегда означает, что структура селекторов запуталась.
+      </div>
+      <div class="hint world">
+        <summary><span><span class="hint-label">из другой области</span>Законы и весы</span></summary>
+        <div class="hint-body">
+          <p><b>Каскад</b> — как иерархия законов: конституция важнее указа, указ важнее инструкции. <b>Специфичность</b> — как вес на весах: <code>id</code> — гиря, класс — гантеля, тег — монета. Если вес равный, побеждает тот, кто встал позже.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Визуализация · калькулятор специфичности</h3>
+      <p>Введи селектор и посмотри вес. Упрощённо: <code>:not()</code> сам не считается, его аргумент — да; <code>:where()</code> обнуляет всё; <code>:is()</code> здесь считается по сумме аргументов, хотя в стандарте берётся самый тяжёлый.</p>
+      <div class="demo">
+        <div class="demo-title">specificity calculator</div>
+        <div class="spec-row">
+          <input class="spec-input" id="spec-input" value="#intro .note a:hover" spellcheck="false" aria-label="Селектор">
+          <button class="btn btn-sm btn-ghost" id="spec-example">ещё пример</button>
+        </div>
+        <div class="spec-score">
+          <div class="spec-digit"><span id="spec-inline">0</span><small>inline</small></div>
+          <div class="spec-digit"><span id="spec-id">1</span><small>id</small></div>
+          <div class="spec-digit"><span id="spec-class">2</span><small>class</small></div>
+          <div class="spec-digit"><span id="spec-tag">1</span><small>tag</small></div>
+        </div>
+        <div class="spec-note" id="spec-note">#intro — id; .note и :hover — классы; a — тег.</div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-title">битва селекторов · кто победит</div>
+        <p id="battle-q" style="color:var(--muted);font-size:14px;margin-bottom:10px">Выбери правило, которое применится к элементу.</p>
+        <pre><code id="battle-code"></code></pre>
+        <div class="battle-options" id="battle-options"></div>
+        <div class="battle-result" id="battle-result"></div>
+        <div class="zone-actions" style="margin-top:12px">
+          <button class="btn btn-sm btn-primary" id="battle-next" type="button">Следующий раунд</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Практика 1 · Стилизация скелета</h3>
+      <p>
+        В папке <code>week-02\day-01</code> создай <code>style.css</code> и подключи его
+        к <code>skeleton.html</code>. Задача — только цвет, шрифт и состояния. <b>Раскладку не трогай.</b>
+      </p>
+<pre><code>&lt;link rel="stylesheet" href="style.css"&gt;</code></pre>
+      <p>Требования:</p>
+      <ol>
+        <li><code>body</code>: тёмный фон, светлый текст, системный шрифт, <code>line-height: 1.6</code>.</li>
+        <li><code>h1</code> и <code>h2</code>: свой цвет и размер. Помни: размер — это CSS, а не уровень тега.</li>
+        <li>Ссылки: цвет, подчёркивание, <code>:hover</code> и <code>:focus-visible</code>.</li>
+        <li>Навигация: список без маркеров (<code>list-style: none</code>), ссылки без подчёркивания.</li>
+        <li>Абзацы и списки: читаемый размер и отступы.</li>
+        <li>Кнопка формы: цвет, рамка, <code>:hover</code>, <code>:focus-visible</code>.</li>
+        <li>Используй классы. <code>id</code> — только если очень нужно. <code>!important</code> — запрещён.</li>
+      </ol>
+      <p>Каркас стилей:</p>
+<pre><code>:root {
+  --bg: #0f1420;
+  --text: #e9eefb;
+  --muted: #9aa7c7;
+  --lime: #b6ff3c;
+  --blue: #6c8cff;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.6;
+}
+
+h1 { color: var(--lime); font-size: 32px; }
+h2 { color: var(--blue); font-size: 20px; }
+
+a { color: var(--blue); }
+a:hover { color: var(--lime); }
+a:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+
+/* допиши сама: nav, списки, кнопка, поля формы */</code></pre>
+      <div class="note">
+        <b>Переменные <code>--bg</code> и <code>var()</code></b> — это CSS-переменные. Подробно
+        они будут на следующей неделе, но уже сейчас можно пользоваться: объявили один раз —
+        меняем в одном месте.
+      </div>
+      <div class="hint prev">
+        <summary><span><span class="hint-label">из прошлой недели</span>DevTools покажет, что победило</span></summary>
+        <div class="hint-body">
+          <p>На второй день недели 1 ты меняла стили в Elements. Теперь смотри вкладку <b>Styles</b>: перечёркнутое — проигравшее правило. Рядом видно файл и строку. Это быстрее, чем гадать.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Практика 2 · DevTools → Styles и Computed</h3>
+      <ol>
+        <li>Открой <code>skeleton.html</code> → <code>F12</code> → Elements.</li>
+        <li>Выдели <code>h1</code>. В Styles найди правило, которое задаёт цвет. Наведи курсор — DevTools покажет, откуда оно.</li>
+        <li>Сними галочку с правила. Цвет изменится. Верни обратно.</li>
+        <li>Найди перечёркнутое свойство. Пойми, какое правило его перебило: посмотри на селекторы и порядок.</li>
+        <li>Открой вкладку <b>Computed</b>. Здесь итоговые значения: <code>color</code>, <code>font-size</code>, <code>margin</code>, <code>display</code>.</li>
+        <li>Напиши в Styles новое правило через <code>+</code> и проверь, применилось ли.</li>
+        <li>Сделай так, чтобы <code>h2</code> стал красным, не меняя файл. Потом перезагрузи страницу и убедись, что всё вернулось.</li>
+      </ol>
+      <div class="hint pro">
+        <summary><span><span class="hint-label">приём профи</span>Ищи проблему сверху вниз</span></summary>
+        <div class="hint-body">
+          <p>Если стиль «не работает», порядок проверки: 1) селектор вообще совпал? 2) правило не перечёркнуто? 3) файл подключён? 4) нет ли опечатки в свойстве? 5) не кэшировал ли браузер старый CSS (<code>Ctrl + F5</code>)?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block quiz">
+      <h3>Разбор ошибок</h3>
+      <details><summary><code>h1 { color: red }</code> не применяется</summary><p>Проверь: подключён ли <code>style.css</code>, нет ли опечатки в пути, не перебито ли правило более сильным селектором. <code>Ctrl + F5</code> сбрасывает кэш.</p></details>
+      <details><summary><code>.note { ... }</code> не работает, хотя класс есть</summary><p>В HTML класс написан как <code>class="note "</code> с пробелом или <code>class="Note"</code> с большой буквы. CSS чувствителен к регистру в классах.</p></details>
+      <details><summary><code>#intro { color: blue }</code> перебивает <code>.note { color: red }</code></summary><p>Так и должно быть: <code>id</code> сильнее класса. Если нужен красный — повысь класс или убери <code>id</code> из стилей.</p></details>
+      <details><summary>Стиль из <code>style="..."</code> не перебивается</summary><p>Inline-стиль имеет вес <code>1,0,0,0</code>. Убрать его из HTML — правильное решение. <code>!important</code> — крайняя мера.</p></details>
+      <details><summary>Два правила одинаковой специфичности, применяется не то</summary><p>Побеждает то, что ниже в файле (или в более поздно подключённом файле). Порядок — часть каскада.</p></details>
+      <details><summary><code>body { margin: 0 }</code>, а у детей отступы остались</summary><p><code>margin</code> не наследуется. Нужно задать его конкретным элементам или использовать сброс.</p></details>
+      <details><summary><code>a:hover { ... }</code> не работает на телефоне</summary><p>На сенсорном экране нет наведения. Состояние должно быть доступно и через <code>:focus-visible</code>, а информация — не только в hover-эффекте.</p></details>
+      <details><summary>После добавления <code>* { ... }</code> всё поехало</summary><p>Универсальный селектор применяется ко всем элементам, включая служебные. Используй точечно или сбрасывай только нужное.</p></details>
+    </div>
+
+    <div class="block quiz">
+      <h3>Проверь себя</h3>
+      <details><summary>Что такое каскад?</summary><p>Правила, по которым браузер выбирает победившее объявление: важность, специфичность, порядок, наследование.</p></details>
+      <details><summary>Как считается специфичность?</summary><p>Четырьмя числами: inline, id, class/атрибут/псевдокласс, тег/псевдоэлемент. Сравнение слева направо.</p></details>
+      <details><summary>Что сильнее: <code>#id</code> или десять классов?</summary><p><code>#id</code>: один id в третьей позиции сильнее любого количества классов.</p></details>
+      <details><summary>Что наследуется, а что нет?</summary><p>Наследуются текстовые свойства (цвет, шрифт, межстрочный интервал). Не наследуются отступы, рамки, размеры, display.</p></details>
+      <details><summary>Зачем нужен <code>:focus-visible</code>?</summary><p>Показывает фокус при навигации клавиатурой, но не мигает при клике мышью. Важно для доступности.</p></details>
+      <details><summary>Чем <code>::before</code> отличается от <code>:hover</code>?</summary><p><code>::before</code> — псевдоэлемент, создаёт виртуальную часть. <code>:hover</code> — псевдокласс, состояние.</p></details>
+      <details><summary>Почему <code>!important</code> считается плохой практикой?</summary><p>Он ломает естественный каскад: следующие правила не могут перебить, и стили становятся неуправляемыми.</p></details>
+      <details><summary>Что делает <code>nav &gt; a</code>?</summary><p>Выбирает только прямых детей <code>nav</code> — ссылки первого уровня, не вложенные в другие элементы.</p></details>
+      <details><summary>Где посмотреть итоговое значение свойства?</summary><p>DevTools → Elements → Computed. Там же видно, какое правило его задало.</p></details>
+      <details><summary>Почему классы лучше id для стилей?</summary><p>Класс переиспользуется, не создаёт лишней специфичности, его можно комбинировать. Id уникален и слишком «тяжёлый».</p></details>
+    </div>
+
+    <div class="block">
+      <h3>Подсказки на закрепление</h3>
+      <div class="hints">
+        <details class="hint prev">
+          <summary><span><span class="hint-label">из прошлой недели</span>Git-коммит как точка возврата</span></summary>
+          <div class="hint-body">
+            <p>Перед экспериментами со стилями сделай коммит. Тогда «сломала всё» лечится через <code>git checkout .</code>, а не паникой. Это ровно та суперсила, о которой говорилось на первой неделе.</p>
+          </div>
+        </details>
+        <details class="hint world">
+          <summary><span><span class="hint-label">из другой области</span>Слои в графическом редакторе</span></summary>
+          <div class="hint-body">
+            <p>Специфичность похожа на слои: верхний слой перекрывает нижний. Только здесь «верхний» определяется не глазами, а весом селектора и порядком строк.</p>
+          </div>
+        </details>
+        <details class="hint pro">
+          <summary><span><span class="hint-label">приём профи</span>Начни с малого</span></summary>
+          <div class="hint-body">
+            <p>Не пиши сразу <code>body * { ... }</code>. Сначала стилизуй <code>body</code>, потом заголовки, потом ссылки. Маленькими шагами видно, что именно сломалось.</p>
+          </div>
+        </details>
+        <details class="hint trap">
+          <summary><span><span class="hint-label">ловушка</span>Гонка вооружений специфичности</span></summary>
+          <div class="hint-body">
+            <p>Если стиль не применяется, не добавляй <code>!important</code> и не удлиняй селектор. Сначала пойми, кто победил. Иначе через неделю у тебя будет <code>body main .card .title</code> и всё равно не работать.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Чек-лист дня</h3>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox"> Прошла карточки и вопросы</label>
+        <label class="check-item"><input type="checkbox"> Создала <code>style.css</code> и подключила через <code>link</code></label>
+        <label class="check-item"><input type="checkbox"> Стилизованы body, заголовки, ссылки, nav, кнопка</label>
+        <label class="check-item"><input type="checkbox"> Есть <code>:hover</code> и <code>:focus-visible</code></label>
+        <label class="check-item"><input type="checkbox"> В CSS нет <code>!important</code> и inline-стилей</label>
+        <label class="check-item"><input type="checkbox"> Калькулятор специфичности: проверила 5 селекторов</label>
+        <label class="check-item"><input type="checkbox"> Прошла все раунды «битвы селекторов»</label>
+        <label class="check-item"><input type="checkbox"> DevTools: нашла победившее правило и Computed</label>
+        <label class="check-item"><input type="checkbox"> Разобрала 8 ошибок и 10 вопросов</label>
+        <label class="check-item"><input type="checkbox"> Дневник и коммит</label>
+      </div>
+      <div class="note">
+        <b>Коммит:</b> <code>git add .</code> → <code>git commit -m "Неделя 2: CSS-стили скелета"</code>.
+      </div>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="9">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="9">✓ Практика сделана</button>
+    </div>
+  </section>
+
+  <!-- ================= ДЕНЬ 4 ================= -->
+  <section class="day" id="d4">
+    <div class="day-head">
+      <div class="day-num">4</div>
+      <div>
+        <div class="day-sub">теория + практика · 5 часов</div>
+        <h2>Box model и отступы</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>
+        Понять, из чего состоит любой прямоугольник на странице и почему «ширина 300» занимает
+        340 пикселей. Научиться считать размеры, управлять отступами и собирать карточку,
+        которая выглядит одинаково в браузере и в голове.
+      </p>
+    </div>
+
+    <div class="block">
+      <h3>Разминка · 20 минут</h3>
+      <ol>
+        <li>Что сильнее: <code>.card</code> или <code>#card</code>?</li>
+        <li>Что наследуется: <code>color</code> или <code>margin</code>?</li>
+        <li>Что делает <code>:focus-visible</code>?</li>
+        <li>Почему <code>!important</code> — плохая идея?</li>
+        <li>Где в DevTools видно итоговое значение свойства?</li>
+        <li>Чем класс лучше id для стилей?</li>
+      </ol>
+      <div class="note">
+        Box model — самая «математическая» тема недели. Здесь не нужно запоминать — нужно один раз
+        понять схему и потом считать на автомате.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>План дня</h3>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Время</th><th>Блок</th><th>Что делаем</th></tr></thead>
+          <tbody>
+            <tr><td>0:00–0:20</td><td><b>Разминка</b></td><td>карточки и шесть вопросов</td></tr>
+            <tr><td>0:20–1:30</td><td><b>Теория 1</b></td><td>четыре слоя коробки, box-sizing, margin</td></tr>
+            <tr><td>1:30–1:40</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>1:40–2:25</td><td><b>Теория 2</b></td><td>display, единицы, рамки и декор</td></tr>
+            <tr><td>2:25–2:35</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>2:35–3:50</td><td><b>Практика 1</b></td><td>карточка по размерам макета</td></tr>
+            <tr><td>3:50–4:25</td><td><b>Практика 2</b></td><td>три состояния карточки</td></tr>
+            <tr><td>4:25–4:50</td><td><b>Закрепление</b></td><td>задачи на расчёт, ошибки, вопросы</td></tr>
+            <tr><td>4:50–5:00</td><td><b>Итог</b></td><td>чек-лист, дневник, коммит</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Теория 1 · Четыре слоя коробки</h3>
+      <p>Каждый элемент — прямоугольник, у которого есть четыре зоны, от центра к краю:</p>
+      <ol>
+        <li><b>content</b> — содержимое: текст, картинка, вложенные элементы.</li>
+        <li><b>padding</b> — внутренний отступ, «пузырчатка» вокруг содержимого. Входит в фон элемента.</li>
+        <li><b>border</b> — рамка между padding и margin.</li>
+        <li><b>margin</b> — внешний отступ, расстояние до соседей. Не входит в фон, не кликается.</li>
+      </ol>
+      <p>По умолчанию <code>box-sizing: content-box</code>: заданная <code>width</code> — это <b>только content</b>. Итоговая ширина:</p>
+<pre><code>итоговая ширина = width + padding-left + padding-right
+                + border-left + border-right
+
+300 + 16 + 16 + 1 + 1 = 334 px</code></pre>
+      <p>Это и есть главный сюрприз новичка: «я же сказала 300». Решение — <code>box-sizing: border-box</code>:</p>
+<pre><code>*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.card {
+  width: 300px;   /* теперь это итоговая ширина */
+  padding: 16px;  /* входит внутрь */
+  border: 1px solid #2a3550;
+}</code></pre>
+      <p>
+        <code>margin</code> в размер элемента не входит — он снаружи. Поэтому карточка с
+        <code>width: 300px</code> и <code>margin: 20px</code> занимает 300 пикселей,
+        но между ней и соседом будет 20 (или больше, если сосед тоже с margin — см. ниже).
+      </p>
+      <p><b>Схлопывание margin (margin collapse).</b> Вертикальные отступы соседних блоков не складываются, а «схлопываются» в больший:</p>
+<pre><code>.a { margin-bottom: 30px; }
+.b { margin-top: 20px; }
+
+/* расстояние между ними — 30px, а не 50px */</code></pre>
+      <p>Это не баг, а правило потока. Горизонтальные margin так себя не ведут. Схлопывание не работает у flex- и grid-контейнеров — ещё одна причина любить flex.</p>
+      <p><b>Полезные приёмы:</b></p>
+      <ul>
+        <li><code>margin: 0 auto</code> — центрировать блочный элемент с заданной шириной.</li>
+        <li><code>margin: 0</code> у <code>body</code> — убрать стандартные 8 пикселей браузера.</li>
+        <li><code>padding</code> — когда нужен фон вокруг содержимого; <code>margin</code> — когда нужно расстояние до соседа.</li>
+        <li>Отрицательный margin сдвигает элемент, но им легко сломать раскладку. Пока не используй.</li>
+      </ul>
+      <div class="hint world">
+        <summary><span><span class="hint-label">из другой области</span>Посылка</span></summary>
+        <div class="hint-body">
+          <p><b>content</b> — товар, <b>padding</b> — пузырчатая плёнка, <b>border</b> — стенка коробки, <b>margin</b> — расстояние до соседней коробки на складе.</p>
+          <p><code>content-box</code> — «300 мм — это размер товара». <code>border-box</code> — «300 мм — это габарит коробки». Второе удобнее, когда коробки должны стоять ровно.</p>
+        </div>
+      </div>
+      <div class="hint trap">
+        <summary><span><span class="hint-label">ловушка</span>width + padding = сюрприз</span></summary>
+        <div class="hint-body">
+          <p>Забыла про <code>box-sizing</code> — и три карточки по 300 px не влезают в контейнер 900 px, потому что каждая занимает 334. Лечится одной строкой сброса в начале CSS.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Теория 2 · Display, единицы и декор</h3>
+      <p><b>display</b> решает, как элемент участвует в потоке:</p>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Значение</th><th>Поведение</th><th>Когда использовать</th></tr></thead>
+          <tbody>
+            <tr><td>block</td><td>вся ширина, новая строка</td><td>разделы, карточки, абзацы</td></tr>
+            <tr><td>inline</td><td>в строке, width/height не работают</td><td>выделение внутри текста</td></tr>
+            <tr><td>inline-block</td><td>в строке, но размеры работают</td><td>кнопки, бейджи (реже — есть flex)</td></tr>
+            <tr><td>none</td><td>элемента нет в раскладке</td><td>скрыть блок</td></tr>
+            <tr><td>flex / grid</td><td>контейнер для раскладки</td><td>день 5 и неделя 3</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><b>overflow</b> — что делать, если содержимое не влезает: <code>visible</code> (по умолчанию, вылезает), <code>hidden</code> (обрезать), <code>auto</code> (прокрутка при необходимости), <code>scroll</code> (прокрутка всегда).</p>
+      <p><b>Единицы:</b></p>
+      <ul>
+        <li><code>px</code> — фиксированные пиксели. Хорошо для рамок и мелких деталей.</li>
+        <li><code>%</code> — процент от родителя. Ширина — от ширины родителя, высота — от высоты (часто не работает, если высота не задана).</li>
+        <li><code>rem</code> — от размера шрифта корня (<code>html</code>). Удобно для масштабирования.</li>
+        <li><code>em</code> — от размера шрифта текущего элемента. Коварно при вложенности.</li>
+        <li><code>vh / vw</code> — процент от высоты/ширины окна. <code>100vh</code> на мобильных может учитывать адресную строку — есть <code>dvh</code>.</li>
+        <li><code>ch</code> — ширина символа «0». Удобно для текстовых колонок.</li>
+      </ul>
+      <p><b>line-height</b> лучше задавать без единиц: <code>line-height: 1.6</code> — это множитель от размера шрифта, он наследуется корректно.</p>
+      <p><b>Декор:</b></p>
+      <ul>
+        <li><code>border-radius</code> — скругление углов;</li>
+        <li><code>box-shadow</code> — тень: смещение по X, по Y, размытие, цвет;</li>
+        <li><code>outline</code> — внешний контур, не влияет на размеры. Идеален для фокуса;</li>
+        <li><code>background</code> — цвет, градиент или картинка.</li>
+      </ul>
+      <p><b>max-width</b> важнее <code>width</code> для адаптивности: <code>max-width: 900px; width: 100%</code> — блок не вылезет за экран.</p>
+      <div class="hint pro">
+        <summary><span><span class="hint-label">приём профи</span>Рамка вместо гадания</span></summary>
+        <div class="hint-body">
+          <p>Временно добавь <code>outline: 1px solid red</code> нужному элементу. В отличие от <code>border</code>, outline не меняет размеры и не сдвигает соседей. Увидела границы — убрала.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Визуализация · собери коробку</h3>
+      <p>Двигай ползунки и смотри, как меняется итоговая ширина. Оранжевое — margin, зелёное — border, синее — padding, тёмное — content.</p>
+      <div class="demo">
+        <div class="demo-title">box model → расчёт</div>
+        <div class="bm-wrap">
+          <div>
+            <div class="bm-stage">
+              <div class="bm-margin" id="bm-margin">
+                <div class="bm-border" id="bm-border">
+                  <div class="bm-padding" id="bm-padding">
+                    <div class="bm-content" id="bm-content">content<br><span id="bm-content-label">220 px</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bm-legend">
+              <span><i style="background:rgba(255,165,60,.5)"></i>margin</span>
+              <span><i style="background:rgba(182,255,60,.5)"></i>border</span>
+              <span><i style="background:rgba(108,140,255,.5)"></i>padding</span>
+              <span><i style="background:#0b0f18;border:1px solid #2a3550"></i>content</span>
+            </div>
+          </div>
+          <div>
+            <div class="controls">
+              <div class="ctrl"><span>width</span><input type="range" id="bm-w" min="120" max="320" value="220"><output id="bm-w-out">220</output></div>
+              <div class="ctrl"><span>padding</span><input type="range" id="bm-p" min="0" max="40" value="18"><output id="bm-p-out">18</output></div>
+              <div class="ctrl"><span>border</span><input type="range" id="bm-b" min="0" max="12" value="6"><output id="bm-b-out">6</output></div>
+              <div class="ctrl"><span>margin</span><input type="range" id="bm-m" min="0" max="40" value="22"><output id="bm-m-out">22</output></div>
+            </div>
+            <div class="bm-result" id="bm-result"></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        <b>Проверь себя:</b> поставь width 200, padding 20, border 5. Итоговая ширина — 250 px.
+        Затем мысленно включи <code>border-box</code> — итоговая останется 200, а content сожмётся до 150.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Практика 1 · Карточка по макету</h3>
+      <p>Создай <code>notes\sandbox\week-02\day-04\box.html</code> и <code>box.css</code>. Собери карточку задания с точными размерами.</p>
+      <p><b>Макет:</b></p>
+      <ul>
+        <li>карточка: итоговая ширина <b>360 px</b>, padding <b>16 px</b>, border <b>1 px</b>, radius <b>12 px</b>;</li>
+        <li>заголовок: 20 px, цвет светлый, отступ снизу 8 px;</li>
+        <li>текст: 14 px, <code>line-height: 1.5</code>, цвет приглушённый;</li>
+        <li>подпись «+120 XP»: 12 px, цвет лаймовый, отступ сверху 12 px;</li>
+        <li>фон карточки темнее страницы, лёгкая тень.</li>
+      </ul>
+      <p>Стартовый код:</p>
+<pre><code>*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 40px 20px;
+  background: #0f1420;
+  color: #e9eefb;
+  font-family: system-ui, "Segoe UI", sans-serif;
+}
+
+.card {
+  width: 360px;
+  padding: 16px;
+  border: 1px solid #2a3550;
+  border-radius: 12px;
+  background: #141b2b;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.card__title { margin: 0 0 8px; font-size: 20px; }
+.card__text  { margin: 0; font-size: 14px; line-height: 1.5; color: #9aa7c7; }
+.card__xp    { margin: 12px 0 0; font-size: 12px; color: #b6ff3c; }</code></pre>
+<pre><code>&lt;article class="card"&gt;
+  &lt;h2 class="card__title"&gt;Теория&lt;/h2&gt;
+  &lt;p class="card__text"&gt;Новая тема и визуализация.&lt;/p&gt;
+  &lt;p class="card__xp"&gt;+60 XP&lt;/p&gt;
+&lt;/article&gt;</code></pre>
+      <p>Проверка в DevTools:</p>
+      <ol>
+        <li>Выдели карточку → Computed. Ширина должна быть <b>360</b>, а не 394.</li>
+        <li>Посмотри вкладку Box Model в Styles — там видны все четыре слоя и их размеры.</li>
+        <li>Измени padding на 24 — итоговая ширина не должна измениться (если <code>border-box</code> работает).</li>
+        <li>Убери <code>box-sizing</code> — ширина вырастет. Верни обратно.</li>
+      </ol>
+      <div class="hint prev">
+        <summary><span><span class="hint-label">из прошлой недели</span>Переменные CSS</span></summary>
+        <div class="hint-body">
+          <p>Цвета можно вынести в <code>:root</code>, как вчера: <code>--bg</code>, <code>--panel</code>, <code>--lime</code>. Тогда карточка и страница говорят на одном языке, а перекрасить всё — одна строка.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Практика 2 · Три состояния карточки</h3>
+      <p>Добавь карточке три состояния. Меняй только цвет, рамку и тень — <b>без изменения размеров</b>, иначе карточка будет дёргаться.</p>
+      <ul>
+        <li><b>обычное:</b> как в макете;</li>
+        <li><b><code>:hover</code>:</b> светлее фон или ярче рамка;</li>
+        <li><b><code>:focus-within</code>:</b> видимая рамка, когда внутри карточки есть фокус (например, на кнопке).</li>
+      </ul>
+<pre><code>.card:hover {
+  border-color: #3b4a6b;
+  background: #182136;
+}
+
+.card:focus-within {
+  outline: 2px solid #b6ff3c;
+  outline-offset: 2px;
+}</code></pre>
+      <p>Добавь внутрь карточки кнопку и проверь: при переходе Tab на кнопку карточка получает рамку.</p>
+      <div class="note good">
+        <b>Критерий готовности:</b> карточка ровно 360 px, при hover ничего не сдвигается,
+        фокус виден, в DevTools Box Model показывает padding 16 и border 1.
+      </div>
+    </div>
+
+    <div class="block quiz">
+      <h3>Разбор ошибок</h3>
+      <details><summary>Карточка шириной 300 px занимает 332 px</summary><p>Стандартный <code>content-box</code>: 300 + padding 16×2 + border 1×2 = 334. Добавь <code>box-sizing: border-box</code>.</p></details>
+      <details><summary>Два блока с margin 20 и 30, а расстояние 30</summary><p>Вертикальные margin схлопываются: берётся больший. Это нормальное поведение, не баг.</p></details>
+      <details><summary><code>margin: 0 auto</code> не центрирует</summary><p>У элемента нет ширины (блок занимает 100%) или он <code>inline</code>. Задай <code>width</code>/<code>max-width</code> и <code>display: block</code>.</p></details>
+      <details><summary>Текст вылезает за карточку</summary><p>Нет <code>overflow</code> или <code>min-width: 0</code> во flex-контейнере. Для длинных слов — <code>overflow-wrap: anywhere</code>.</p></details>
+      <details><summary>Высота 100% не работает</summary><p>У родителя не задана высота. Проценты считаются от конкретного значения, а не от «сколько получится».</p></details>
+      <details><summary>На телефоне блок шире экрана</summary><p>Фиксированная <code>width: 360px</code> при экране 320. Используй <code>max-width: 360px; width: 100%</code>.</p></details>
+      <details><summary>Тень обрезается</summary><p>У родителя <code>overflow: hidden</code>. Тень рисуется за границами элемента и обрезается вместе с ними.</p></details>
+      <details><summary>Отступы «прыгают» при наведении</summary><p>В <code>:hover</code> изменён <code>border-width</code> или <code>padding</code>. Меняй цвет рамки, а не толщину, либо компенсируй размер.</p></details>
+    </div>
+
+    <div class="block quiz">
+      <h3>Проверь себя</h3>
+      <details><summary>Из каких четырёх слоёв состоит коробка?</summary><p>content, padding, border, margin — от центра к краю.</p></details>
+      <details><summary>Что делает box-sizing: border-box?</summary><p>Включает padding и border в заданную ширину/высоту. Итоговый размер остаётся равным <code>width</code>.</p></details>
+      <details><summary>Чем padding отличается от margin?</summary><p>Padding — внутри, вокруг содержимого, входит в фон и кликабельную область. Margin — снаружи, расстояние до соседей.</p></details>
+      <details><summary>Что такое схлопывание margin?</summary><p>Вертикальные отступы соседних блоков не складываются, а выбирается больший.</p></details>
+      <details><summary>Почему <code>margin: 0 auto</code> центрирует?</summary><p>Автоматические боковые отступы делят свободное место поровну. Нужна заданная ширина.</p></details>
+      <details><summary>Чем outline отличается от border?</summary><p>Outline не занимает места и не влияет на размеры/раскладку. Поэтому хорош для фокуса.</p></details>
+      <details><summary>Когда padding, а когда margin?</summary><p>Padding — если нужен фон/клик вокруг содержимого. Margin — если нужно расстояние до другого элемента.</p></details>
+      <details><summary>Почему <code>max-width</code> лучше фиксированной <code>width</code>?</summary><p>Блок адаптируется к узкому экрану, но не растягивается бесконечно на широком.</p></details>
+      <details><summary>Что делает <code>display: none</code>?</summary><p>Полностью убирает элемент из раскладки: он не занимает место и не показывается.</p></details>
+      <details><summary>Почему <code>line-height: 1.6</code> лучше <code>line-height: 26px</code>?</summary><p>Множитель наследуется корректно и масштабируется вместе с размером шрифта. Фиксированные пиксели ломаются при смене размера.</p></details>
+    </div>
+
+    <div class="block">
+      <h3>Подсказки на закрепление</h3>
+      <div class="hints">
+        <details class="hint prev">
+          <summary><span><span class="hint-label">из прошлой недели</span>DevTools Box Model</span></summary>
+          <div class="hint-body">
+            <p>На первой неделе ты смотрела Elements. Теперь в Styles прокрути вниз до диаграммы Box Model: там наглядно видно content, padding, border, margin и их точные размеры. Это лучший калькулятор.</p>
+          </div>
+        </details>
+        <details class="hint world">
+          <summary><span><span class="hint-label">из другой области</span>Матрёшка</span></summary>
+          <div class="hint-body">
+            <p>Content внутри padding, padding внутри border, border внутри margin. Каждый слой больше предыдущего. Если перепутать порядок, «матрёшка» рассыпается.</p>
+          </div>
+        </details>
+        <details class="hint pro">
+          <summary><span><span class="hint-label">приём профи</span>Сброс в три строки</span></summary>
+          <div class="hint-body">
+            <p>Начинай каждый проект с этого:</p>
+            <pre><code>*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; }
+img { max-width: 100%; display: block; }</code></pre>
+            <p>Три строки экономят часы объяснений «почему 334 вместо 300».</p>
+          </div>
+        </details>
+        <details class="hint trap">
+          <summary><span><span class="hint-label">ловушка</span>100vh на телефоне</span></summary>
+          <div class="hint-body">
+            <p><code>100vh</code> может оказаться выше видимой области из-за адресной строки. Для полноэкранных блоков используй <code>100dvh</code> или <code>min-height: 100svh</code>.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Чек-лист дня</h3>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox"> Прошла карточки и вопросы</label>
+        <label class="check-item"><input type="checkbox"> Поняла разницу content-box и border-box</label>
+        <label class="check-item"><input type="checkbox"> Создала <code>day-04\box.html</code> и <code>box.css</code></label>
+        <label class="check-item"><input type="checkbox"> Карточка ровно 360 px, проверено в Computed</label>
+        <label class="check-item"><input type="checkbox"> Есть hover и focus-within без сдвига размеров</label>
+        <label class="check-item"><input type="checkbox"> Прошла визуализацию и посчитала 3 варианта</label>
+        <label class="check-item"><input type="checkbox"> Разобрала 8 ошибок и 10 вопросов</label>
+        <label class="check-item"><input type="checkbox"> Дневник и коммит</label>
+      </div>
+      <div class="note">
+        <b>Коммит:</b> <code>git add .</code> → <code>git commit -m "Неделя 2: box model и карточка задания"</code>.
+      </div>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="10">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="10">✓ Практика сделана</button>
+    </div>
+  </section>
+
+  <!-- ================= ДЕНЬ 5 ================= -->
+  <section class="day" id="d5">
+    <div class="day-head">
+      <div class="day-num">5</div>
+      <div>
+        <div class="day-sub">теория + практика · 5 часов</div>
+        <h2>Flexbox на практике</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>
+        Перестать двигать блоки отступами и начать раскладывать их контейнером. К вечеру
+        у тебя будет пять рабочих паттернов и экран «Сегодня», который не разваливается
+        при сужении окна.
+      </p>
+    </div>
+
+    <div class="block">
+      <h3>Разминка · 20 минут</h3>
+      <ol>
+        <li>Что входит в итоговую ширину при <code>border-box</code>?</li>
+        <li>Чем padding отличается от margin?</li>
+        <li>Что такое схлопывание margin?</li>
+        <li>Когда <code>margin: 0 auto</code> не центрирует?</li>
+        <li>Почему <code>max-width</code> лучше фиксированной ширины?</li>
+        <li>Что делает <code>outline</code> и почему он хорош для фокуса?</li>
+      </ol>
+      <div class="note">
+        Flexbox — не «ещё один способ». Это первый инструмент, который думает о пространстве
+        между элементами, а не о каждом элементе по отдельности.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>План дня</h3>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Время</th><th>Блок</th><th>Что делаем</th></tr></thead>
+          <tbody>
+            <tr><td>0:00–0:20</td><td><b>Разминка</b></td><td>карточки и шесть вопросов</td></tr>
+            <tr><td>0:20–1:30</td><td><b>Теория 1</b></td><td>оси, свойства контейнера и элементов</td></tr>
+            <tr><td>1:30–1:40</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>1:40–2:25</td><td><b>Теория 2</b></td><td>пять паттернов и когда flex, а когда grid</td></tr>
+            <tr><td>2:25–2:35</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>2:35–3:50</td><td><b>Практика 1</b></td><td><code>flex-lab.html</code>: пять паттернов</td></tr>
+            <tr><td>3:50–4:25</td><td><b>Практика 2</b></td><td>применить flex к экрану «Сегодня»</td></tr>
+            <tr><td>4:25–4:50</td><td><b>Закрепление</b></td><td>угадай раскладку, ошибки, вопросы</td></tr>
+            <tr><td>4:50–5:00</td><td><b>Итог</b></td><td>чек-лист, дневник, коммит</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Теория 1 · Оси и свойства</h3>
+      <p>
+        <code>display: flex</code> вешается на <b>контейнер</b>. Его прямые дети становятся
+        <b>flex-элементами</b> и выстраиваются вдоль оси.
+      </p>
+      <ul>
+        <li><b>Главная ось (main axis)</b> — направление, в котором выстраиваются элементы. По умолчанию слева направо.</li>
+        <li><b>Поперечная ось (cross axis)</b> — перпендикулярно главной.</li>
+      </ul>
+      <p><b>Свойства контейнера:</b></p>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Свойство</th><th>Что делает</th><th>Значения</th></tr></thead>
+          <tbody>
+            <tr><td>flex-direction</td><td>задаёт главную ось</td><td>row, row-reverse, column, column-reverse</td></tr>
+            <tr><td>justify-content</td><td>распределяет вдоль главной оси</td><td>flex-start, center, flex-end, space-between, space-around, space-evenly</td></tr>
+            <tr><td>align-items</td><td>выравнивает вдоль поперечной</td><td>stretch, flex-start, center, flex-end, baseline</td></tr>
+            <tr><td>flex-wrap</td><td>разрешает перенос</td><td>nowrap, wrap, wrap-reverse</td></tr>
+            <tr><td>gap</td><td>промежутки между элементами</td><td>любая длина: 8px, 1rem</td></tr>
+            <tr><td>align-content</td><td>выравнивает строки при wrap</td><td>как justify-content</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><b>Свойства элементов:</b></p>
+      <ul>
+        <li><code>flex-grow</code> — сколько свободного места забрать (0 — не расти);</li>
+        <li><code>flex-shrink</code> — можно ли сжиматься;</li>
+        <li><code>flex-basis</code> — исходный размер до распределения;</li>
+        <li><code>flex: 1</code> — сокращение: <code>1 1 0%</code> («займи всё свободное место»);</li>
+        <li><code>align-self</code> — переопределить выравнивание для одного элемента;</li>
+        <li><code>order</code> — изменить визуальный порядок (осторожно с доступностью).</li>
+      </ul>
+<pre><code>.row {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.row__main { flex: 1; min-width: 0; }</code></pre>
+      <div class="note">
+        <b><code>min-width: 0</code> — спасательный круг.</b> Flex-элемент по умолчанию не сжимается
+        меньше своего содержимого. Длинный текст или картинка могут вылезти. <code>min-width: 0</code>
+        разрешает сжатие, и тогда работает <code>overflow: hidden</code> / <code>text-overflow</code>.
+      </div>
+      <div class="hint world">
+        <summary><span><span class="hint-label">из другой области</span>Полка с книгами</span></summary>
+        <div class="hint-body">
+          <p><b>flex-direction</b> — как стоит полка: горизонтально или вертикально. <b>justify-content</b> — как расставить книги вдоль полки: слева, по центру, по краям, с равными промежутками. <b>align-items</b> — как выровнять книги по высоте: по верхнему краю, по центру, по нижнему.</p>
+        </div>
+      </div>
+      <div class="hint trap">
+        <summary><span><span class="hint-label">ловушка</span>Путать justify-content и align-items</span></summary>
+        <div class="hint-body">
+          <p>Запомни привязку к оси: <code>justify-*</code> — всегда главная ось, <code>align-*</code> — всегда поперечная. Если поменяла <code>flex-direction</code> на <code>column</code>, оси поменялись местами — и свойства тоже.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Теория 2 · Пять паттернов</h3>
+      <p>Эти пять конструкций покрывают большинство интерфейсов. Выучи их руками, не копипастом.</p>
+
+      <p><b>1. Навбар: логотип слева, меню справа.</b></p>
+<pre><code>.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+}</code></pre>
+
+      <p><b>2. Центрирование по обеим осям.</b></p>
+<pre><code>.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+}</code></pre>
+
+      <p><b>3. Карточки в ряд с переносом.</b></p>
+<pre><code>.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.cards &gt; * {
+  flex: 1 1 240px; /* минимум 240, остальное делится */
+}</code></pre>
+
+      <p><b>4. Сайдбар и контент.</b></p>
+<pre><code>.layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.layout__side { flex: 0 0 220px; }
+.layout__main { flex: 1; min-width: 0; }</code></pre>
+
+      <p><b>5. Прижатый футер.</b></p>
+<pre><code>body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+main { flex: 1; } /* забирает всё свободное место */
+footer { margin-top: auto; }</code></pre>
+
+      <p><b>Flex или grid?</b> Flex — про одно направление (ряд или колонка). Grid — про сетку из строк и столбцов одновременно. Если тебе нужно «две колонки и три ряда» — это grid, он будет на следующей неделе. Если «элементы в ряд с промежутками» — flex.</p>
+      <div class="hint pro">
+        <summary><span><span class="hint-label">приём профи</span>gap вместо margin</span></summary>
+        <div class="hint-body">
+          <p>Не расставляй <code>margin-right</code> каждому элементу и не убирай его у последнего. <code>gap</code> делает ровные промежутки и не создаёт «хвост» после последнего элемента. Работает во flex и grid.</p>
+        </div>
+      </div>
+      <div class="hint trap">
+        <summary><span><span class="hint-label">ловушка</span>flex: 1 без min-width</span></summary>
+        <div class="hint-body">
+          <p>Колонка с длинным словом или таблицей откажется сжиматься и выломает раскладку. Добавь <code>min-width: 0</code> и <code>overflow-wrap: anywhere</code>, если текст может быть длинным.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Визуализация · flex-песочница</h3>
+      <p>Меняй свойства и смотри, как двигаются блоки. Код внизу обновляется — его можно скопировать.</p>
+      <div class="demo">
+        <div class="demo-title">display: flex</div>
+        <div class="controls" style="margin-bottom:12px">
+          <div class="ctrl"><span>direction</span>
+            <select id="fx-dir">
+              <option value="row">row</option>
+              <option value="row-reverse">row-reverse</option>
+              <option value="column">column</option>
+              <option value="column-reverse">column-reverse</option>
+            </select>
+            <output></output>
+          </div>
+          <div class="ctrl"><span>justify</span>
+            <select id="fx-justify">
+              <option value="flex-start">flex-start</option>
+              <option value="center">center</option>
+              <option value="flex-end">flex-end</option>
+              <option value="space-between" selected>space-between</option>
+              <option value="space-around">space-around</option>
+              <option value="space-evenly">space-evenly</option>
+            </select>
+            <output></output>
+          </div>
+          <div class="ctrl"><span>align</span>
+            <select id="fx-align">
+              <option value="stretch">stretch</option>
+              <option value="flex-start">flex-start</option>
+              <option value="center" selected>center</option>
+              <option value="flex-end">flex-end</option>
+            </select>
+            <output></output>
+          </div>
+          <div class="ctrl"><span>wrap</span>
+            <select id="fx-wrap">
+              <option value="nowrap" selected>nowrap</option>
+              <option value="wrap">wrap</option>
+            </select>
+            <output></output>
+          </div>
+          <div class="ctrl"><span>gap</span><input type="range" id="fx-gap" min="0" max="32" value="8"><output id="fx-gap-out">8</output></div>
+        </div>
+        <div class="flex-stage" id="flex-stage">
+          <div class="flex-item">1</div>
+          <div class="flex-item">2</div>
+          <div class="flex-item">3</div>
+          <div class="flex-item">4</div>
+        </div>
+        <div class="flex-code" id="flex-code"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Практика 1 · flex-lab.html</h3>
+      <p>Создай <code>notes\sandbox\week-02\day-05\flex-lab.html</code>. Пять секций, в каждой — свой паттерн. Без библиотек и фреймворков.</p>
+      <ol>
+        <li><b>Навбар:</b> логотип «Learning OS» слева, четыре ссылки справа. На узком экране — перенос.</li>
+        <li><b>Центрирование:</b> квадрат 200×200 с текстом «по центру» ровно посередине.</li>
+        <li><b>Карточки:</b> четыре карточки, которые переносятся на новую строку и делят ширину.</li>
+        <li><b>Сайдбар + контент:</b> слева 220 px, справа всё остальное. Проверь, что длинный текст не ломает раскладку.</li>
+        <li><b>Прижатый футер:</b> при коротком контенте футер внизу окна, при длинном — после контента.</li>
+      </ol>
+      <p>Каркас:</p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Flex lab&lt;/title&gt;
+  &lt;style&gt;
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; background: #0f1420; color: #e9eefb; }
+
+    .lab { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+    .lab section { margin-bottom: 48px; }
+
+    /* 1. nav */
+    /* 2. center */
+    /* 3. cards */
+    /* 4. layout */
+    /* 5. sticky footer */
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="lab"&gt;
+    &lt;section&gt;...&lt;/section&gt;
+    &lt;section&gt;...&lt;/section&gt;
+    &lt;section&gt;...&lt;/section&gt;
+    &lt;section&gt;...&lt;/section&gt;
+    &lt;section&gt;...&lt;/section&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <div class="note good">
+        <b>Проверка:</b> сузь окно до 400 px. Навбар переносится, карточки встают в колонку,
+        сайдбар не выдавливает контент, футер остаётся внизу. Если что-то вылезает — ищи
+        фиксированную ширину или отсутствие <code>min-width: 0</code>.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Практика 2 · Применить к экрану «Сегодня»</h3>
+      <p>Возьми <code>skeleton.html</code> + <code>style.css</code> и добавь раскладку:</p>
+      <ol>
+        <li>Шапка: <code>header</code> — flex, заголовок слева, дата справа, <code>align-items: center</code>.</li>
+        <li>Навигация: ссылки в ряд, <code>gap</code>, перенос на узком экране.</li>
+        <li>Список заданий: каждая карточка — flex-строка: текст слева, XP справа.</li>
+        <li>Основная зона: на широком экране две колонки (задания и дневник), на узком — одна.</li>
+        <li>Футер прижат к низу при коротком содержимом.</li>
+      </ol>
+      <p>Подсказка по двум колонкам без медиазапроса:</p>
+<pre><code>main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+main &gt; section {
+  flex: 1 1 320px; /* колонки станут одна под другой, когда не хватит места */
+}</code></pre>
+      <div class="hint prev">
+        <summary><span><span class="hint-label">из прошлой недели</span>Коммит перед экспериментом</span></summary>
+        <div class="hint-body">
+          <p>Раскладка — место, где легко «сломать всё». Сделай коммит до правок. Если эксперимент не удался: <code>git restore .</code> — и ты снова в рабочем состоянии.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block quiz">
+      <h3>Разбор ошибок</h3>
+      <details><summary>Элементы не выстраиваются в ряд</summary><p><code>display: flex</code> повешен не на контейнер, а на сам элемент, или у контейнера <code>display: block</code> перебивает.</p></details>
+      <details><summary><code>justify-content</code> не работает</summary><p>Возможно, главная ось вертикальная (<code>flex-direction: column</code>) — тогда <code>justify-content</code> двигает по вертикали, а горизонталь — <code>align-items</code>.</p></details>
+      <details><summary>gap не даёт эффекта</summary><p>У контейнера нет <code>display: flex</code>/<code>grid</code>, или <code>gap</code> написан на элементе, а не на контейнере.</p></details>
+      <details><summary>Карточки не переносятся</summary><p>Забыт <code>flex-wrap: wrap</code>. По умолчанию <code>nowrap</code>, и элементы сжимаются.</p></details>
+      <details><summary>Текст вылезает из колонки</summary><p>Нужен <code>min-width: 0</code> у flex-элемента и, при необходимости, <code>overflow-wrap: anywhere</code>.</p></details>
+      <details><summary>Высота элементов разная, хотя align-items: center</summary><p>Проверь, не задана ли высота у детей, и не мешает ли <code>align-self</code>.</p></details>
+      <details><summary>Футер не прижат к низу</summary><p>У <code>body</code> нет <code>min-height: 100dvh</code> и <code>display: flex; flex-direction: column</code>, либо у <code>main</code> нет <code>flex: 1</code>.</p></details>
+      <details><summary>На телефоне горизонтальная прокрутка</summary><p>Где-то фиксированная ширина больше экрана или отрицательный margin. Проверь <code>width: 100%</code>, <code>max-width</code> и <code>min-width: 0</code>.</p></details>
+    </div>
+
+    <div class="block quiz">
+      <h3>Проверь себя</h3>
+      <details><summary>Что такое главная и поперечная ось?</summary><p>Главная задаётся <code>flex-direction</code> (по умолчанию горизонтальная). Поперечная перпендикулярна ей.</p></details>
+      <details><summary>Чем justify-content отличается от align-items?</summary><p><code>justify-content</code> распределяет вдоль главной оси, <code>align-items</code> выравнивает вдоль поперечной.</p></details>
+      <details><summary>Что делает flex-wrap: wrap?</summary><p>Разрешает перенос элементов на новую строку, когда не хватает места.</p></details>
+      <details><summary>Что означает flex: 1?</summary><p>Сокращение <code>flex: 1 1 0%</code>: элемент может расти и сжиматься, исходная база — ноль, свободное место делится.</p></details>
+      <details><summary>Зачем gap, если есть margin?</summary><p><code>gap</code> даёт ровные промежутки без «хвоста» после последнего элемента и не схлопывается.</p></details>
+      <details><summary>Зачем min-width: 0?</summary><p>Разрешает flex-элементу сжиматься меньше содержимого, чтобы длинный текст не ломал раскладку.</p></details>
+      <details><summary>Как прижать футер к низу?</summary><p><code>body</code> — flex-колонка с <code>min-height: 100dvh</code>, <code>main</code> — <code>flex: 1</code>.</p></details>
+      <details><summary>Чем flex отличается от grid?</summary><p>Flex — одно направление, grid — строки и столбцы одновременно.</p></details>
+      <details><summary>Что делает align-self?</summary><p>Переопределяет <code>align-items</code> для одного конкретного элемента.</p></details>
+      <details><summary>Почему order стоит использовать осторожно?</summary><p>Он меняет визуальный порядок, но не порядок в DOM. Клавиатура и скринридер пойдут по исходному порядку — можно запутать пользователя.</p></details>
+    </div>
+
+    <div class="block">
+      <h3>Подсказки на закрепление</h3>
+      <div class="hints">
+        <details class="hint prev">
+          <summary><span><span class="hint-label">из прошлой недели</span>DevTools показывает flex</span></summary>
+          <div class="hint-body">
+            <p>Выдели flex-контейнер в Elements — рядом с <code>display: flex</code> появится значок. Нажми его: браузер подсветит оси и промежутки. Это лучший способ понять, что происходит.</p>
+          </div>
+        </details>
+        <details class="hint world">
+          <summary><span><span class="hint-label">из другой области</span>Раскладка витрины</span></summary>
+          <div class="hint-body">
+            <p>Товары на витрине стоят в ряд, но если места мало — переносятся на следующую полку. Это <code>flex-wrap</code>. Расстояние между товарами — <code>gap</code>. Выравнивание по центру полки — <code>align-items</code>.</p>
+          </div>
+        </details>
+        <details class="hint pro">
+          <summary><span><span class="hint-label">приём профи</span>Меняй одно свойство за раз</span></summary>
+          <div class="hint-body">
+            <p>В DevTools включай и выключай по одному свойству. Если менять три сразу, непонятно, что помогло. Это правило экономит больше времени, чем любой трюк.</p>
+          </div>
+        </details>
+        <details class="hint trap">
+          <summary><span><span class="hint-label">ловушка</span>Всё делать flex-ом</span></summary>
+          <div class="hint-body">
+            <p>Flex не заменяет сетку. Если нужны ровные строки и столбцы, лучше grid (неделя 3). Flex — для ряда, навбара, карточек и выравнивания.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Чек-лист дня</h3>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox"> Прошла карточки и вопросы</label>
+        <label class="check-item"><input type="checkbox"> Понимаю разницу главной и поперечной оси</label>
+        <label class="check-item"><input type="checkbox"> Создала <code>day-05\flex-lab.html</code> с пятью секциями</label>
+        <label class="check-item"><input type="checkbox"> Навбар, центр, карточки, сайдбар, футер работают</label>
+        <label class="check-item"><input type="checkbox"> Проверила сужение окна до 400 px</label>
+        <label class="check-item"><input type="checkbox"> Применила flex к экрану «Сегодня»</label>
+        <label class="check-item"><input type="checkbox"> Прошла песочницу и скопировала один вариант кода</label>
+        <label class="check-item"><input type="checkbox"> Разобрала 8 ошибок и 10 вопросов</label>
+        <label class="check-item"><input type="checkbox"> Дневник и коммит</label>
+      </div>
+      <div class="note">
+        <b>Коммит:</b> <code>git add .</code> → <code>git commit -m "Неделя 2: flexbox и пять паттернов"</code>.
+      </div>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="11">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="11">✓ Практика сделана</button>
+    </div>
+  </section>
+
+  <!-- ================= ДЕНЬ 6 ================= -->
+  <section class="day" id="d6">
+    <div class="day-head">
+      <div class="day-num">6</div>
+      <div>
+        <div class="day-sub">проект · 5 часов</div>
+        <h2>Проект: экран «Сегодня»</h2>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Цель дня</h3>
+      <p>
+        Собрать всё, что было на неделе, в один настоящий экран: семантика, форма, стили,
+        box model, flexbox. Опубликовать его и закрыть неделю. Это не учебное упражнение —
+        это первый экран твоего собственного приложения.
+      </p>
+    </div>
+
+    <div class="block">
+      <h3>Разминка · 20 минут</h3>
+      <ol>
+        <li>Что из недели получилось легче всего?</li>
+        <li>Где пришлось возвращаться назад?</li>
+        <li>Какой тег или свойство до сих пор «не уложились»?</li>
+        <li>Что в <code>skeleton.html</code> сделано хорошо?</li>
+        <li>Что бы ты переделала, если бы начала заново?</li>
+        <li>Есть ли незакоммиченные изменения?</li>
+      </ol>
+      <div class="note">
+        Сегодня не будет новой теории. Только сборка, проверка и доведение до состояния
+        «не стыдно показать».
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>План дня</h3>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Время</th><th>Блок</th><th>Что делаем</th></tr></thead>
+          <tbody>
+            <tr><td>0:00–0:20</td><td><b>Разминка</b></td><td>ретро-вопросы и проверка долгов</td></tr>
+            <tr><td>0:20–1:00</td><td><b>Спецификация</b></td><td>что на экране, состояния, критерии</td></tr>
+            <tr><td>1:00–1:10</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>1:10–3:10</td><td><b>Сборка</b></td><td><code>today.html</code> + <code>today.css</code></td></tr>
+            <tr><td>3:10–3:20</td><td><b>Перерыв</b></td><td>—</td></tr>
+            <tr><td>3:20–4:00</td><td><b>Ревью</b></td><td>самопроверка и агент</td></tr>
+            <tr><td>4:00–4:30</td><td><b>Публикация</b></td><td>коммиты, README, GitHub Pages</td></tr>
+            <tr><td>4:30–5:00</td><td><b>Ретро</b></td><td>итоги недели и план недели 3</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Спецификация · что именно собираем</h3>
+      <p>
+        <b>Спецификация</b> — это короткий документ «что должно получиться». Без неё сборка
+        превращается в бесконечные «а может, ещё вот так».
+      </p>
+      <p><b>Экран «Сегодня» состоит из:</b></p>
+      <ol>
+        <li><b>Шапка:</b> заголовок «Сегодня», дата, серия дней (streak).</li>
+        <li><b>Навигация:</b> Сегодня, Программа, Карточки, Дневник.</li>
+        <li><b>Блок заданий:</b> четыре карточки с названием, подсказкой и XP.</li>
+        <li><b>Блок прогресса:</b> полоса прогресса и текст «2 из 4».</li>
+        <li><b>Дневник:</b> форма из вчерашнего дня.</li>
+        <li><b>Боковая цитата</b> и <b>футер</b>.</li>
+      </ol>
+      <p><b>Состояния карточки задания:</b></p>
+      <ul>
+        <li>обычное — тёмный фон, спокойная рамка;</li>
+        <li>выполнено — лаймовая рамка и галочка (класс <code>.is-done</code>);</li>
+        <li>фокус — видимая рамка <code>:focus-visible</code>.</li>
+      </ul>
+      <p><b>Адаптив:</b> на широком экране две колонки (задания + дневник), на узком — одна. Никакой горизонтальной прокрутки.</p>
+      <p><b>Критерии готовности:</b></p>
+      <ul>
+        <li>один <code>h1</code>, осмысленные <code>header/nav/main/section/footer</code>;</li>
+        <li>форма с <code>label</code>, <code>name</code> и валидацией;</li>
+        <li>все кликабельные элементы достижимы клавиатурой;</li>
+        <li>фокус виден;</li>
+        <li>нет <code>!important</code>, нет inline-стилей;</li>
+        <li>отступы кратны 8 px;</li>
+        <li>страница открывается по ссылке GitHub Pages.</li>
+      </ul>
+      <div class="hint world">
+        <summary><span><span class="hint-label">из другой области</span>Чертёж перед стройкой</span></summary>
+        <div class="hint-body">
+          <p>Никто не начинает строить дом с «давай положим кирпич и посмотрим». Сначала план: где дверь, где окно, сколько комнат. Спецификация — тот же чертёж, только для экрана.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Сборка · 2 часа</h3>
+      <p>Работай по шагам. После каждого шага — сохранить и посмотреть в браузере.</p>
+      <ol>
+        <li><b>Каркас.</b> Скопируй <code>skeleton.html</code> в <code>today.html</code>, создай <code>today.css</code> и подключи его.</li>
+        <li><b>Шапка.</b> Flex-строка: заголовок и дата. <code>align-items: center</code>, <code>justify-content: space-between</code>.</li>
+        <li><b>Навигация.</b> Список ссылок в ряд, <code>gap</code>, перенос на узком экране. Активная ссылка — класс <code>.is-active</code>.</li>
+        <li><b>Основная зона.</b> Две колонки через flex с <code>flex: 1 1 320px</code> и <code>flex-wrap: wrap</code>.</li>
+        <li><b>Карточки заданий.</b> Четыре штуки: заголовок, подсказка, XP справа. Одна — с классом <code>.is-done</code>.</li>
+        <li><b>Прогресс.</b> Полоса: внешний блок с фоном, внутренний с шириной 50% и лаймовым цветом.</li>
+        <li><b>Дневник.</b> Вчерашняя форма. Проверь <code>label</code>, <code>name</code>, <code>required</code>.</li>
+        <li><b>Цитата и футер.</b> <code>aside</code> с <code>blockquote</code>, футер с подписью.</li>
+        <li><b>Состояния.</b> <code>:hover</code>, <code>:focus-visible</code>, <code>.is-done</code>.</li>
+        <li><b>Адаптив.</b> Сузь окно до 400 px. Всё должно встать в одну колонку.</li>
+      </ol>
+      <p>Каркас разметки:</p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Сегодня — Learning OS&lt;/title&gt;
+  &lt;link rel="stylesheet" href="today.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header class="topbar"&gt;
+    &lt;div&gt;
+      &lt;h1&gt;Сегодня&lt;/h1&gt;
+      &lt;p&gt;&lt;time datetime="2026-11-08"&gt;8 ноября 2026&lt;/time&gt;&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;p class="streak"&gt;🔥 6 дней&lt;/p&gt;
+  &lt;/header&gt;
+
+  &lt;nav class="nav"&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a class="is-active" href="today.html"&gt;Сегодня&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="program.html"&gt;Программа&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="cards.html"&gt;Карточки&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="journal.html"&gt;Дневник&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+
+  &lt;main class="layout"&gt;
+    &lt;section class="panel"&gt;
+      &lt;h2&gt;Задания дня&lt;/h2&gt;
+      &lt;ul class="tasks"&gt;
+        &lt;li class="task is-done"&gt;...&lt;/li&gt;
+        &lt;li class="task"&gt;...&lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;p class="progress-label"&gt;1 из 4&lt;/p&gt;
+      &lt;div class="progress"&gt;&lt;i style="width:25%"&gt;&lt;/i&gt;&lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class="panel"&gt;
+      &lt;h2&gt;Дневник&lt;/h2&gt;
+      &lt;!-- форма --&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;aside class="quote"&gt;
+    &lt;blockquote&gt;Никогда не ноль.&lt;/blockquote&gt;
+    &lt;cite&gt;правило Learning OS&lt;/cite&gt;
+  &lt;/aside&gt;
+
+  &lt;footer&gt;&lt;p&gt;Learning OS · неделя 2&lt;/p&gt;&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <div class="note">
+        <b>Про inline-стиль <code>style="width:25%"</code>.</b> В реальном проекте ширину прогресса
+        будет ставить JavaScript. Пока это единственное допустимое исключение — иначе прогресс
+        не покажешь без десятка классов.
+      </div>
+      <div class="hint pro">
+        <summary><span><span class="hint-label">приём профи</span>Коммит после каждого шага</span></summary>
+        <div class="hint-body">
+          <p>Не делай один коммит «всё готово». После шапки — коммит, после карточек — коммит. Если через час что-то сломается, ты откатишь один шаг, а не весь проект.</p>
+          <pre><code>git add .
+git commit -m "today: шапка и навигация"</code></pre>
+        </div>
+      </div>
+      <div class="hint trap">
+        <summary><span><span class="hint-label">ловушка</span>Сначала красота, потом структура</span></summary>
+        <div class="hint-body">
+          <p>Сначала семантика и работоспособность, потом тени и градиенты. Иначе через час окажется, что <code>div</code> вместо кнопки и форма без <code>label</code>, и всё придётся переделывать вместе с красотой.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Ревью · 40 минут</h3>
+      <p>Сначала проверь сама по чек-листу. Потом позови агента — но только на ревью, <b>без права менять файлы</b>.</p>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox"> Один <code>h1</code>, заголовки по порядку</label>
+        <label class="check-item"><input type="checkbox"> Есть <code>header</code>, <code>nav</code>, <code>main</code>, <code>section</code>, <code>footer</code></label>
+        <label class="check-item"><input type="checkbox"> У всех полей формы есть <code>label</code> и <code>name</code></label>
+        <label class="check-item"><input type="checkbox"> Кнопки имеют явный <code>type</code></label>
+        <label class="check-item"><input type="checkbox"> Tab проходит по всем интерактивным элементам</label>
+        <label class="check-item"><input type="checkbox"> Фокус виден на ссылках, кнопках, полях</label>
+        <label class="check-item"><input type="checkbox"> Нет горизонтальной прокрутки на 400 px</label>
+        <label class="check-item"><input type="checkbox"> Нет <code>!important</code> и лишних inline-стилей</label>
+        <label class="check-item"><input type="checkbox"> Текст читается: контраст, размер, межстрочный интервал</label>
+        <label class="check-item"><input type="checkbox"> В консоли нет красных ошибок</label>
+      </div>
+      <p><b>Запрос агенту — скопируй и подставь свои файлы:</b></p>
+<pre><code>КОНТЕКСТ:
+Проект Learning OS — статичный сайт на HTML и CSS. Я собрала экран
+«Сегодня»: файлы today.html и today.css. Это учебный проект,
+неделя 2. Я хочу научиться, а не получить готовый код.
+
+ЗАДАЧА:
+Проведи ревью today.html и today.css. Ничего не меняй.
+Найди проблемы в четырёх областях:
+1) семантика HTML;
+2) доступность (label, фокус, клавиатура);
+3) CSS: каскад, box model, flexbox, адаптив;
+4) читаемость кода и именование классов.
+
+ОГРАНИЧЕНИЯ:
+Не редактируй файлы. Не предлагай библиотеки и фреймворки.
+Не переписывай всё целиком. Только список конкретных замечаний
+с указанием строки и объяснением «почему это проблема».
+
+ПРОВЕРКА:
+В конце дай 5 самых важных исправлений по приоритету и один
+вопрос, который проверит, поняла ли я причину.</code></pre>
+      <div class="note warn">
+        <b>Правило ревью:</b> если замечание непонятно — не исправляй. Спроси агента
+        «объясни проще» или «покажи минимальный пример». Код, который не понимаешь,
+        не коммитишь.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Публикация · 30 минут</h3>
+      <ol>
+        <li><code>git status</code> — убедись, что все нужные файлы видны.</li>
+        <li><code>git add .</code></li>
+        <li><code>git commit -m "Неделя 2: экран Сегодня"</code></li>
+        <li><code>git push</code></li>
+        <li>Обнови страницу репозитория на GitHub — файлы на месте.</li>
+        <li>Открой <code>https://ЛОГИН.github.io/vb_ed/today.html</code>.</li>
+        <li>Открой ссылку с телефона. Проверь, что нет горизонтальной прокрутки.</li>
+        <li>Добавь ссылку на <code>today.html</code> в <code>index.html</code> или в README, чтобы не потерять.</li>
+      </ol>
+      <div class="note good">
+        <b>Обнови README:</b> что это, что уже умеет, как открыть. Три строки — достаточно.
+        Через месяц ты скажешь себе спасибо.
+      </div>
+      <div class="hint prev">
+        <summary><span><span class="hint-label">из прошлой недели</span>Pages уже настроен</span></summary>
+        <div class="hint-body">
+          <p>На первой неделе ты включила GitHub Pages. Новые файлы подхватываются автоматически после <code>push</code>. Если ссылка не обновилась — подожди минуту и обнови с <code>Ctrl + F5</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Ретро недели · 30 минут</h3>
+      <div class="final">
+        <h3 style="font-size:18px;margin-bottom:12px">Ответь себе честно</h3>
+        <ol style="color:var(--muted);font-size:14px;padding-left:20px">
+          <li>Что оказалось проще, чем ты думала?</li>
+          <li>Что оказалось сложнее?</li>
+          <li>Где ты застряла больше чем на 20 минут — и что помогло?</li>
+          <li>Какой тег или свойство теперь понятны «на пальцах»?</li>
+          <li>Что бы ты сделала иначе в понедельник?</li>
+          <li>Какая маленькая победа была самой приятной?</li>
+          <li>Что из недели 1 пригодилось чаще всего?</li>
+        </ol>
+        <p style="color:var(--dim);font-size:13px;margin-top:14px">Запиши ответы в дневник в дашборде. Это часть недели, а не формальность.</p>
+      </div>
+      <p style="margin-top:16px"><b>План недели 3 — коротко:</b> CSS Grid, переменные и темы, позиционирование, адаптивность, анимации и проект «адаптивный дашборд». Отдохни в воскресенье: он тоже часть системы.</p>
+    </div>
+
+    <div class="block">
+      <h3>Подсказки на закрепление</h3>
+      <div class="hints">
+        <details class="hint prev">
+          <summary><span><span class="hint-label">из прошлой недели</span>Маленькие шаги и объяснения</span></summary>
+          <div class="hint-body">
+            <p>На первой неделе ты училась ставить агенту контекст, задачу, ограничения и проверку. Сегодня тот же приём, но задача — ревью, а не генерация. Это следующий уровень работы с ИИ.</p>
+          </div>
+        </details>
+        <details class="hint world">
+          <summary><span><span class="hint-label">из другой области</span>Редактор, а не соавтор</span></summary>
+          <div class="hint-body">
+            <p>Хороший редактор не переписывает книгу за автора. Он показывает слабые места и задаёт вопросы. Агент на ревью должен вести себя так же.</p>
+          </div>
+        </details>
+        <details class="hint pro">
+          <summary><span><span class="hint-label">приём профи</span>Проверка «с телефона»</span></summary>
+          <div class="hint-body">
+            <p>DevTools → Toggle device toolbar (<code>Ctrl + Shift + M</code>) → выбери 375 px. Это быстрее, чем ходить за телефоном, и сразу видно горизонтальную прокрутку.</p>
+          </div>
+        </details>
+        <details class="hint trap">
+          <summary><span><span class="hint-label">ловушка</span>«Сделай красиво»</span></summary>
+        <div class="hint-body">
+          <p>Запрос без критериев даёт случайный результат. Вместо «сделай красиво» — «увеличь контраст текста до читаемого, выровняй отступы по 8 px, добавь видимый фокус». Конкретика экономит итерации.</p>
+        </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Чек-лист недели</h3>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox"> День 1: семантический скелет готов</label>
+        <label class="check-item"><input type="checkbox"> День 2: форма дневника с label и валидацией</label>
+        <label class="check-item"><input type="checkbox"> День 3: стили и понимание каскада</label>
+        <label class="check-item"><input type="checkbox"> День 4: карточка 360 px и box model</label>
+        <label class="check-item"><input type="checkbox"> День 5: пять flex-паттернов</label>
+        <label class="check-item"><input type="checkbox"> День 6: <code>today.html</code> собран и опубликован</label>
+        <label class="check-item"><input type="checkbox"> Все шесть дней отмечены в дашборде</label>
+        <label class="check-item"><input type="checkbox"> Экспорт прогресса сохранён</label>
+      </div>
+      <div class="note good">
+        <b>Неделя закрыта не тогда, когда всё идеально, а когда ты можешь объяснить, что сделала.</b>
+        Идеального кода не существует. Существует понятный.
+      </div>
+    </div>
+
+    <div class="day-check">
+      <button class="mark-btn" data-mark="theory" data-day="12">✓ Теория пройдена</button>
+      <button class="mark-btn" data-mark="practice" data-day="12">✓ Проект задеплоен</button>
+    </div>
+  </section>
+
+  <div class="block">
+    <h3>Что дальше</h3>
+    <p>
+      На неделе 3 экран станет адаптивным по-настоящему: <b>CSS Grid</b> для сеток,
+      <b>переменные и темы</b>, <b>позиционирование</b>, <b>медиазапросы</b> и <b>анимации</b>.
+      Проект недели — адаптивный дашборд, который выглядит как настоящий продукт.
+    </p>
+    <p style="color:var(--dim);font-size:13px">
+      Перед понедельником: отдохни, выспись и не открывай учебные вкладки. Мозг закрепляет
+      навык во сне, а не в бесконечном скролле.
+    </p>
+  </div>
+
+  <!-- ================= ПРИЛОЖЕНИЕ: ТЕРМИНАЛ ИЛИ ПРИЛОЖЕНИЕ ================= -->
+
+  <div class="block" id="app-vs-terminal" style="scroll-margin-top:70px">
+    <h3>Приложение вместо терминала · в чём разница</h3>
+    <p>
+      <b>Короткий ответ:</b> это не два разных OpenCode. Это два окна к одному двигателю.
+      Модель, правила, файлы и история работы — одни и те же. Меняется только то, как ты
+      отдаёшь команды и как смотришь результат.
+    </p>
+    <p>
+      По умолчанию OpenCode поднимает на компьютере один общий фоновый сервис. К нему
+      подключаются все локальные клиенты: терминальный интерфейс, приложение для Windows,
+      веб-интерфейс. Именно сервис хранит сессии, конфигурацию, разрешения и выполняет
+      инструменты. Поэтому сессия, начатая в терминале, доступна приложению — и наоборот.
+    </p>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Что</th><th>Терминал</th><th>Приложение Windows</th><th>Смысл</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Запуск</td>
+            <td><code>cd</code> в папку проекта → <code>opencode</code></td>
+            <td>установщик <code>.exe</code>, открыть папку в окне</td>
+            <td>в приложении не нужно набирать путь руками</td>
+          </tr>
+          <tr>
+            <td>Где проект</td>
+            <td>папка, из которой запущен <code>opencode</code></td>
+            <td>папка, открытая в приложении</td>
+            <td>файлы на диске те же самые</td>
+          </tr>
+          <tr>
+            <td>Файлы</td>
+            <td><code>dir</code>, <code>type</code>, редактор отдельно</td>
+            <td>дерево файлов и просмотр внутри окна</td>
+            <td>меньше переключений между программами</td>
+          </tr>
+          <tr>
+            <td>Разрешения</td>
+            <td>вопрос в терминале, ответ с клавиатуры</td>
+            <td>кнопка подтверждения</td>
+            <td>правила те же, меняется только способ ответа</td>
+          </tr>
+          <tr>
+            <td>Изменения</td>
+            <td><code>git diff</code> или вывод команд</td>
+            <td>панель просмотра и сравнение файлов</td>
+            <td>видно глазами, а не только текстом</td>
+          </tr>
+          <tr>
+            <td>HTML-превью</td>
+            <td><code>start today.html</code> или вручную в браузере</td>
+            <td>встроенный браузер в панели просмотра</td>
+            <td>быстрее проверять результат после каждой правки</td>
+          </tr>
+          <tr>
+            <td>Сессии</td>
+            <td><code>/sessions</code>, горячие клавиши</td>
+            <td>список сессий в интерфейсе</td>
+            <td>сессии общие: начатая в терминале видна приложению</td>
+          </tr>
+          <tr>
+            <td>Команды оболочки</td>
+            <td><code>!git status</code> прямо в строке ввода</td>
+            <td>агент выполняет команду, результат в окне</td>
+            <td>под капотом работает та же оболочка</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <b>Важно:</b> «приложение» не означает «без команд». Агент внутри приложения всё равно
+      выполняет команды оболочки — просто ты видишь их результат в окне, а не в чёрном
+      прямоугольнике. Если команда что-то удаляет или перезаписывает, последствия одинаковы
+      в обоих режимах.
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Чего приложение не меняет</h3>
+    <p>
+      Самый опасный миф: «в приложении можно не разбираться в терминале, Git и путях».
+      Можно не <i>печатать</i> команды. Разбираться всё равно придётся — иначе нечем
+      проверить, что сделал агент.
+    </p>
+    <ul>
+      <li><b>Модель</b> — та же. Качество ответа зависит от контекста и задачи, а не от окна.</li>
+      <li><b>Разрешения</b> — те же. Подтверждение кнопкой не делает опасную команду безопасной.</li>
+      <li><b>Файлы</b> — те же. Приложение не хранит «свою» копию проекта.</li>
+      <li><b>Git</b> — тот же. Коммит, push и откат остаются коммитом, push и откатом.</li>
+      <li><b>Ошибки</b> — те же. Красный текст в консоли никуда не исчезает, просто его виднее.</li>
+    </ul>
+    <div class="hints">
+      <details class="hint prev">
+        <summary><span><span class="hint-label">из прошлой недели</span>Навыки терминала не пропали</span></summary>
+        <div class="hint-body">
+          <p>На первой неделе ты училась <code>cd</code>, <code>mkdir</code>, <code>git add</code> и <code>git commit</code>. В приложении эти знания всё равно нужны: чтобы понять, что происходит, и чтобы проверить работу агента. Интерфейс меняется, модель работы — нет.</p>
+        </div>
+      </details>
+      <details class="hint world">
+        <summary><span><span class="hint-label">из другой области</span>Пульт и приборная панель</span></summary>
+        <div class="hint-body">
+          <p>Терминал — это прямой пульт: каждая кнопка подписана командой. Приложение — приборная панель: те же функции, но с иконками и подсветкой. Панель удобнее, пока ты понимаешь, что за ней стоит. Если не понимаешь — красивая кнопка «сбросить» всё равно сбросит.</p>
+        </div>
+      </details>
+      <details class="hint pro">
+        <summary><span><span class="hint-label">приём профи</span>Одна сессия — два окна</span></summary>
+        <div class="hint-body">
+          <p>Можно начать в терминале, а продолжить в приложении: по умолчанию у них общий фоновый сервис и общие сессии. Удобный сценарий: команды и Git — в терминале, ревью диффа и превью HTML — в приложении.</p>
+        </div>
+      </details>
+      <details class="hint trap">
+        <summary><span><span class="hint-label">ловушка</span>«Приложение всё сделает само»</span></summary>
+        <div class="hint-body">
+          <p>Приложение не добавляет агенту знаний о твоём проекте. Если запрос расплывчатый, результат будет случайным в любом интерфейсе. Разница только в том, что ошибку удобнее не заметить.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Когда что удобнее</h3>
+    <div class="card-grid">
+      <div class="mini-card">
+        <h4>терминал сильнее</h4>
+        <p>
+          Git, <code>npm</code>, локальный сервер, Python, SSH, деплой, длинные логи и ошибки.
+          Терминал показывает вывод целиком и не прячет команды. Навык переносится на любой
+          компьютер, сервер и CI — там приложения может не быть вообще.
+        </p>
+      </div>
+      <div class="mini-card">
+        <h4>приложение удобнее</h4>
+        <p>
+          Читать диффы, смотреть несколько файлов, проверять HTML в превью, вести несколько
+          сессий, работать с длинными путями. На Windows это особенно заметно: не нужно
+          вспоминать про <code>cd /d</code>, кавычки и диск.
+        </p>
+      </div>
+    </div>
+    <p>
+      <b>Рабочая схема для этой недели:</b> лаборатории делай в терминале, а ревью, диффы и
+      превью — в приложении. Через несколько дней сама почувствуешь, где тебе удобнее.
+      Главное — не менять инструмент посреди непонятной ошибки: сначала пойми причину.
+    </p>
+    <div class="note good">
+      <b>Правило:</b> если команда или разрешение непонятны — не подтверждай. Спроси
+      «объясни, что делает эта команда и что изменится на диске». Это работает и в терминале,
+      и в приложении.
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Windows-детали, которые ломают новичков</h3>
+    <p><b>1. <code>cd /d</code> — это команда cmd, а не PowerShell.</b> В PowerShell флаг <code>/d</code> не нужен, и та же строка сработает иначе:</p>
+<pre><code>:: cmd — можно менять диск
+cd /d "C:\Users\Vera\OneDrive\Документы\vb_ed"</code></pre>
+<pre><code># PowerShell — просто cd, без /d
+cd "C:\Users\Vera\OneDrive\Документы\vb_ed"</code></pre>
+    <p>
+      Проверить, где ты: <code>pwd</code> в PowerShell или <code>cd</code> без аргументов в cmd.
+      В приложении это не нужно — папка выбирается мышью.
+    </p>
+    <p><b>2. Пробелы и кириллица в пути.</b> Путь <code>C:\Users\Vera\OneDrive\Документы\vb_ed</code> содержит и то, и другое. В терминале всегда бери его в кавычки. В приложении просто выбери папку — путь подставится сам.</p>
+    <p><b>3. Установка.</b> Приложение для Windows — обычный установщик <code>.exe</code> (x64 или ARM64). CLI на Windows не ставится через пакетные менеджеры: нужен отдельный архив с бинарником. Если команда <code>opencode</code> не находится — либо бинарник не в <code>PATH</code>, либо проще запустить приложение.</p>
+    <p><b>4. Два окна — один проект.</b> Если терминал и приложение открыты в одной папке, они видят одни файлы. Не запускай две задачи, которые одновременно правят один и тот же файл: агенты не согласуют правки между собой.</p>
+    <div class="note warn">
+      <b>Не путай:</b> «приложение для Windows» — это не WSL и не отдельная операционная система.
+      Это тот же OpenCode с графическим интерфейсом. WSL понадобится только для инструментов,
+      которых нет под Windows, — для HTML и CSS он не нужен.
+    </div>
+  </div>
+
+  <div class="block quiz">
+    <h3>Проверь себя · терминал и приложение</h3>
+    <details><summary>Терминал и приложение — это две разные программы с разными сессиями?</summary><p>Нет. По умолчанию это два клиента к одному фоновому сервису. Сессии, конфигурация и разрешения общие.</p></details>
+    <details><summary>Если работать в приложении, Git можно не учить?</summary><p>Нет. Git остаётся Git: коммиты, push и откаты делает тот же инструмент. Приложение меняет интерфейс, а не модель работы.</p></details>
+    <details><summary>Почему <code>cd /d "D:\codex"</code> может не сработать?</summary><p>Это синтаксис cmd. В PowerShell флаг <code>/d</code> не используется — там достаточно <code>cd "D:\codex"</code>.</p></details>
+    <details><summary>Где смотреть изменения перед коммитом?</summary><p>В терминале — <code>git diff</code> и <code>git status</code>. В приложении — панель просмотра изменений. Смысл один: сначала прочитать, потом коммитить.</p></details>
+    <details><summary>Что делать, если агент просит разрешение на непонятную команду?</summary><p>Не подтверждать. Спросить, что команда делает и что изменится на диске. Это правило не зависит от интерфейса.</p></details>
+  </div>
+
+</div>
+
+<script src="../data.js"></script>
+<script src="../store.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- отметки прогресса ---------- */
+
+  Store.load();
+
+  function refreshDots() {
+    document.querySelectorAll("#week-dots a").forEach(function (a) {
+      var i = Number(a.dataset.day) - 1;
+      var d = Store.peekDay(i);
+      a.classList.toggle("done", !!(d && d.closed));
+    });
+    document.querySelectorAll(".mark-btn").forEach(function (b) {
+      var i = Number(b.dataset.day) - 1;
+      var d = Store.peekDay(i);
+      var on = !!(d && d.tasks && d.tasks[b.dataset.mark]);
+      if (!b.dataset.base) b.dataset.base = b.textContent.replace(/^✓\s*/, "").trim();
+      b.textContent = (on ? "✓ " : "") + b.dataset.base;
+      b.classList.toggle("on", on);
+    });
+  }
+
+  document.querySelectorAll(".mark-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var i = Number(btn.dataset.day) - 1;
+      var task = btn.dataset.mark;
+      var d = Store.peekDay(i);
+      if (d && d.closed) return;
+      var current = !!(d && d.tasks && d.tasks[task]);
+      Store.setTask(i, task, !current);
+      refreshDots();
+    });
+  });
+
+  refreshDots();
+
+  /* ---------- форма дневника ---------- */
+
+  var demoForm = document.getElementById("demo-form");
+  var demoOut = document.getElementById("demo-out");
+  var demoHours = document.getElementById("demo-hours");
+  var demoHoursOut = document.getElementById("demo-hours-out");
+
+  if (demoHours && demoHoursOut) {
+    var syncHours = function () { demoHoursOut.textContent = demoHours.value; };
+    demoHours.addEventListener("input", syncHours);
+    syncHours();
+  }
+
+  if (demoForm && demoOut) {
+    demoForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var data = new FormData(demoForm);
+      var lines = [];
+      data.forEach(function (value, key) {
+        lines.push(key + ": " + value);
+      });
+      demoOut.textContent =
+        "Форма прошла проверку. Вот что ушло бы на сервер:\n" +
+        (lines.length ? lines.join("\n") : "(пусто)");
+    });
+  }
+
+  /* ---------- калькулятор специфичности ---------- */
+
+  var specInput = document.getElementById("spec-input");
+  var specNote = document.getElementById("spec-note");
+  var specExample = document.getElementById("spec-example");
+  var specExamples = [
+    "#intro .note a:hover",
+    "nav a",
+    "p.note",
+    "ul li::before",
+    ".card > .title",
+    "a[href^='https']",
+    "*",
+    "#app main section .card p"
+  ];
+  var specIndex = 0;
+
+  function calcSpec(selector) {
+    var s = String(selector || "").replace(/"[^"]*"|'[^']*'/g, " ");
+    s = s.replace(/:where\([^)]*\)/g, " ");
+    var ids = (s.match(/#[\w-]+/g) || []).length;
+    var classes = (s.match(/\.[\w-]+/g) || []).length;
+    classes += (s.match(/\[[^\]]*\]/g) || []).length;
+    classes += (s.match(/:(?!:)(?!not\b|is\b|where\b)[\w-]+/g) || []).length;
+    var tags = (s.match(/::[\w-]+/g) || []).length;
+
+    var rest = s
+      .replace(/#[\w-]+/g, " ")
+      .replace(/\.[\w-]+/g, " ")
+      .replace(/\[[^\]]*\]/g, " ")
+      .replace(/::?[\w-]+(\([^)]*\))?/g, " ")
+      .replace(/[>+~,*]/g, " ");
+
+    var tagNames = rest.match(/[a-zA-Z][\w-]*/g);
+    if (tagNames) tags += tagNames.length;
+
+    return [0, ids, classes, tags];
+  }
+
+  function renderSpec() {
+    if (!specInput) return;
+    var w = calcSpec(specInput.value);
+    document.getElementById("spec-inline").textContent = w[0];
+    document.getElementById("spec-id").textContent = w[1];
+    document.getElementById("spec-class").textContent = w[2];
+    document.getElementById("spec-tag").textContent = w[3];
+    if (specNote) {
+      specNote.textContent =
+        "Вес: 0, " + w[1] + ", " + w[2] + ", " + w[3] +
+        ". Упрощённо: :not() сам не считается (аргумент — да), :where() обнуляет всё, :is() — по сумме аргументов.";
+    }
+  }
+
+  if (specInput) {
+    specInput.addEventListener("input", renderSpec);
+    renderSpec();
+  }
+
+  if (specExample) {
+    specExample.addEventListener("click", function () {
+      specIndex = (specIndex + 1) % specExamples.length;
+      specInput.value = specExamples[specIndex];
+      renderSpec();
+    });
+  }
+
+  /* ---------- битва селекторов ---------- */
+
+  var battles = [
+    {
+      html: '&lt;p class="note" id="intro"&gt;Текст&lt;/p&gt;',
+      rules: ['#intro { color: red }', '.note { color: green }', 'p { color: blue }'],
+      correct: 0,
+      why: 'id (0,1,0,0) сильнее класса (0,0,1,0) и тега (0,0,0,1).'
+    },
+    {
+      html: '&lt;a class="link" href="#"&gt;Ссылка&lt;/a&gt;',
+      rules: ['a { color: blue }', '.link { color: green }', 'a.link:hover { color: lime }'],
+      correct: 2,
+      why: 'a.link:hover = 0,0,2,1: два класса и тег. Сильнее .link и a.'
+    },
+    {
+      html: '&lt;div id="app"&gt;&lt;p class="text"&gt;Абзац&lt;/p&gt;&lt;/div&gt;',
+      rules: ['#app p { color: red }', '.text { color: green }', 'div p { color: blue }'],
+      correct: 0,
+      why: '#app p = 0,1,0,1: id перебивает класс и два тега.'
+    },
+    {
+      html: '&lt;button class="btn" disabled&gt;Кнопка&lt;/button&gt;',
+      rules: ['.btn { color: red }', 'button:disabled { color: green }', 'button { color: blue }'],
+      correct: 1,
+      why: 'button:disabled = 0,0,1,1: класс псевдокласса плюс тег. Сильнее .btn и button.'
+    },
+    {
+      html: '&lt;ul&gt;&lt;li&gt;Первый&lt;/li&gt;&lt;li class="last"&gt;Второй&lt;/li&gt;&lt;/ul&gt;',
+      rules: ['li { color: red }', '.last { color: green }', 'ul li:last-child { color: lime }'],
+      correct: 2,
+      why: 'ul li:last-child = 0,0,1,2: псевдокласс и два тега.'
+    }
+  ];
+  var battleIndex = 0;
+  var battleAnswered = false;
+
+  var battleQ = document.getElementById("battle-q");
+  var battleCode = document.getElementById("battle-code");
+  var battleOptions = document.getElementById("battle-options");
+  var battleResult = document.getElementById("battle-result");
+  var battleNext = document.getElementById("battle-next");
+
+  function renderBattle() {
+    if (!battleOptions) return;
+    var b = battles[battleIndex];
+    battleAnswered = false;
+    battleQ.textContent = "Элемент " + (battleIndex + 1) + " из " + battles.length + ". Кто победит?";
+    battleCode.innerHTML = b.html + "\n\n" + b.rules.join("\n");
+    battleResult.textContent = "";
+    battleOptions.innerHTML = "";
+
+    b.rules.forEach(function (rule, i) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "battle-opt";
+      btn.textContent = rule;
+      btn.addEventListener("click", function () {
+        if (battleAnswered) return;
+        battleAnswered = true;
+        var opts = battleOptions.querySelectorAll(".battle-opt");
+        opts.forEach(function (o, k) {
+          if (k === b.correct) o.classList.add("right");
+          else if (k === i) o.classList.add("wrong");
+        });
+        if (i === b.correct) {
+          battleResult.innerHTML = "<b>Верно.</b> " + b.why;
+        } else {
+          battleResult.innerHTML = "<b>Не угадала.</b> " + b.why + " Победило правило: <code>" + b.rules[b.correct] + "</code>.";
+        }
+      });
+      battleOptions.appendChild(btn);
+    });
+  }
+
+  if (battleNext) {
+    battleNext.addEventListener("click", function () {
+      battleIndex = (battleIndex + 1) % battles.length;
+      renderBattle();
+    });
+    renderBattle();
+  }
+
+  /* ---------- box model ---------- */
+
+  var bmW = document.getElementById("bm-w");
+  var bmP = document.getElementById("bm-p");
+  var bmB = document.getElementById("bm-b");
+  var bmM = document.getElementById("bm-m");
+
+  function syncBox() {
+    if (!bmW) return;
+    var w = Number(bmW.value);
+    var p = Number(bmP.value);
+    var b = Number(bmB.value);
+    var m = Number(bmM.value);
+
+    var content = document.getElementById("bm-content");
+    var padding = document.getElementById("bm-padding");
+    var border = document.getElementById("bm-border");
+    var margin = document.getElementById("bm-margin");
+    var label = document.getElementById("bm-content-label");
+    var result = document.getElementById("bm-result");
+
+    content.style.width = w + "px";
+    padding.style.padding = p + "px";
+    border.style.padding = b + "px";
+    margin.style.padding = m + "px";
+    label.textContent = w + " px";
+
+    document.getElementById("bm-w-out").textContent = w;
+    document.getElementById("bm-p-out").textContent = p;
+    document.getElementById("bm-b-out").textContent = b;
+    document.getElementById("bm-m-out").textContent = m;
+
+    var total = w + 2 * p + 2 * b;
+    result.textContent =
+      "width: " + w + "px\n" +
+      "padding: " + p + "px  → " + (2 * p) + "px\n" +
+      "border: " + b + "px   → " + (2 * b) + "px\n" +
+      "────────────────────\n" +
+      "итоговая ширина: " + total + "px\n" +
+      "margin снаружи: " + m + "px (в размер не входит)\n\n" +
+      (total === w
+        ? "box-sizing: border-box — ширина не изменилась"
+        : "box-sizing: content-box — ширина выросла");
+  }
+
+  if (bmW) {
+    [bmW, bmP, bmB, bmM].forEach(function (el) {
+      el.addEventListener("input", syncBox);
+    });
+    syncBox();
+  }
+
+  /* ---------- flexbox playground ---------- */
+
+  var fxDir = document.getElementById("fx-dir");
+  var fxJustify = document.getElementById("fx-justify");
+  var fxAlign = document.getElementById("fx-align");
+  var fxWrap = document.getElementById("fx-wrap");
+  var fxGap = document.getElementById("fx-gap");
+
+  function syncFlex() {
+    if (!fxDir) return;
+    var stage = document.getElementById("flex-stage");
+    var code = document.getElementById("flex-code");
+
+    stage.style.flexDirection = fxDir.value;
+    stage.style.justifyContent = fxJustify.value;
+    stage.style.alignItems = fxAlign.value;
+    stage.style.flexWrap = fxWrap.value;
+    stage.style.gap = fxGap.value + "px";
+
+    document.getElementById("fx-gap-out").textContent = fxGap.value;
+
+    code.textContent =
+      ".container {\n" +
+      "  display: flex;\n" +
+      "  flex-direction: " + fxDir.value + ";\n" +
+      "  justify-content: " + fxJustify.value + ";\n" +
+      "  align-items: " + fxAlign.value + ";\n" +
+      "  flex-wrap: " + fxWrap.value + ";\n" +
+      "  gap: " + fxGap.value + "px;\n" +
+      "}";
+  }
+
+  if (fxDir) {
+    [fxDir, fxJustify, fxAlign, fxWrap].forEach(function (el) {
+      el.addEventListener("change", syncFlex);
+    });
+    fxGap.addEventListener("input", syncFlex);
+    syncFlex();
+  }
+})();
+</script>
+
+</body>
+</html>

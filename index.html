@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning OS — Вера</title>
+  <meta name="description" content="Личный пульт обучения: программа, прогресс, карточки, ачивки.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">◈</div>
+        <div>
+          <b>Learning OS</b>
+          <small>пульт обучения</small>
+        </div>
+      </div>
+
+      <nav class="nav" id="nav">
+        <a href="#today"        data-route="today"><span>🎯</span>Сегодня</a>
+        <a href="#program"      data-route="program"><span>🗺️</span>Программа</a>
+        <a href="#cards"        data-route="cards"><span>🃏</span>Карточки</a>
+        <a href="#tree"         data-route="tree"><span>🌱</span>Навыки</a>
+        <a href="#achievements" data-route="achievements"><span>🏆</span>Ачивки</a>
+        <a href="#journal"      data-route="journal"><span>📝</span>Дневник</a>
+      </nav>
+
+      <div class="sidebar-foot" id="sidebar-foot"></div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar" id="topbar"></header>
+      <main class="view" id="view"></main>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts"></div>
+  <div class="modal" id="modal" hidden></div>
+  <div class="levelup" id="levelup" hidden></div>
+  <input type="file" id="import-file" accept="application/json,.json" hidden>
+
+  <script src="data.js"></script>
+  <script src="store.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
